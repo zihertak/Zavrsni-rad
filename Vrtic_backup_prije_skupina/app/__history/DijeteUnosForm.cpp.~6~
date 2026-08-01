@@ -1,0 +1,208 @@
+﻿//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "DijeteUnosForm.h"
+#include "DatabaseModule.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+Tform_dijete_unos *form_dijete_unos;
+//---------------------------------------------------------------------------
+__fastcall Tform_dijete_unos::Tform_dijete_unos(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void Tform_dijete_unos::ucitajSkupine()
+{
+    combo_skupina->Items->Clear();
+	query_skupine->Close();
+	query_skupine->Open();
+	while (!query_skupine->Eof)
+	{
+		String naziv =
+			query_skupine->FieldByName("naziv")->AsString;
+		int idSkupina =
+			query_skupine->FieldByName("id_skupina")->AsInteger;
+        combo_skupina->Items->AddObject(
+            naziv,
+            reinterpret_cast<TObject*>(
+				static_cast<NativeInt>(idSkupina)
+			)
+		);
+		query_skupine->Next();
+	}
+    combo_skupina->ItemIndex = -1;
+}
+void Tform_dijete_unos::pripremiZaDodavanje()
+{
+	Caption ="Dodaj dijete";
+    edit_ime->Clear();
+    edit_prezime->Clear();
+	edit_kontakt_roditelja->Clear();
+	memo_alergije->Clear();
+	memo_posebne_potrebe->Clear();
+	memo_zdravstvene_napomene->Clear();
+	combo_spol->Items->Clear();
+	combo_spol->Items->Add("M");
+	combo_spol->Items->Add(L"Ž");
+	combo_spol->ItemIndex = -1;
+	ucitajSkupine();
+	date_datum_rodjenja->Date = Date() - 365 * 3;
+	date_datum_upisa->Date = Date();
+}
+void __fastcall Tform_dijete_unos::button_spremiClick(TObject *Sender)
+{
+	String ime = edit_ime->Text.Trim();
+	String prezime = edit_prezime->Text.Trim();
+	String kontaktRoditelja = edit_kontakt_roditelja->Text.Trim();
+	if (ime.IsEmpty())
+	{
+		ShowMessage("Unesite ime djeteta.");
+		edit_ime->SetFocus();
+		return;
+	}
+	if (prezime.IsEmpty())
+	{
+		ShowMessage("Unesite prezime djeteta.");
+		edit_prezime->SetFocus();
+		return;
+	}
+	if (combo_spol->ItemIndex == -1)
+	{
+		ShowMessage("Odaberite spol djeteta.");
+		combo_spol->SetFocus();
+		return;
+	}
+	if (kontaktRoditelja.IsEmpty())
+	{
+		ShowMessage("Unesite kontakt roditelja.");
+		edit_kontakt_roditelja->SetFocus();
+		return;
+	}
+	if (combo_skupina->ItemIndex == -1)
+	{
+		ShowMessage("Odaberite skupinu.");
+		combo_skupina->SetFocus();
+		return;
+	}
+	if (date_datum_rodjenja->Date > Date())
+	{
+		ShowMessage(L"Datum rođenja ne može biti u budućnosti.");
+		date_datum_rodjenja->SetFocus();
+		return;
+	}
+	if (date_datum_upisa->Date <= date_datum_rodjenja->Date)
+	{
+		ShowMessage(L"Datum upisa mora biti nakon datuma rođenja.");
+		date_datum_upisa->SetFocus();
+		return;
+	}
+	NativeInt idSkupina = reinterpret_cast<NativeInt>(
+    combo_skupina->Items->Objects[
+        combo_skupina->ItemIndex
+    ]
+);
+
+try
+{
+    data_module->connection->StartTransaction();
+
+    // 1. Spremanje osnovnih podataka
+    query_spremanje->Close();
+    query_spremanje->SQL->Clear();
+
+    query_spremanje->SQL->Add(
+        "INSERT INTO dijete "
+        "(ime, prezime, datum_rodjenja, spol, "
+        "datum_upisa, kontakt_roditelj, id_skupina) "
+        "VALUES "
+        "(:ime, :prezime, :datum_rodjenja, :spol, "
+        ":datum_upisa, :kontakt_roditelj, :id_skupina)"
+    );
+
+    query_spremanje->ParamByName("ime")->AsString =
+        edit_ime->Text.Trim();
+
+    query_spremanje->ParamByName("prezime")->AsString =
+        edit_prezime->Text.Trim();
+
+    query_spremanje->ParamByName("datum_rodjenja")->AsDateTime =
+        date_datum_rodjenja->Date;
+
+    query_spremanje->ParamByName("spol")->AsString =
+        combo_spol->Text;
+
+    query_spremanje->ParamByName("datum_upisa")->AsDateTime =
+        date_datum_upisa->Date;
+
+    query_spremanje->ParamByName("kontakt_roditelj")->AsString =
+        edit_kontakt_roditelja->Text.Trim();
+
+    query_spremanje->ParamByName("id_skupina")->AsInteger =
+        static_cast<int>(idSkupina);
+
+    query_spremanje->ExecSQL();
+
+    // 2. Dohvat ID-a upravo dodanog djeteta
+    query_spremanje->Close();
+    query_spremanje->SQL->Clear();
+
+    query_spremanje->SQL->Add(
+        "SELECT LAST_INSERT_ID() AS novi_id"
+    );
+
+    query_spremanje->Open();
+
+    int noviIdDijete =
+        query_spremanje->FieldByName("novi_id")->AsInteger;
+
+    // 3. Spremanje zdravstvenih podataka
+    query_spremanje->Close();
+    query_spremanje->SQL->Clear();
+
+    query_spremanje->SQL->Add(
+        "INSERT INTO zdravstveni_podaci "
+        "(alergije, posebne_potrebe, "
+        "zdravstvene_napomene, id_dijete) "
+        "VALUES "
+        "(:alergije, :posebne_potrebe, "
+        ":zdravstvene_napomene, :id_dijete)"
+    );
+
+    query_spremanje->ParamByName("alergije")->AsString =
+        memo_alergije->Text.Trim();
+
+    query_spremanje->ParamByName("posebne_potrebe")->AsString =
+        memo_posebne_potrebe->Text.Trim();
+
+    query_spremanje->ParamByName("zdravstvene_napomene")->AsString =
+        memo_zdravstvene_napomene->Text.Trim();
+
+    query_spremanje->ParamByName("id_dijete")->AsInteger =
+        noviIdDijete;
+
+    query_spremanje->ExecSQL();
+
+    data_module->connection->Commit();
+
+    ShowMessage(L"Dijete je uspješno spremljeno.");
+
+    ModalResult = mrOk;
+}
+catch (const Exception &e)
+{
+    if (data_module->connection->InTransaction)
+    {
+        data_module->connection->Rollback();
+    }
+
+    ShowMessage(
+        L"Došlo je do pogreške pri spremanju podataka:\n" +
+        e.Message
+    );
+}
+}
+//---------------------------------------------------------------------------

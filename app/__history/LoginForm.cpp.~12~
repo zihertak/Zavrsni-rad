@@ -1,0 +1,80 @@
+﻿//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "LoginForm.h"
+#include "DashboardForm.h"
+#include "DatabaseModule.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+Tform_Login *form_Login;
+//---------------------------------------------------------------------------
+__fastcall Tform_Login::Tform_Login(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_Login::button_loginClick(TObject *Sender)
+{
+    if (edit_username->Text.Trim().IsEmpty() ||
+    edit_password->Text.IsEmpty())
+	{
+    ShowMessage("Unesite korisničko ime i lozinku.");
+    return;
+	}
+	try{
+		data_module->connection ->Connected = true;
+		data_module->query_login->Close();
+		data_module->query_login->SQL->Text =
+			"SELECT * "
+			"FROM korisnik "
+			"WHERE username = :username "
+			"AND lozinka = :lozinka ";
+		data_module->query_login
+			->ParamByName("username")
+			->AsString = edit_username->Text;
+		data_module->query_login
+			->ParamByName("lozinka")
+			->AsString = edit_password->Text;
+		data_module->query_login->Open();
+		if(!data_module->query_login->IsEmpty())
+		{
+			data_module->currentUserID =
+				data_module->query_login
+					->FieldByName("id_korisnik")
+					->AsInteger;
+			data_module->currentUserIme	 =
+				data_module->query_login
+					->FieldByName("ime")
+					->AsString;
+			data_module->currentUserPrezime	 =
+				data_module->query_login
+					->FieldByName("prezime")
+					->AsString;
+			data_module->currentUserUloga		 =
+				data_module->query_login
+					->FieldByName("id_uloga")
+					->AsInteger;
+			form_dashboard->Show();
+			this->Hide();
+		}
+		else{
+			data_module->query_login->Close();
+			ShowMessage("Neispravno korisničko ime ili lozinka.");
+            edit_password->Clear();
+			edit_password->SetFocus();
+		}
+	}
+	catch (const Exception &e){
+		ShowMessage("Greška pri prijavi." + e.Message);
+	}
+
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_Login::FormShow(TObject *Sender)
+{
+	edit_username->SetFocus();
+}
+//---------------------------------------------------------------------------

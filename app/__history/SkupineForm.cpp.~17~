@@ -1,0 +1,399 @@
+﻿//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "SkupineForm.h"
+#include "DatabaseModule.h"
+#include "DashboardForm.h"
+#include "DjecaForm.h"
+#include "SkupinaUnosForm.h"
+#include "LoginForm.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+Tform_skupine *form_skupine;
+//---------------------------------------------------------------------------
+__fastcall Tform_skupine::Tform_skupine(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_skupine::FormShow(TObject *Sender)
+{
+	label_korisnik->Caption =
+		"Korisnik: " +
+		data_module->currentUserIme +
+		" " +
+		data_module->currentUserPrezime;
+
+	label_uloga->Caption =
+		"Uloga: " +
+		data_module->currentUserUloga;
+
+	ucitajPedagoskeGodine();
+
+	combo_sortiranje->Items->Clear();
+	combo_sortiranje->Items->Add(L"Naziv A-Ž");
+	combo_sortiranje->Items->Add(L"Naziv Ž-A");
+	combo_sortiranje->Items->Add(L"Najmlađa dob prvo");
+	combo_sortiranje->Items->Add(L"Najstarija dob prvo");
+	combo_sortiranje->Items->Add(L"Pedagoška godina uzlazno");
+	combo_sortiranje->Items->Add(L"Pedagoška godina silazno");
+	combo_sortiranje->ItemIndex = 0;
+
+	osvjeziPopisSkupina();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_skupine::button_pocetnaClick(TObject *Sender)
+{
+	this->Hide();
+	form_dashboard->Show();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_skupine::button_djecaClick(TObject *Sender)
+{
+	this->Hide();
+	form_djeca->Show();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_skupine::FormClose(TObject *Sender, TCloseAction &Action)
+{
+	Application->Terminate();
+}
+//---------------------------------------------------------------------------
+void Tform_skupine::ucitajPedagoskeGodine()
+{
+	combo_pedagoska_godina->Items->Clear();
+	combo_pedagoska_godina->Items->Add(
+		L"Sve godine"
+	);
+	query_pedagoske_godine->Close();
+	query_pedagoske_godine->Open();
+	while (!query_pedagoske_godine->Eof)
+	{
+		String pedagoskaGodina =
+			query_pedagoske_godine
+				->FieldByName("pedagoska_godina")
+				->AsString;
+		combo_pedagoska_godina->Items->Add(
+			pedagoskaGodina
+		);
+		query_pedagoske_godine->Next();
+	}
+	combo_pedagoska_godina->ItemIndex = 0;
+}
+
+void Tform_skupine::osvjeziPopisSkupina()
+{
+	String pretraga = edit_pretraga->Text.Trim();
+	String pedagoskaGodina = "";
+
+	if (combo_pedagoska_godina->ItemIndex > 0)
+	{
+		pedagoskaGodina =
+			combo_pedagoska_godina->Text;
+	}
+
+	query_skupine->Close();
+	query_skupine->SQL->Clear();
+
+	query_skupine->SQL->Add(
+		"SELECT "
+		"s.id_skupina, "
+		"s.naziv, "
+		"CONCAT(s.dob_od, ' - ', s.dob_do, ' godina') "
+		"AS dobna_skupina, "
+		"s.pedagoska_godina, "
+		"s.dob_od, "
+		"s.dob_do, "
+
+		"(SELECT COUNT(*) "
+		"FROM dijete d "
+		"WHERE d.id_skupina = s.id_skupina) "
+		"AS broj_djece, "
+
+		"(SELECT GROUP_CONCAT("
+		"CONCAT(k.ime, ' ', k.prezime) "
+		"SEPARATOR ', ') "
+		"FROM korisnik k "
+		"INNER JOIN uloga u "
+		"ON u.id_uloga = k.id_uloga "
+		"WHERE k.id_skupina = s.id_skupina "
+		"AND LOWER(u.naziv) = 'odgojitelj') "
+		"AS odgojitelji "
+
+		"FROM skupina s "
+		"WHERE 1 = 1 "
+	);
+
+	if (!pretraga.IsEmpty())
+	{
+		query_skupine->SQL->Add(
+			"AND s.naziv LIKE :pretraga "
+		);
+
+		query_skupine
+			->ParamByName("pretraga")
+			->AsString =
+			"%" + pretraga + "%";
+	}
+
+	if (!pedagoskaGodina.IsEmpty())
+	{
+		query_skupine->SQL->Add(
+			"AND s.pedagoska_godina = "
+			":pedagoska_godina "
+		);
+
+		query_skupine
+			->ParamByName("pedagoska_godina")
+			->AsString =
+			pedagoskaGodina;
+	}
+
+	switch (combo_sortiranje->ItemIndex)
+	{
+		case 0:
+			query_skupine->SQL->Add(
+				"ORDER BY s.naziv ASC"
+			);
+			break;
+
+		case 1:
+			query_skupine->SQL->Add(
+				"ORDER BY s.naziv DESC"
+			);
+			break;
+
+		case 2:
+			query_skupine->SQL->Add(
+				"ORDER BY s.dob_od ASC, s.dob_do ASC"
+			);
+			break;
+
+		case 3:
+			query_skupine->SQL->Add(
+				"ORDER BY s.dob_od DESC, s.dob_do DESC"
+			);
+			break;
+
+		case 4:
+			query_skupine->SQL->Add(
+				"ORDER BY s.pedagoska_godina ASC, "
+				"s.naziv ASC"
+			);
+			break;
+
+		case 5:
+			query_skupine->SQL->Add(
+				"ORDER BY s.pedagoska_godina DESC, "
+				"s.naziv ASC"
+			);
+			break;
+
+		default:
+			query_skupine->SQL->Add(
+				"ORDER BY s.naziv ASC"
+			);
+			break;
+	}
+
+	query_skupine->Open();
+
+	postaviIzgledGrida();
+}
+
+void Tform_skupine::postaviIzgledGrida()
+{
+	query_skupine
+		->FieldByName("id_skupina")
+		->Visible = false;
+
+	query_skupine
+		->FieldByName("dob_od")
+		->Visible = false;
+
+	query_skupine
+		->FieldByName("dob_do")
+		->Visible = false;
+
+
+	query_skupine
+		->FieldByName("naziv")
+		->DisplayLabel = L"Naziv";
+
+	query_skupine
+		->FieldByName("naziv")
+		->DisplayWidth = 18;
+
+
+	query_skupine
+		->FieldByName("dobna_skupina")
+		->DisplayLabel = L"Dobna skupina";
+
+	query_skupine
+		->FieldByName("dobna_skupina")
+		->DisplayWidth = 18;
+
+
+	query_skupine
+		->FieldByName("pedagoska_godina")
+		->DisplayLabel = L"Pedagoška godina";
+
+	query_skupine
+		->FieldByName("pedagoska_godina")
+		->DisplayWidth = 20;
+
+
+	query_skupine
+		->FieldByName("broj_djece")
+		->DisplayLabel = L"Broj djece";
+
+	query_skupine
+		->FieldByName("broj_djece")
+		->DisplayWidth = 12;
+
+
+	query_skupine
+		->FieldByName("odgojitelji")
+		->DisplayLabel = L"Odgojitelji";
+
+	query_skupine
+		->FieldByName("odgojitelji")
+		->DisplayWidth = 30;
+}
+void __fastcall Tform_skupine::edit_pretragaChange(TObject *Sender)
+{
+	osvjeziPopisSkupina();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_skupine::combo_pedagoska_godinaChange(TObject *Sender)
+{
+	osvjeziPopisSkupina();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_skupine::combo_sortiranjeChange(TObject *Sender)
+{
+	osvjeziPopisSkupina();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_skupine::button_dodajClick(TObject *Sender)
+{
+	form_skupina_unos->pripremiZaDodavanje();
+	if (form_skupina_unos->ShowModal() == mrOk)
+	{
+		osvjeziPopisSkupina();
+		ucitajPedagoskeGodine();
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall Tform_skupine::button_urediClick(TObject *Sender)
+{
+    if (query_skupine->IsEmpty())
+	{
+		ShowMessage(L"Nema odabrane skupine za uređivanje.");
+		return;
+	}
+
+	int idSkupine =
+		query_skupine
+			->FieldByName("id_skupina")
+			->AsInteger;
+
+	form_skupina_unos->pripremiZaUredjivanje(idSkupine);
+
+	if (form_skupina_unos->ShowModal() == mrOk)
+	{
+		osvjeziPopisSkupina();
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall Tform_skupine::button_obrisiClick(TObject *Sender)
+{
+	if (query_skupine->IsEmpty())
+	{
+		ShowMessage(L"Nema odabrane skupine za brisanje.");
+		return;
+	}
+
+	String nazivSkupine =
+		query_skupine
+			->FieldByName("naziv")
+			->AsString;
+
+	int odgovor = MessageDlg(
+		L"Želite li zaista obrisati skupinu \"" +
+		nazivSkupine +
+		L"\"?",
+		mtConfirmation,
+		TMsgDlgButtons() << mbYes << mbNo,
+		0
+	);
+
+	if (odgovor != mrYes)
+	{
+		return;
+	}
+
+	int idSkupine =
+		query_skupine
+			->FieldByName("id_skupina")
+			->AsInteger;
+
+	try
+	{
+		query_brisanje->Close();
+		query_brisanje->SQL->Clear();
+
+		query_brisanje->SQL->Add(
+			"DELETE FROM skupina "
+			"WHERE id_skupina = :id"
+		);
+
+		query_brisanje
+			->ParamByName("id")
+			->AsInteger = idSkupine;
+
+		query_brisanje->ExecSQL();
+
+		osvjeziPopisSkupina();
+	}
+	catch (Exception &e)
+	{
+		ShowMessage(
+			L"Greška prilikom brisanja skupine:\n" +
+			e.Message
+		);
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall Tform_skupine::grid_skupineDblClick(TObject *Sender)
+{
+    button_urediClick(Sender);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall Tform_skupine::button_odjavaClick(TObject *Sender)
+{
+    data_module->currentUserID = 0;
+	data_module->currentUserIme = "";
+	data_module->currentUserPrezime = "";
+	data_module->currentUserUloga = "";
+	data_module->currentUserSkupinaID = 0;
+
+	form_Login->edit_username->Clear();
+	form_Login->edit_password->Clear();
+
+	this->Hide();
+	form_dashboard->Hide();
+
+	form_Login->Show();
+	form_Login->BringToFront();
+	form_Login->edit_username->SetFocus();
+}
+//---------------------------------------------------------------------------
+

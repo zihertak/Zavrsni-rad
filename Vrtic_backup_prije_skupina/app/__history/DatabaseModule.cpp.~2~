@@ -1,0 +1,26 @@
+//---------------------------------------------------------------------------
+
+
+#pragma hdrstop
+
+#include "DatabaseModule.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma classgroup "Vcl.Controls.TControl"
+#pragma resource "*.dfm"
+Tdata_module *data_module;
+//---------------------------------------------------------------------------
+__fastcall Tdata_module::Tdata_module(TComponent* Owner)
+	: TDataModule(Owner)
+{
+    try
+    {
+        connection->Connected = true;
+        ShowMessage("Veza s bazom uspješna!");
+    }
+    catch (const Exception &e)
+    {
+        ShowMessage(e.Message);
+    }
+}
+//---------------------------------------------------------------------------

@@ -1,0 +1,34 @@
+//---------------------------------------------------------------------------
+
+#ifndef DatabaseModuleH
+#define DatabaseModuleH
+//---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+#include <Data.DB.hpp>
+#include <FireDAC.Comp.Client.hpp>
+#include <FireDAC.Phys.hpp>
+#include <FireDAC.Phys.Intf.hpp>
+#include <FireDAC.Phys.MySQL.hpp>
+#include <FireDAC.Phys.MySQLDef.hpp>
+#include <FireDAC.Stan.Async.hpp>
+#include <FireDAC.Stan.Def.hpp>
+#include <FireDAC.Stan.Error.hpp>
+#include <FireDAC.Stan.Intf.hpp>
+#include <FireDAC.Stan.Option.hpp>
+#include <FireDAC.Stan.Pool.hpp>
+#include <FireDAC.UI.Intf.hpp>
+#include <FireDAC.VCLUI.Wait.hpp>
+//---------------------------------------------------------------------------
+class Tdata_module : public TDataModule
+{
+__published:	// IDE-managed Components
+	TFDConnection *connection;
+	TFDPhysMySQLDriverLink *mysql_driver;
+private:	// User declarations
+public:		// User declarations
+	__fastcall Tdata_module(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE Tdata_module *data_module;
+//---------------------------------------------------------------------------
+#endif

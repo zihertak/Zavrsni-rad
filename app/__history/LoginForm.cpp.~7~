@@ -1,0 +1,30 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "LoginForm.h"
+#include "DashboardForm.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+Tform_Login *form_Login;
+//---------------------------------------------------------------------------
+__fastcall Tform_Login::Tform_Login(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_Login::button_loginClick(TObject *Sender)
+{
+    form_dashboard->Align = alNone;
+    form_dashboard->BorderStyle = bsSingle;
+    form_dashboard->BorderIcons =
+        TBorderIcons() << biSystemMenu << biMinimize;
+    form_dashboard->WindowState = wsNormal;
+    form_dashboard->Position = poScreenCenter;
+
+    form_dashboard->Show();
+    this->Hide();
+}
+//---------------------------------------------------------------------------

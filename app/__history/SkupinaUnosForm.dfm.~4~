@@ -1,0 +1,103 @@
+object form_skupina_unos: Tform_skupina_unos
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Dodaj/Uredi skupinu'
+  ClientHeight = 304
+  ClientWidth = 450
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  OnShow = FormShow
+  TextHeight = 15
+  object label_naziv: TLabel
+    Left = 48
+    Top = 50
+    Width = 29
+    Height = 15
+    Caption = 'Naziv'
+  end
+  object label_pedagoska_godina: TLabel
+    Left = 48
+    Top = 93
+    Width = 97
+    Height = 15
+    Caption = 'Pedago'#353'ka godina'
+  end
+  object label_dob_od: TLabel
+    Left = 48
+    Top = 136
+    Width = 39
+    Height = 15
+    Caption = 'Dob od'
+  end
+  object label_dob_do: TLabel
+    Left = 48
+    Top = 179
+    Width = 39
+    Height = 15
+    Caption = 'Dob do'
+  end
+  object edit_naziv: TEdit
+    Left = 192
+    Top = 50
+    Width = 193
+    Height = 23
+    TabOrder = 0
+  end
+  object button_spremi: TButton
+    Left = 100
+    Top = 248
+    Width = 75
+    Height = 25
+    Caption = 'Spremi'
+    TabOrder = 1
+    OnClick = button_spremiClick
+  end
+  object button_odustani: TButton
+    Left = 250
+    Top = 248
+    Width = 75
+    Height = 25
+    Caption = 'Odustani'
+    TabOrder = 2
+    OnClick = button_odustaniClick
+  end
+  object combo_pedagoska_godina: TComboBox
+    Left = 192
+    Top = 90
+    Width = 193
+    Height = 23
+    Style = csDropDownList
+    TabOrder = 3
+  end
+  object spin_dob_od: TSpinEdit
+    Left = 192
+    Top = 133
+    Width = 193
+    Height = 24
+    MaxValue = 2
+    MinValue = 6
+    TabOrder = 4
+    Value = 0
+  end
+  object spin_dob_do: TSpinEdit
+    Left = 192
+    Top = 176
+    Width = 193
+    Height = 24
+    MaxValue = 2
+    MinValue = 6
+    TabOrder = 5
+    Value = 0
+  end
+  object query_spremanje: TFDQuery
+    Connection = data_module.connection
+    Left = 416
+    Top = 72
+  end
+end

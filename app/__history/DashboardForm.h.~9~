@@ -1,0 +1,44 @@
+//---------------------------------------------------------------------------
+
+#ifndef DashboardFormH
+#define DashboardFormH
+//---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+#include <Vcl.Controls.hpp>
+#include <Vcl.StdCtrls.hpp>
+#include <Vcl.Forms.hpp>
+#include <Vcl.ExtCtrls.hpp>
+#include <Vcl.Imaging.pngimage.hpp>
+//---------------------------------------------------------------------------
+class Tform_dashboard : public TForm
+{
+__published:	// IDE-managed Components
+	TPanel *panel_header;
+	TPanel *panel_menu;
+	TPanel *panel_content;
+	TLabel *label_naslov;
+	TLabel *label_korisnik;
+	TLabel *label_uloga;
+	TButton *button_pocetna;
+	TButton *button_djeca;
+	TButton *button_aktivnosti;
+	TButton *button_skupine;
+	TButton *button_razvoj;
+	TButton *button_korisnici;
+	TButton *button_upute;
+	TButton *button_odjava;
+	TImage *slika_background;
+	TPanel *panel_dobrodosli;
+	TLabel *label_dobrodosli;
+	TPanel *panel_user;
+	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+	void __fastcall FormShow(TObject *Sender);
+	void __fastcall button_odjavaClick(TObject *Sender);
+private:	// User declarations
+public:		// User declarations
+	__fastcall Tform_dashboard(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE Tform_dashboard *form_dashboard;
+//---------------------------------------------------------------------------
+#endif
