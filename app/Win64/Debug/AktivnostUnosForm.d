@@ -379,6 +379,9 @@
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\vcl\Vcl.ImageCollection.hpp \
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\vcl\Vcl.BaseImageCollection.hpp \
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\vcl\Vcl.VirtualImageList.hpp \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\vcl\Vcl.Imaging.pngimage.hpp \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\System.ZLib.hpp \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\vcl\Vcl.Imaging.pnglang.hpp \
   C:\Users\Luka\Desktop\NTP\app/DatabaseModule.h \
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\FireDAC.Phys.hpp \
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\FireDAC.Stan.Factory.hpp \

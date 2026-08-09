@@ -4,7 +4,7 @@ object form_aktivnost_unos: Tform_aktivnost_unos
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Aktivnost'
-  ClientHeight = 591
+  ClientHeight = 620
   ClientWidth = 600
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -18,7 +18,7 @@ object form_aktivnost_unos: Tform_aktivnost_unos
     Left = 25
     Top = 8
     Width = 537
-    Height = 521
+    Height = 557
     Color = 11064738
     ParentBackground = False
     ParentColor = False
@@ -32,7 +32,7 @@ object form_aktivnost_unos: Tform_aktivnost_unos
     end
     object label_opis: TLabel
       Left = 24
-      Top = 80
+      Top = 75
       Width = 24
       Height = 15
       Caption = 'Opis'
@@ -53,31 +53,38 @@ object form_aktivnost_unos: Tform_aktivnost_unos
     end
     object label_dob_do: TLabel
       Left = 24
-      Top = 234
+      Top = 229
       Width = 39
       Height = 15
       Caption = 'Dob do'
     end
     object label_potrebne_stavke: TLabel
       Left = 24
-      Top = 279
+      Top = 340
       Width = 84
       Height = 15
       Caption = 'Potrebne stavke'
     end
     object label_upute: TLabel
-      Left = 24
-      Top = 346
+      Left = 31
+      Top = 405
       Width = 32
       Height = 15
       Caption = 'Upute'
     end
     object label_podrucja: TLabel
-      Left = 29
-      Top = 440
+      Left = 21
+      Top = 480
       Width = 87
       Height = 15
       Caption = 'Podru'#269'ja razvoja'
+    end
+    object label_tezina: TLabel
+      Left = 24
+      Top = 269
+      Width = 68
+      Height = 15
+      Caption = 'Razina te'#382'ine'
     end
     object edit_naziv: TEdit
       Left = 152
@@ -112,7 +119,7 @@ object form_aktivnost_unos: Tform_aktivnost_unos
     end
     object edit_dob_do: TEdit
       Left = 152
-      Top = 234
+      Top = 229
       Width = 265
       Height = 23
       NumbersOnly = True
@@ -120,7 +127,7 @@ object form_aktivnost_unos: Tform_aktivnost_unos
     end
     object memo_potrebne_stavke: TMemo
       Left = 152
-      Top = 276
+      Top = 335
       Width = 265
       Height = 50
       ScrollBars = ssVertical
@@ -128,16 +135,34 @@ object form_aktivnost_unos: Tform_aktivnost_unos
     end
     object memo_upute: TMemo
       Left = 152
-      Top = 346
+      Top = 395
       Width = 265
       Height = 71
       ScrollBars = ssVertical
       TabOrder = 6
     end
+    object combo_tezina: TComboBox
+      Left = 152
+      Top = 266
+      Width = 265
+      Height = 23
+      Style = csDropDownList
+      TabOrder = 7
+    end
+    object check_aktivna: TCheckBox
+      Left = 152
+      Top = 305
+      Width = 105
+      Height = 17
+      Caption = 'Aktivna'
+      Checked = True
+      State = cbChecked
+      TabOrder = 8
+    end
   end
   object button_spremi: TButton
     Left = 128
-    Top = 542
+    Top = 571
     Width = 121
     Height = 41
     Caption = 'Spremi'
@@ -146,8 +171,8 @@ object form_aktivnost_unos: Tform_aktivnost_unos
     OnClick = button_spremiClick
   end
   object button_odustani: TButton
-    Left = 280
-    Top = 542
+    Left = 288
+    Top = 571
     Width = 121
     Height = 41
     Cancel = True
@@ -157,7 +182,7 @@ object form_aktivnost_unos: Tform_aktivnost_unos
   end
   object check_podrucja: TCheckListBox
     Left = 177
-    Top = 446
+    Top = 485
     Width = 265
     Height = 75
     Columns = 1

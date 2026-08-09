@@ -11,6 +11,9 @@
 #include "LoginForm.h"
 #include "AktivnostUnosForm.h"
 #include "KorisnickaPrava.h"
+#include "RazvojForm.h"
+#include "KorisniciForm.h"
+#include "UputeForm.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -23,14 +26,12 @@ __fastcall Tform_aktivnosti::Tform_aktivnosti(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall Tform_aktivnosti::FormShow(TObject *Sender)
 {
-    label_korisnik->Caption =
-		"Korisnik: " +
+	label_korisnik->Caption =
 		data_module->currentUserIme +
-		" " +
+		L" " +
 		data_module->currentUserPrezime;
 
 	label_uloga->Caption =
-		"Uloga: " +
 		data_module->currentUserUloga;
 
     ucitajPodrucja();
@@ -167,6 +168,14 @@ void Tform_aktivnosti::osvjeziPopisAktivnosti()
 		"a.naziv, "
 		"CAST(a.opis AS CHAR(255)) AS opis, "
 		"a.trajanje_minuta, "
+        "CONCAT(a.razina_tezine, ' - ', "
+		"CASE a.razina_tezine "
+		"WHEN 1 THEN 'Vrlo jednostavna' "
+		"WHEN 2 THEN 'Jednostavna' "
+		"WHEN 3 THEN 'Srednja' "
+		"WHEN 4 THEN 'Napredna' "
+		"WHEN 5 THEN 'Vrlo napredna' "
+		"END) AS tezina, "
 		"CONCAT(a.dob_od, ' - ', a.dob_do, ' godina') AS dob, "
 
 
@@ -221,6 +230,7 @@ void Tform_aktivnosti::osvjeziPopisAktivnosti()
 	"a.naziv, "
 	"a.opis, "
 	"a.trajanje_minuta, "
+	"a.razina_tezine, "
 	"a.dob_od, "
 	"a.dob_do "
 	);
@@ -264,6 +274,14 @@ void Tform_aktivnosti::postaviIzgledGrida()
 	query_aktivnosti
 		->FieldByName("trajanje_minuta")
 		->DisplayWidth = 14;
+
+    query_aktivnosti
+		->FieldByName("tezina")
+		->DisplayLabel = L"Težina";
+
+	query_aktivnosti
+		->FieldByName("tezina")
+		->DisplayWidth = 20;
 
 	query_aktivnosti
 		->FieldByName("dob")
@@ -484,5 +502,26 @@ void Tform_aktivnosti::primijeniPrava()
 	button_korisnici->Visible = prava.korisnici();
 }
 
+//---------------------------------------------------------------------------
+
+void __fastcall Tform_aktivnosti::button_razvojClick(TObject *Sender)
+{
+    this->Hide();
+    form_razvoj->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall Tform_aktivnosti::button_korisniciClick(TObject *Sender)
+{
+    this->Hide();
+    form_korisnici->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall Tform_aktivnosti::button_uputeClick(TObject *Sender)
+{
+    this->Hide();
+    form_upute->Show();
+}
 //---------------------------------------------------------------------------
 

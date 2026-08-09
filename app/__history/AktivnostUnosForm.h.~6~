@@ -1,0 +1,66 @@
+//---------------------------------------------------------------------------
+
+#ifndef AktivnostUnosFormH
+#define AktivnostUnosFormH
+//---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+#include <Vcl.Controls.hpp>
+#include <Vcl.StdCtrls.hpp>
+#include <Vcl.Forms.hpp>
+#include <Vcl.ComCtrls.hpp>
+#include <Data.DB.hpp>
+#include <FireDAC.Comp.Client.hpp>
+#include <FireDAC.Comp.DataSet.hpp>
+#include <FireDAC.DApt.hpp>
+#include <FireDAC.DApt.Intf.hpp>
+#include <FireDAC.DatS.hpp>
+#include <FireDAC.Phys.Intf.hpp>
+#include <FireDAC.Stan.Async.hpp>
+#include <FireDAC.Stan.Error.hpp>
+#include <FireDAC.Stan.Intf.hpp>
+#include <FireDAC.Stan.Option.hpp>
+#include <FireDAC.Stan.Param.hpp>
+#include <Vcl.CheckLst.hpp>
+//---------------------------------------------------------------------------
+class Tform_aktivnost_unos : public TForm
+{
+__published:	// IDE-managed Components
+	TGroupBox *group_osnovni;
+	TLabel *label_naziv;
+	TLabel *label_opis;
+	TLabel *label_trajanje;
+	TLabel *label_dob_od;
+	TLabel *label_dob_do;
+	TLabel *label_potrebne_stavke;
+	TLabel *label_upute;
+	TEdit *edit_naziv;
+	TButton *button_spremi;
+	TButton *button_odustani;
+	TMemo *memo_opis;
+	TEdit *edit_trajanje;
+	TEdit *edit_dob_od;
+	TEdit *edit_dob_do;
+	TMemo *memo_potrebne_stavke;
+	TMemo *memo_upute;
+	TFDQuery *query_spremanje;
+	TFDQuery *query_aktivnost;
+	TFDQuery *query_podrucja;
+	TCheckListBox *check_podrucja;
+	TLabel *label_podrucja;
+	TLabel *label_tezina;
+	TComboBox *combo_tezina;
+	TCheckBox *check_aktivna;
+	void __fastcall button_odustaniClick(TObject *Sender);
+	void __fastcall button_spremiClick(TObject *Sender);
+private:	// User declarations
+	int idAktivnost;
+	void ucitajPodrucja();
+public:		// User declarations
+	__fastcall Tform_aktivnost_unos(TComponent* Owner);
+	void pripremiZaDodavanje();
+	void pripremiZaUredjivanje(int odabraniIdAktivnost);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE Tform_aktivnost_unos *form_aktivnost_unos;
+//---------------------------------------------------------------------------
+#endif

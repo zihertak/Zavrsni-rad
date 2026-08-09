@@ -214,15 +214,39 @@
             <DependentOn>DjecaForm.h</DependentOn>
             <BuildOrder>5</BuildOrder>
         </CppCompile>
+        <CppCompile Include="KorisniciForm.cpp">
+            <Form>form_korisnici</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>KorisniciForm.h</DependentOn>
+            <BuildOrder>14</BuildOrder>
+        </CppCompile>
         <CppCompile Include="KorisnickaPrava.cpp">
             <DependentOn>KorisnickaPrava.h</DependentOn>
             <BuildOrder>7</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="KorisnikUnosForm.cpp">
+            <Form>form_korisnik_unos</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>KorisnikUnosForm.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
         </CppCompile>
         <CppCompile Include="LoginForm.cpp">
             <Form>form_Login</Form>
             <FormType>dfm</FormType>
             <DependentOn>LoginForm.h</DependentOn>
             <BuildOrder>2</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="RazvojDetaljiForm.cpp">
+            <Form>form_razvoj_detalji</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>RazvojDetaljiForm.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="RazvojForm.cpp">
+            <Form>form_razvoj</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>RazvojForm.h</DependentOn>
+            <BuildOrder>12</BuildOrder>
         </CppCompile>
         <CppCompile Include="SkupinaUnosForm.cpp">
             <Form>form_skupina_unos</Form>
@@ -235,6 +259,12 @@
             <FormType>dfm</FormType>
             <DependentOn>SkupineForm.h</DependentOn>
             <BuildOrder>8</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="UputeForm.cpp">
+            <Form>form_upute</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>UputeForm.h</DependentOn>
+            <BuildOrder>16</BuildOrder>
         </CppCompile>
         <CppCompile Include="vrtic_app.cpp">
             <BuildOrder>0</BuildOrder>
@@ -252,6 +282,11 @@
         <FormResources Include="SkupinaUnosForm.dfm"/>
         <FormResources Include="AktivnostiForm.dfm"/>
         <FormResources Include="AktivnostUnosForm.dfm"/>
+        <FormResources Include="RazvojForm.dfm"/>
+        <FormResources Include="RazvojDetaljiForm.dfm"/>
+        <FormResources Include="KorisniciForm.dfm"/>
+        <FormResources Include="KorisnikUnosForm.dfm"/>
+        <FormResources Include="UputeForm.dfm"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

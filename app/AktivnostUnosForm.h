@@ -47,15 +47,20 @@ __published:	// IDE-managed Components
 	TFDQuery *query_podrucja;
 	TCheckListBox *check_podrucja;
 	TLabel *label_podrucja;
+	TLabel *label_tezina;
+	TComboBox *combo_tezina;
+	TCheckBox *check_aktivna;
 	void __fastcall button_odustaniClick(TObject *Sender);
 	void __fastcall button_spremiClick(TObject *Sender);
 private:	// User declarations
 	int idAktivnost;
 	void ucitajPodrucja();
+    void ucitajRazineTezine();
 public:		// User declarations
 	__fastcall Tform_aktivnost_unos(TComponent* Owner);
 	void pripremiZaDodavanje();
 	void pripremiZaUredjivanje(int odabraniIdAktivnost);
+    void pripremiZaPregled(int odabraniIdAktivnost);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE Tform_aktivnost_unos *form_aktivnost_unos;

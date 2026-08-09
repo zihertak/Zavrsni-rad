@@ -1,0 +1,182 @@
+object form_aktivnost_unos: Tform_aktivnost_unos
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Aktivnost'
+  ClientHeight = 591
+  ClientWidth = 600
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  Position = poScreenCenter
+  TextHeight = 15
+  object group_osnovni: TGroupBox
+    Left = 25
+    Top = 8
+    Width = 537
+    Height = 521
+    Color = 11064738
+    ParentBackground = False
+    ParentColor = False
+    TabOrder = 0
+    object label_naziv: TLabel
+      Left = 24
+      Top = 35
+      Width = 29
+      Height = 15
+      Caption = 'Naziv'
+    end
+    object label_opis: TLabel
+      Left = 24
+      Top = 80
+      Width = 24
+      Height = 15
+      Caption = 'Opis'
+    end
+    object label_trajanje: TLabel
+      Left = 24
+      Top = 144
+      Width = 109
+      Height = 15
+      Caption = 'Trajanje u minutama'
+    end
+    object label_dob_od: TLabel
+      Left = 24
+      Top = 189
+      Width = 39
+      Height = 15
+      Caption = 'Dob od'
+    end
+    object label_dob_do: TLabel
+      Left = 24
+      Top = 234
+      Width = 39
+      Height = 15
+      Caption = 'Dob do'
+    end
+    object label_potrebne_stavke: TLabel
+      Left = 24
+      Top = 279
+      Width = 84
+      Height = 15
+      Caption = 'Potrebne stavke'
+    end
+    object label_upute: TLabel
+      Left = 24
+      Top = 346
+      Width = 32
+      Height = 15
+      Caption = 'Upute'
+    end
+    object label_podrucja: TLabel
+      Left = 29
+      Top = 440
+      Width = 87
+      Height = 15
+      Caption = 'Podru'#269'ja razvoja'
+    end
+    object edit_naziv: TEdit
+      Left = 152
+      Top = 27
+      Width = 265
+      Height = 23
+      TabOrder = 0
+    end
+    object memo_opis: TMemo
+      Left = 152
+      Top = 72
+      Width = 265
+      Height = 50
+      ScrollBars = ssVertical
+      TabOrder = 1
+    end
+    object edit_trajanje: TEdit
+      Left = 152
+      Top = 144
+      Width = 265
+      Height = 23
+      NumbersOnly = True
+      TabOrder = 2
+    end
+    object edit_dob_od: TEdit
+      Left = 152
+      Top = 189
+      Width = 265
+      Height = 23
+      NumbersOnly = True
+      TabOrder = 3
+    end
+    object edit_dob_do: TEdit
+      Left = 152
+      Top = 234
+      Width = 265
+      Height = 23
+      NumbersOnly = True
+      TabOrder = 4
+    end
+    object memo_potrebne_stavke: TMemo
+      Left = 152
+      Top = 276
+      Width = 265
+      Height = 50
+      ScrollBars = ssVertical
+      TabOrder = 5
+    end
+    object memo_upute: TMemo
+      Left = 152
+      Top = 346
+      Width = 265
+      Height = 71
+      ScrollBars = ssVertical
+      TabOrder = 6
+    end
+  end
+  object button_spremi: TButton
+    Left = 128
+    Top = 542
+    Width = 121
+    Height = 41
+    Caption = 'Spremi'
+    Default = True
+    TabOrder = 1
+    OnClick = button_spremiClick
+  end
+  object button_odustani: TButton
+    Left = 280
+    Top = 542
+    Width = 121
+    Height = 41
+    Cancel = True
+    Caption = 'Odustani'
+    TabOrder = 2
+    OnClick = button_odustaniClick
+  end
+  object check_podrucja: TCheckListBox
+    Left = 177
+    Top = 446
+    Width = 265
+    Height = 75
+    Columns = 1
+    ItemHeight = 17
+    TabOrder = 3
+  end
+  object query_spremanje: TFDQuery
+    Connection = data_module.connection
+    Left = 480
+    Top = 168
+  end
+  object query_aktivnost: TFDQuery
+    Connection = data_module.connection
+    Left = 480
+    Top = 256
+  end
+  object query_podrucja: TFDQuery
+    Connection = data_module.connection
+    Left = 488
+    Top = 336
+  end
+end

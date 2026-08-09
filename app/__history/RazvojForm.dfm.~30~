@@ -1,0 +1,1092 @@
+object form_razvoj: Tform_razvoj
+  Left = 0
+  Top = 0
+  Caption = 'Razvoj djece'
+  ClientHeight = 670
+  ClientWidth = 1060
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  Position = poMainFormCenter
+  WindowState = wsMaximized
+  OnClose = FormClose
+  OnShow = FormShow
+  TextHeight = 15
+  object panel_header: TPanel
+    Left = 0
+    Top = 0
+    Width = 1060
+    Height = 80
+    Align = alTop
+    BevelOuter = bvNone
+    Color = 16744448
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = 15267305
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 0
+    ExplicitLeft = -436
+    object label_naslov: TLabel
+      Left = 20
+      Top = 20
+      Width = 220
+      Height = 38
+      Caption = 'Naslov aplikacije'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -28
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object panel_user: TPanel
+      Left = 874
+      Top = 12
+      Width = 218
+      Height = 41
+      BevelOuter = bvNone
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = 15267305
+      Font.Height = 60
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 0
+      object label_korisnik: TLabel
+        Left = 1
+        Top = 0
+        Width = 26
+        Height = 21
+        Caption = ' '#55357#56420
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object label_uloga: TLabel
+        Left = 8
+        Top = 20
+        Width = 54
+        Height = 21
+        Caption = 'Uloga: -'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+    end
+  end
+  object panel_menu: TPanel
+    Left = 0
+    Top = 80
+    Width = 220
+    Height = 590
+    Align = alLeft
+    BevelOuter = bvNone
+    Color = 11064738
+    ParentBackground = False
+    TabOrder = 1
+    ExplicitTop = -59
+    ExplicitHeight = 500
+    DesignSize = (
+      220
+      590)
+    object button_pocetna: TButton
+      Left = 0
+      Top = 0
+      Width = 220
+      Height = 55
+      Align = alTop
+      Caption = 'Po'#269'etna'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+      TabStop = False
+      OnClick = button_pocetnaClick
+    end
+    object button_djeca: TButton
+      Left = 0
+      Top = 55
+      Width = 220
+      Height = 55
+      Align = alTop
+      Caption = 'Djeca'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 1
+      TabStop = False
+      OnClick = button_djecaClick
+    end
+    object button_aktivnosti: TButton
+      Left = 0
+      Top = 110
+      Width = 220
+      Height = 55
+      Align = alTop
+      Caption = 'Aktivnosti'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 2
+      TabStop = False
+      OnClick = button_aktivnostiClick
+    end
+    object button_skupine: TButton
+      Left = 0
+      Top = 165
+      Width = 220
+      Height = 55
+      Align = alTop
+      Caption = 'Skupine'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 3
+      TabStop = False
+      OnClick = button_skupineClick
+    end
+    object button_razvoj: TButton
+      Left = 0
+      Top = 220
+      Width = 220
+      Height = 55
+      Align = alTop
+      Caption = 'Razvoj'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 4
+      TabStop = False
+    end
+    object button_korisnici: TButton
+      Left = 0
+      Top = 275
+      Width = 220
+      Height = 55
+      Align = alTop
+      Caption = 'Korisnici'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 5
+      TabStop = False
+    end
+    object button_upute: TButton
+      Left = 0
+      Top = 330
+      Width = 220
+      Height = 55
+      Align = alTop
+      Caption = 'Upute'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 6
+      TabStop = False
+    end
+    object button_odjava: TButton
+      Left = 0
+      Top = 475
+      Width = 220
+      Height = 55
+      Anchors = [akLeft, akRight, akBottom]
+      Caption = 'Odjava'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 7
+      TabStop = False
+      OnClick = button_odjavaClick
+      ExplicitTop = 385
+    end
+  end
+  object panel_content: TPanel
+    Left = 220
+    Top = 80
+    Width = 840
+    Height = 590
+    Align = alClient
+    Color = clWhite
+    ParentBackground = False
+    TabOrder = 2
+    ExplicitLeft = 448
+    ExplicitTop = 288
+    ExplicitWidth = 185
+    ExplicitHeight = 41
+    object panel_alati: TPanel
+      Left = 1
+      Top = 1
+      Width = 838
+      Height = 90
+      Align = alTop
+      BevelOuter = bvNone
+      Color = clWhite
+      ParentBackground = False
+      TabOrder = 0
+      object label_naslov_razvoj: TLabel
+        Left = 25
+        Top = 6
+        Width = 112
+        Height = 48
+        Caption = 'Razvoj'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -36
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object label_opis: TLabel
+        Left = 27
+        Top = 56
+        Width = 268
+        Height = 28
+        Caption = 'Pregled i upravljanje razvojem '
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clGray
+        Font.Height = -20
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+    end
+    object panel_odabir_djeteta: TPanel
+      Left = 1
+      Top = 91
+      Width = 838
+      Height = 60
+      Align = alTop
+      BevelOuter = bvNone
+      Color = clWhite
+      ParentBackground = False
+      TabOrder = 1
+      ExplicitLeft = 6
+      object label_dijete: TLabel
+        Left = 25
+        Top = 10
+        Width = 90
+        Height = 15
+        Caption = 'Odaberite dijete :'
+      end
+      object label_skupina_naslov: TLabel
+        Left = 336
+        Top = -2
+        Width = 45
+        Height = 15
+        Caption = 'Skupina:'
+      end
+      object label_skupina: TLabel
+        Left = 488
+        Top = -2
+        Width = 10
+        Height = 15
+        Caption = '--'
+      end
+      object label_dob_naslov: TLabel
+        Left = 336
+        Top = 19
+        Width = 25
+        Height = 15
+        Caption = 'Dob:'
+      end
+      object label_dob: TLabel
+        Left = 488
+        Top = 19
+        Width = 10
+        Height = 15
+        Caption = '--'
+      end
+      object label_zadnji_pregled_naslov: TLabel
+        Left = 336
+        Top = 40
+        Width = 97
+        Height = 15
+        Caption = 'Posljednji pregled:'
+      end
+      object label_zadnji_pregled: TLabel
+        Left = 488
+        Top = 40
+        Width = 10
+        Height = 15
+        Caption = '--'
+      end
+      object combo_dijete: TComboBox
+        Left = 144
+        Top = 10
+        Width = 145
+        Height = 23
+        Style = csDropDownList
+        TabOrder = 0
+        OnChange = combo_dijeteChange
+      end
+    end
+    object page_razvoj: TPageControl
+      Left = 1
+      Top = 151
+      Width = 838
+      Height = 438
+      ActivePage = tab_procjena
+      Align = alClient
+      TabOrder = 2
+      ExplicitHeight = 348
+      object tab_procjena: TTabSheet
+        Caption = 'Procjena'
+        object panel_procjena: TPanel
+          Left = 0
+          Top = 0
+          Width = 830
+          Height = 408
+          Align = alClient
+          BevelOuter = bvNone
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 0
+          ExplicitLeft = 1
+          ExplicitTop = -6
+          ExplicitHeight = 318
+          object label_tjelesni: TLabel
+            Left = 50
+            Top = 15
+            Width = 204
+            Height = 21
+            Caption = 'Tjelesni i psihomotorni razvoj'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+          end
+          object label_socio: TLabel
+            Left = 50
+            Top = 55
+            Width = 175
+            Height = 21
+            Caption = 'Socio-emocionalni razvoj'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+          end
+          object label_govorni: TLabel
+            Left = 50
+            Top = 95
+            Width = 102
+            Height = 21
+            Caption = 'Govorni razvoj'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+          end
+          object label_spoznajni: TLabel
+            Left = 50
+            Top = 135
+            Width = 114
+            Height = 21
+            Caption = 'Spoznajni razvoj'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+          end
+          object speed_tjelesni_1: TSpeedButton
+            Tag = 1
+            Left = 312
+            Top = 12
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_tjelesniClick
+          end
+          object speed_tjelesni_2: TSpeedButton
+            Tag = 2
+            Left = 342
+            Top = 12
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_tjelesniClick
+          end
+          object speed_tjelesni_3: TSpeedButton
+            Tag = 3
+            Left = 372
+            Top = 12
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_tjelesniClick
+          end
+          object speed_tjelesni_4: TSpeedButton
+            Tag = 4
+            Left = 402
+            Top = 12
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_tjelesniClick
+          end
+          object speed_tjelesni_5: TSpeedButton
+            Tag = 5
+            Left = 432
+            Top = 12
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_tjelesniClick
+          end
+          object speed_socio_1: TSpeedButton
+            Tag = 1
+            Left = 312
+            Top = 52
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_socioClick
+          end
+          object speed_socio_2: TSpeedButton
+            Tag = 2
+            Left = 342
+            Top = 52
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_socioClick
+          end
+          object speed_socio_3: TSpeedButton
+            Tag = 3
+            Left = 372
+            Top = 52
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_socioClick
+          end
+          object speed_socio_4: TSpeedButton
+            Tag = 4
+            Left = 402
+            Top = 52
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_socioClick
+          end
+          object speed_socio_5: TSpeedButton
+            Tag = 5
+            Left = 432
+            Top = 52
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_socioClick
+          end
+          object speed_govorni_1: TSpeedButton
+            Tag = 1
+            Left = 312
+            Top = 92
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_govorniClick
+          end
+          object speed_govorni_2: TSpeedButton
+            Tag = 2
+            Left = 342
+            Top = 92
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_govorniClick
+          end
+          object speed_govorni_3: TSpeedButton
+            Tag = 3
+            Left = 372
+            Top = 92
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_govorniClick
+          end
+          object speed_govorni_4: TSpeedButton
+            Tag = 4
+            Left = 402
+            Top = 92
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_govorniClick
+          end
+          object speed_govorni_5: TSpeedButton
+            Tag = 5
+            Left = 432
+            Top = 92
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_govorniClick
+          end
+          object speed_spoznajni_1: TSpeedButton
+            Tag = 1
+            Left = 312
+            Top = 132
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_spoznajniClick
+          end
+          object speed_spoznajni_2: TSpeedButton
+            Tag = 2
+            Left = 342
+            Top = 132
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_spoznajniClick
+          end
+          object speed_spoznajni_3: TSpeedButton
+            Tag = 3
+            Left = 372
+            Top = 132
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_spoznajniClick
+          end
+          object speed_spoznajni_4: TSpeedButton
+            Tag = 4
+            Left = 402
+            Top = 132
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_spoznajniClick
+          end
+          object speed_spoznajni_5: TSpeedButton
+            Tag = 5
+            Left = 432
+            Top = 132
+            Width = 24
+            Height = 24
+            Cursor = crHandPoint
+            Caption = #9734
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -32
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            OnClick = speed_spoznajniClick
+          end
+          object label_napomena: TLabel
+            Left = 50
+            Top = 184
+            Width = 117
+            Height = 21
+            Caption = 'Op'#263'a napomena:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+          end
+          object memo_napomena: TMemo
+            Left = 208
+            Top = 184
+            Width = 248
+            Height = 75
+            ScrollBars = ssVertical
+            TabOrder = 0
+          end
+          object button_ocisti: TButton
+            Left = 432
+            Top = 280
+            Width = 94
+            Height = 33
+            Caption = 'O'#269'isti'
+            TabOrder = 1
+            OnClick = button_ocistiClick
+          end
+          object button_spremi: TButton
+            Left = 239
+            Top = 280
+            Width = 97
+            Height = 33
+            Caption = 'Spremi pregled'
+            TabOrder = 2
+            OnClick = button_spremiClick
+          end
+        end
+      end
+      object tab_povijest: TTabSheet
+        Caption = 'Povijest'
+        ImageIndex = 1
+        object grid_povijest: TDBGrid
+          Left = 0
+          Top = 0
+          Width = 830
+          Height = 408
+          Align = alClient
+          DataSource = data_povijest
+          Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+          ReadOnly = True
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Segoe UI'
+          TitleFont.Style = []
+          OnDblClick = grid_povijestDblClick
+        end
+      end
+      object tab_preporuke: TTabSheet
+        Caption = 'Preporuke'
+        ImageIndex = 2
+        object label_preporuke_naslov: TLabel
+          Left = 16
+          Top = 8
+          Width = 204
+          Height = 21
+          Caption = 'Preporuka za daljnji razvoj'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object label_preporuke_opis: TLabel
+          Left = 16
+          Top = 35
+          Width = 633
+          Height = 30
+          AutoSize = False
+          Caption = 
+            'Preporuka se generira prema zadnjem razvojnom pregledu, dobi dje' +
+            'teta i promjenama u odnosu na prethodni pregled.'
+          WordWrap = True
+        end
+        object button_generiraj_preporuku: TButton
+          Left = 16
+          Top = 67
+          Width = 121
+          Height = 25
+          Caption = 'Generiraj preporuku'
+          TabOrder = 0
+          OnClick = button_generiraj_preporukuClick
+        end
+        object panel_opca_preporuka: TPanel
+          Left = 16
+          Top = 107
+          Width = 792
+          Height = 302
+          BevelOuter = bvNone
+          TabOrder = 1
+          object label_zakljucak_naslov: TLabel
+            Left = 0
+            Top = 4
+            Width = 79
+            Height = 15
+            Caption = 'Op'#263'i zaklju'#269'ak'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Segoe UI'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object label_aktivnosti_naslov: TLabel
+            Left = 262
+            Top = 4
+            Width = 130
+            Height = 15
+            Caption = 'Preporu'#269'ene aktivnosti'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Segoe UI'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object label_razlog_naslov: TLabel
+            Left = 524
+            Top = 4
+            Width = 81
+            Height = 15
+            Caption = 'Razlog odabira'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Segoe UI'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object label_status_preporuke_naslov: TLabel
+            Left = 0
+            Top = 204
+            Width = 50
+            Height = 15
+            Caption = 'Status:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Segoe UI'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object label_otvori_aktivnost: TLabel
+            Left = 0
+            Top = 240
+            Width = 57
+            Height = 15
+            Caption = 'Aktivnost:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Segoe UI'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object memo_zakljucak: TMemo
+            Left = 0
+            Top = 26
+            Width = 245
+            Height = 150
+            TabStop = False
+            ReadOnly = True
+            ScrollBars = ssVertical
+            TabOrder = 0
+          end
+          object memo_preporucene_aktivnosti: TMemo
+            Left = 262
+            Top = 25
+            Width = 245
+            Height = 150
+            TabStop = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            ScrollBars = ssVertical
+            TabOrder = 1
+          end
+          object memo_razlog_preporuke: TMemo
+            Left = 524
+            Top = 26
+            Width = 245
+            Height = 150
+            ReadOnly = True
+            ScrollBars = ssVertical
+            TabOrder = 2
+          end
+          object button_detalji_preporuke: TButton
+            Left = 0
+            Top = 272
+            Width = 121
+            Height = 25
+            Caption = 'Detaljne preporuke'
+            TabOrder = 3
+            Visible = False
+          end
+          object combo_status_preporuke: TComboBox
+            Left = 79
+            Top = 200
+            Width = 145
+            Height = 23
+            Style = csDropDownList
+            ItemIndex = 0
+            TabOrder = 4
+            Text = 'Predlo'#382'ena'
+            Items.Strings = (
+              'Predlo'#382'ena'
+              'Prihva'#263'ena'
+              'U provedbi'
+              'Zavr'#353'ena'
+              'Odba'#269'ena')
+          end
+          object button_spremi_preporuku: TButton
+            Left = 656
+            Top = 240
+            Width = 120
+            Height = 30
+            Caption = 'Spremi preporuku'
+            TabOrder = 5
+            OnClick = button_spremi_preporukuClick
+          end
+          object combo_preporucene_aktivnosti: TComboBox
+            Left = 79
+            Top = 235
+            Width = 145
+            Height = 23
+            Style = csDropDownList
+            TabOrder = 6
+          end
+          object button_otvori_aktivnost: TButton
+            Left = 254
+            Top = 235
+            Width = 75
+            Height = 25
+            Caption = 'Otvori'
+            TabOrder = 7
+            OnClick = button_otvori_aktivnostClick
+          end
+        end
+      end
+    end
+  end
+  object query_djeca: TFDQuery
+    Connection = data_module.connection
+    Left = 952
+    Top = 152
+  end
+  object query_spremi_pregled: TFDQuery
+    Connection = data_module.connection
+    Left = 976
+    Top = 224
+  end
+  object query_spremi_procjenu: TFDQuery
+    Connection = data_module.connection
+    Left = 984
+    Top = 296
+  end
+  object query_povijest: TFDQuery
+    Connection = data_module.connection
+    Left = 872
+    Top = 168
+  end
+  object data_povijest: TDataSource
+    DataSet = query_povijest
+    Left = 888
+    Top = 272
+  end
+  object query_pregledi_preporuke: TFDQuery
+    Connection = data_module.connection
+    Left = 808
+    Top = 432
+  end
+  object query_ocjene_preporuke: TFDQuery
+    Connection = data_module.connection
+    Left = 888
+    Top = 416
+  end
+  object query_aktivnosti_preporuke: TFDQuery
+    Connection = data_module.connection
+    Left = 928
+    Top = 472
+  end
+  object query_spremi_preporuku: TFDQuery
+    Connection = data_module.connection
+    Left = 528
+    Top = 416
+  end
+  object query_spremi_preporuka_aktivnost: TFDQuery
+    Connection = data_module.connection
+    Left = 632
+    Top = 416
+  end
+  object query_provjeri_preporuku: TFDQuery
+    Connection = data_module.connection
+    Left = 624
+    Top = 496
+  end
+end

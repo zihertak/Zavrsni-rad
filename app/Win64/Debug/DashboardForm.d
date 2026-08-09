@@ -392,4 +392,10 @@
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\vcl\Vcl.VirtualImageList.hpp \
   C:\Users\Luka\Desktop\NTP\app/KorisnickaPrava.h \
   C:\Users\Luka\Desktop\NTP\app/SkupineForm.h \
-  C:\Users\Luka\Desktop\NTP\app/AktivnostiForm.h
+  C:\Users\Luka\Desktop\NTP\app/AktivnostiForm.h \
+  C:\Users\Luka\Desktop\NTP\app/RazvojForm.h \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\dinkumware64\vector \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\dinkumware64\algorithm \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\dinkumware64\xheap \
+  C:\Users\Luka\Desktop\NTP\app/KorisniciForm.h \
+  C:\Users\Luka\Desktop\NTP\app/UputeForm.h

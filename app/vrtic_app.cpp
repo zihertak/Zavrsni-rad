@@ -13,6 +13,11 @@ USEFORM("SkupineForm.cpp", form_skupine);
 USEFORM("SkupinaUnosForm.cpp", form_skupina_unos);
 USEFORM("AktivnostiForm.cpp", form_aktivnosti);
 USEFORM("AktivnostUnosForm.cpp", form_aktivnost_unos);
+USEFORM("RazvojForm.cpp", form_razvoj);
+USEFORM("RazvojDetaljiForm.cpp", form_razvoj_detalji);
+USEFORM("KorisniciForm.cpp", form_korisnici);
+USEFORM("KorisnikUnosForm.cpp", form_korisnik_unos);
+USEFORM("UputeForm.cpp", form_upute);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
@@ -29,6 +34,11 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 		Application->CreateForm(__classid(Tform_skupina_unos), &form_skupina_unos);
 		Application->CreateForm(__classid(Tform_aktivnosti), &form_aktivnosti);
 		Application->CreateForm(__classid(Tform_aktivnost_unos), &form_aktivnost_unos);
+		Application->CreateForm(__classid(Tform_razvoj), &form_razvoj);
+		Application->CreateForm(__classid(Tform_razvoj_detalji), &form_razvoj_detalji);
+		Application->CreateForm(__classid(Tform_korisnici), &form_korisnici);
+		Application->CreateForm(__classid(Tform_korisnik_unos), &form_korisnik_unos);
+		Application->CreateForm(__classid(Tform_upute), &form_upute);
 		Application->Run();
 	}
 	catch (Exception &exception)

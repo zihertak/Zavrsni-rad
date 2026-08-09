@@ -1,0 +1,409 @@
+﻿//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "KorisniciForm.h"
+#include "DatabaseModule.h"
+#include "LoginForm.h"
+#include "DashboardForm.h"
+#include "DjecaForm.h"
+#include "SkupineForm.h"
+#include "AktivnostiForm.h"
+#include "RazvojForm.h"
+#include "KorisnikUnosForm.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+Tform_korisnici *form_korisnici;
+//---------------------------------------------------------------------------
+__fastcall Tform_korisnici::Tform_korisnici(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_korisnici::FormShow(TObject *Sender)
+{
+    label_korisnik->Caption =
+        L"Korisnik: " +
+        data_module->currentUserIme +
+        L" " +
+        data_module->currentUserPrezime;
+
+    label_uloga->Caption =
+        L"Uloga: " +
+		data_module->currentUserUloga;
+
+    ucitajUloge();
+
+	combo_sortiranje->Items->Clear();
+	combo_sortiranje->Items->Add(L"Prezime A-Ž");
+	combo_sortiranje->Items->Add(L"Prezime Ž-A");
+	combo_sortiranje->Items->Add(L"Ime A-Ž");
+	combo_sortiranje->Items->Add(L"Ime Ž-A");
+	combo_sortiranje->Items->Add(L"Korisničko ime A-Ž");
+	combo_sortiranje->Items->Add(L"Korisničko ime Ž-A");
+	combo_sortiranje->Items->Add(L"Uloga A-Ž");
+	combo_sortiranje->Items->Add(L"Status");
+	combo_sortiranje->ItemIndex = 0;
+
+	osvjeziPopisKorisnika();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_korisnici::FormClose(TObject *Sender, TCloseAction &Action)
+
+{
+     Application->Terminate();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_korisnici::button_pocetnaClick(TObject *Sender)
+{
+    this->Hide();
+	form_dashboard->Show();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_korisnici::button_djecaClick(TObject *Sender)
+{
+	this->Hide();
+	form_djeca->Show();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_korisnici::button_aktivnostiClick(TObject *Sender)
+{
+	this->Hide();
+	form_aktivnosti->Show();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_korisnici::button_skupineClick(TObject *Sender)
+{
+	this->Hide();
+	form_skupine->Show();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_korisnici::button_razvojClick(TObject *Sender)
+{
+    this->Hide();
+	form_razvoj->Show();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_korisnici::button_odjavaClick(TObject *Sender)
+{
+	data_module->currentUserID = 0;
+    data_module->currentUserIme = L"";
+    data_module->currentUserPrezime = L"";
+    data_module->currentUserUloga = L"";
+    data_module->currentUserSkupinaID = 0;
+
+    form_Login->edit_username->Clear();
+    form_Login->edit_password->Clear();
+
+    this->Hide();
+    form_dashboard->Hide();
+
+    form_Login->Show();
+    form_Login->BringToFront();
+	form_Login->edit_username->SetFocus();
+}
+//---------------------------------------------------------------------------
+void Tform_korisnici::ucitajUloge()
+{
+    combo_uloga->Items->Clear();
+
+    combo_uloga->Items->AddObject(
+        L"Sve uloge",
+        reinterpret_cast<TObject*>(0)
+    );
+
+    query_uloge->Close();
+    query_uloge->SQL->Clear();
+
+    query_uloge->SQL->Add(
+        L"SELECT id_uloga, naziv "
+        L"FROM uloga "
+        L"ORDER BY naziv"
+    );
+
+    query_uloge->Open();
+
+    while (!query_uloge->Eof)
+    {
+        String naziv =
+            query_uloge
+                ->FieldByName(L"naziv")
+                ->AsWideString;
+
+        int idUloga =
+            query_uloge
+                ->FieldByName(L"id_uloga")
+                ->AsInteger;
+
+        combo_uloga->Items->AddObject(
+            naziv,
+			reinterpret_cast<TObject*>(
+                static_cast<NativeInt>(idUloga)
+            )
+        );
+
+        query_uloge->Next();
+    }
+
+    query_uloge->Close();
+    combo_uloga->ItemIndex = 0;
+}
+
+void Tform_korisnici::osvjeziPopisKorisnika()
+{
+    String pretraga = edit_pretraga->Text.Trim();
+
+    NativeInt idUloga = 0;
+
+    if (combo_uloga->ItemIndex >= 0)
+    {
+        idUloga = reinterpret_cast<NativeInt>(
+            combo_uloga->Items->Objects[
+                combo_uloga->ItemIndex
+            ]
+        );
+    }
+
+    query_korisnici->Close();
+    query_korisnici->SQL->Clear();
+
+    query_korisnici->SQL->Add(
+        L"SELECT "
+        L"    k.id_korisnik, "
+        L"    k.ime, "
+        L"    k.prezime, "
+        L"    k.username, "
+        L"    k.id_uloga, "
+		L"    k.id_skupina, "
+		L"    k.aktivan, "
+        L"    u.naziv AS naziv_uloge, "
+		L"    s.naziv AS naziv_skupine "
+        L"    CASE "
+		L"    WHEN k.aktivan = 1 THEN 'Aktivan' "
+		L"    ELSE 'Neaktivan' "
+		L"    END AS status_korisnika
+        L"FROM korisnik k "
+        L"INNER JOIN uloga u "
+        L"    ON u.id_uloga = k.id_uloga "
+        L"LEFT JOIN skupina s "
+        L"    ON s.id_skupina = k.id_skupina "
+        L"WHERE 1 = 1 "
+    );
+
+    if (!pretraga.IsEmpty())
+    {
+        query_korisnici->SQL->Add(
+            L"AND ("
+            L"    k.ime LIKE :pretraga "
+            L"    OR k.prezime LIKE :pretraga "
+            L"    OR k.username LIKE :pretraga"
+            L") "
+        );
+
+        query_korisnici
+            ->ParamByName(L"pretraga")
+            ->AsWideString =
+            L"%" + pretraga + L"%";
+    }
+
+    if (idUloga != 0)
+    {
+        query_korisnici->SQL->Add(
+            L"AND k.id_uloga = :id_uloga "
+        );
+
+        query_korisnici
+            ->ParamByName(L"id_uloga")
+            ->AsInteger =
+            static_cast<int>(idUloga);
+    }
+
+    switch (combo_sortiranje->ItemIndex)
+    {
+        case 0:
+            query_korisnici->SQL->Add(
+                L"ORDER BY k.prezime ASC, k.ime ASC"
+            );
+            break;
+
+        case 1:
+            query_korisnici->SQL->Add(
+                L"ORDER BY k.prezime DESC, k.ime DESC"
+            );
+            break;
+
+        case 2:
+            query_korisnici->SQL->Add(
+                L"ORDER BY k.ime ASC, k.prezime ASC"
+            );
+            break;
+
+        case 3:
+            query_korisnici->SQL->Add(
+                L"ORDER BY k.ime DESC, k.prezime DESC"
+            );
+            break;
+
+        case 4:
+            query_korisnici->SQL->Add(
+                L"ORDER BY k.username ASC"
+            );
+            break;
+
+        case 5:
+            query_korisnici->SQL->Add(
+                L"ORDER BY k.username DESC"
+            );
+            break;
+
+        case 6:
+            query_korisnici->SQL->Add(
+                L"ORDER BY u.naziv ASC, "
+                L"k.prezime ASC, k.ime ASC"
+            );
+			break;
+
+        case 7:
+			query_korisnici->SQL->Add(
+				L"ORDER BY k.aktivan DESC, "
+				L"k.prezime ASC, k.ime ASC"
+			);
+			break;
+
+        default:
+            query_korisnici->SQL->Add(
+                L"ORDER BY k.prezime ASC, k.ime ASC"
+            );
+            break;
+    }
+
+    query_korisnici->Open();
+	postaviIzgledGrida();
+}
+
+void Tform_korisnici::postaviIzgledGrida()
+{
+    query_korisnici
+        ->FieldByName(L"id_korisnik")
+        ->Visible = false;
+
+    query_korisnici
+        ->FieldByName(L"id_uloga")
+        ->Visible = false;
+
+    query_korisnici
+        ->FieldByName(L"id_skupina")
+        ->Visible = false;
+
+    query_korisnici
+        ->FieldByName(L"ime")
+        ->DisplayLabel = L"Ime";
+
+    query_korisnici
+        ->FieldByName(L"ime")
+        ->DisplayWidth = 18;
+
+    query_korisnici
+        ->FieldByName(L"prezime")
+        ->DisplayLabel = L"Prezime";
+
+    query_korisnici
+        ->FieldByName(L"prezime")
+        ->DisplayWidth = 22;
+
+    query_korisnici
+        ->FieldByName(L"username")
+        ->DisplayLabel = L"Korisničko ime";
+
+    query_korisnici
+        ->FieldByName(L"username")
+        ->DisplayWidth = 20;
+
+    query_korisnici
+        ->FieldByName(L"naziv_uloge")
+        ->DisplayLabel = L"Uloga";
+
+    query_korisnici
+        ->FieldByName(L"naziv_uloge")
+        ->DisplayWidth = 20;
+
+    query_korisnici
+        ->FieldByName(L"naziv_skupine")
+        ->DisplayLabel = L"Skupina";
+
+    query_korisnici
+		->FieldByName(L"naziv_skupine")
+		->DisplayWidth = 20;
+
+    query_korisnici
+		->FieldByName(L"aktivan")
+		->Visible = false;
+
+    query_korisnici
+		->FieldByName(L"status_korisnika")
+		->DisplayLabel = L"Status";
+
+	query_korisnici
+		->FieldByName(L"status_korisnika")
+		->DisplayWidth = 12;
+
+	query_korisnici
+		->FieldByName(L"status_korisnika")
+		->Alignment = taCenter;
+}
+void __fastcall Tform_korisnici::edit_pretragaChange(TObject *Sender)
+{
+	osvjeziPopisKorisnika();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_korisnici::combo_ulogaChange(TObject *Sender)
+{
+	osvjeziPopisKorisnika();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_korisnici::combo_sortiranjeChange(TObject *Sender)
+{
+    osvjeziPopisKorisnika();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_korisnici::button_dodajClick(TObject *Sender)
+{
+     form_korisnik_unos->pripremiZaDodavanje();
+
+    if (form_korisnik_unos->ShowModal() == mrOk)
+    {
+        osvjeziPopisKorisnika();
+    }
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_korisnici::button_urediClick(TObject *Sender)
+{
+	if (query_korisnici->IsEmpty())
+    {
+        ShowMessage(
+            L"Odaberite korisnika kojeg želite urediti."
+        );
+        return;
+    }
+
+    int idKorisnik =
+        query_korisnici
+            ->FieldByName("id_korisnik")
+            ->AsInteger;
+
+    form_korisnik_unos
+        ->pripremiZaUredjivanje(idKorisnik);
+
+    if (form_korisnik_unos->ShowModal() == mrOk)
+    {
+        osvjeziPopisKorisnika();
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_korisnici::grid_korisniciDblClick(TObject *Sender)
+{
+    button_urediClick(Sender);
+}
+//---------------------------------------------------------------------------

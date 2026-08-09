@@ -17,8 +17,6 @@ __published:	// IDE-managed Components
 	TPanel *panel_menu;
 	TPanel *panel_content;
 	TLabel *label_naslov;
-	TLabel *label_korisnik;
-	TLabel *label_uloga;
 	TButton *button_pocetna;
 	TButton *button_djeca;
 	TButton *button_aktivnosti;
@@ -31,12 +29,18 @@ __published:	// IDE-managed Components
 	TPanel *panel_dobrodosli;
 	TLabel *label_dobrodosli;
 	TPanel *panel_user;
+	TLabel *label_korisnik;
+	TLabel *label_uloga;
+	TImage *imgKorisnik;
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall button_odjavaClick(TObject *Sender);
 	void __fastcall button_djecaClick(TObject *Sender);
 	void __fastcall button_skupineClick(TObject *Sender);
 	void __fastcall button_aktivnostiClick(TObject *Sender);
+	void __fastcall button_razvojClick(TObject *Sender);
+	void __fastcall button_korisniciClick(TObject *Sender);
+	void __fastcall button_uputeClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
 	__fastcall Tform_dashboard(TComponent* Owner);

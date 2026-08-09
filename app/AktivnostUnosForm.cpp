@@ -59,6 +59,20 @@ void Tform_aktivnost_unos::ucitajPodrucja()
 
 void Tform_aktivnost_unos::pripremiZaDodavanje()
 {
+    edit_naziv->ReadOnly = false;
+	memo_opis->ReadOnly = false;
+	edit_trajanje->ReadOnly = false;
+	edit_dob_od->ReadOnly = false;
+	edit_dob_do->ReadOnly = false;
+	memo_potrebne_stavke->ReadOnly = false;
+	memo_upute->ReadOnly = false;
+
+	combo_tezina->Enabled = true;
+	check_aktivna->Enabled = true;
+	check_podrucja->Enabled = true;
+
+	button_spremi->Visible = true;
+	button_odustani->Caption = L"Odustani";
 	idAktivnost = 0;
 	Caption = "Dodavanje aktivnosti";
 	edit_naziv->Clear();
@@ -68,14 +82,32 @@ void Tform_aktivnost_unos::pripremiZaDodavanje()
 	edit_dob_do->Clear();
 	memo_potrebne_stavke->Clear();
 	memo_upute->Clear();
+	ucitajRazineTezine();
+	combo_tezina->ItemIndex = 2;
+	check_aktivna->Checked = true;
 	ucitajPodrucja();
 }
 
 void Tform_aktivnost_unos::pripremiZaUredjivanje(
 	int odabraniIdAktivnost)
 {
+    edit_naziv->ReadOnly = false;
+	memo_opis->ReadOnly = false;
+	edit_trajanje->ReadOnly = false;
+	edit_dob_od->ReadOnly = false;
+	edit_dob_do->ReadOnly = false;
+	memo_potrebne_stavke->ReadOnly = false;
+	memo_upute->ReadOnly = false;
+
+	combo_tezina->Enabled = true;
+	check_aktivna->Enabled = true;
+	check_podrucja->Enabled = true;
+
+	button_spremi->Visible = true;
+	button_odustani->Caption = L"Odustani";
 	idAktivnost = odabraniIdAktivnost;
 	Caption = "Uređivanje aktivnosti";
+    ucitajRazineTezine();
 	ucitajPodrucja();
 	query_aktivnost->Close();
 
@@ -135,6 +167,19 @@ void Tform_aktivnost_unos::pripremiZaUredjivanje(
 		query_aktivnost
 			->FieldByName("upute")
 		->AsString;
+
+    int razinaTezine =
+    query_aktivnost
+        ->FieldByName("razina_tezine")
+        ->AsInteger;
+
+	combo_tezina->ItemIndex =
+		razinaTezine - 1;
+
+	check_aktivna->Checked =
+		query_aktivnost
+			->FieldByName("aktivna")
+			->AsBoolean;
 
     for (int i = 0; i < check_podrucja->Items->Count; i++)
 	{
@@ -307,6 +352,15 @@ void __fastcall Tform_aktivnost_unos::button_spremiClick(
 		edit_dob_do->SetFocus();
 		return;
 	}
+    if (combo_tezina->ItemIndex < 0)
+	{
+    ShowMessage(
+        L"Odaberite razinu težine aktivnosti."
+    );
+
+    combo_tezina->SetFocus();
+    return;
+	}
 
 	bool odabranoPodrucje = false;
 
@@ -344,12 +398,30 @@ void __fastcall Tform_aktivnost_unos::button_spremiClick(
 			query_spremanje->SQL->Clear();
 
 			query_spremanje->SQL->Add(
-				"INSERT INTO aktivnost "
-				"(naziv, opis, trajanje_minuta, dob_od, dob_do, "
-				"potrebne_stavke, upute) "
-				"VALUES "
-				"(:naziv, :opis, :trajanje_minuta, :dob_od, :dob_do, "
-				":potrebne_stavke, :upute)"
+			"INSERT INTO aktivnost "
+			"("
+				"naziv, "
+				"opis, "
+				"trajanje_minuta, "
+				"dob_od, "
+				"dob_do, "
+				"potrebne_stavke, "
+				"upute, "
+				"razina_tezine, "
+				"aktivna"
+			") "
+			"VALUES "
+			"("
+				":naziv, "
+				":opis, "
+				":trajanje_minuta, "
+				":dob_od, "
+				":dob_do, "
+				":potrebne_stavke, "
+				":upute, "
+				":razina_tezine, "
+				":aktivna"
+			")"
 			);
 
 			query_spremanje
@@ -390,6 +462,16 @@ void __fastcall Tform_aktivnost_unos::button_spremiClick(
 				memo_upute
 					->Text
 					.Trim();
+
+            query_spremanje
+				->ParamByName("razina_tezine")
+				->AsInteger =
+					combo_tezina->ItemIndex + 1;
+
+			query_spremanje
+				->ParamByName("aktivna")
+				->AsInteger =
+					check_aktivna->Checked ? 1 : 0;
 
 			query_spremanje->ExecSQL();
 
@@ -473,7 +555,9 @@ void __fastcall Tform_aktivnost_unos::button_spremiClick(
 				"dob_od = :dob_od, "
 				"dob_do = :dob_do, "
 				"potrebne_stavke = :potrebne_stavke, "
-				"upute = :upute "
+				"upute = :upute, "
+				"razina_tezine = :razina_tezine, "
+				"aktivna = :aktivna "
 				"WHERE id_aktivnost = :id_aktivnost"
 			);
 
@@ -515,6 +599,16 @@ void __fastcall Tform_aktivnost_unos::button_spremiClick(
 				memo_upute
 					->Text
 					.Trim();
+
+            query_spremanje
+				->ParamByName("razina_tezine")
+				->AsInteger =
+					combo_tezina->ItemIndex + 1;
+
+			query_spremanje
+				->ParamByName("aktivna")
+				->AsInteger =
+					check_aktivna->Checked ? 1 : 0;
 
 			query_spremanje
 				->ParamByName("id_aktivnost")
@@ -610,5 +704,53 @@ void __fastcall Tform_aktivnost_unos::button_spremiClick(
 	}
 }
 //---------------------------------------------------------------------------
+void Tform_aktivnost_unos::ucitajRazineTezine()
+{
+    combo_tezina->Items->Clear();
 
-//---------------------------------------------------------------------------
+    combo_tezina->Items->Add(
+        L"1 - Vrlo jednostavna"
+    );
+
+    combo_tezina->Items->Add(
+        L"2 - Jednostavna"
+    );
+
+    combo_tezina->Items->Add(
+        L"3 - Srednja"
+    );
+
+    combo_tezina->Items->Add(
+        L"4 - Napredna"
+    );
+
+    combo_tezina->Items->Add(
+        L"5 - Vrlo napredna"
+    );
+}
+
+
+void Tform_aktivnost_unos::pripremiZaPregled(
+    int odabraniIdAktivnost)
+{
+    // Koristimo postojeće učitavanje svih podataka aktivnosti.
+    pripremiZaUredjivanje(odabraniIdAktivnost);
+
+    Caption = L"Detalji aktivnosti";
+
+    edit_naziv->ReadOnly = true;
+    memo_opis->ReadOnly = true;
+    edit_trajanje->ReadOnly = true;
+    edit_dob_od->ReadOnly = true;
+    edit_dob_do->ReadOnly = true;
+    memo_potrebne_stavke->ReadOnly = true;
+    memo_upute->ReadOnly = true;
+
+    combo_tezina->Enabled = false;
+    check_aktivna->Enabled = false;
+    check_podrucja->Enabled = false;
+
+    button_spremi->Visible = false;
+
+    button_odustani->Caption = L"Zatvori";
+}

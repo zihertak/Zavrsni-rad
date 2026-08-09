@@ -34,7 +34,8 @@ void __fastcall Tform_Login::button_loginClick(TObject *Sender)
 			"JOIN uloga "
 			"ON korisnik.id_uloga = uloga.id_uloga "
 			"WHERE korisnik.username = :username "
-			"AND korisnik.lozinka = :lozinka";
+			"AND korisnik.lozinka = :lozinka "
+            "AND korisnik.aktivan = 1";
 		data_module->query_login
 			->ParamByName("username")
 			->AsString = edit_username->Text.Trim();

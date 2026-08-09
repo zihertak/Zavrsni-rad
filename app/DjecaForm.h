@@ -22,6 +22,7 @@
 #include <FireDAC.Stan.Param.hpp>
 #include <Vcl.DBGrids.hpp>
 #include <Vcl.Grids.hpp>
+#include <Vcl.Imaging.pngimage.hpp>
 //---------------------------------------------------------------------------
 class Tform_djeca : public TForm
 {
@@ -37,9 +38,6 @@ __published:	// IDE-managed Components
 	TButton *button_odjava;
 	TPanel *panel_header;
 	TLabel *label_naslov;
-	TPanel *panel_user;
-	TLabel *label_korisnik;
-	TLabel *label_uloga;
 	TPanel *panel_content;
 	TPanel *panel_alati;
 	TLabel *label_naslov_djeca;
@@ -70,6 +68,10 @@ __published:	// IDE-managed Components
 	TIntegerField *query_skupineid_skupina;
 	TWideStringField *query_skupineNaziv;
 	TWideStringField *query_djecaNazivSkupine;
+	TPanel *panel_user;
+	TLabel *label_korisnik;
+	TLabel *label_uloga;
+	TImage *imgKorisnik;
 	void __fastcall button_pocetnaClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall edit_pretragaChange(TObject *Sender);
@@ -84,6 +86,9 @@ __published:	// IDE-managed Components
 	void __fastcall grid_djecaDblClick(TObject *Sender);
 	void __fastcall button_skupineClick(TObject *Sender);
 	void __fastcall button_aktivnostiClick(TObject *Sender);
+	void __fastcall button_razvojClick(TObject *Sender);
+	void __fastcall button_korisniciClick(TObject *Sender);
+	void __fastcall button_uputeClick(TObject *Sender);
 private:	// User declarations
 	void ucitajSkupine();
 	void osvjeziPopisDjece();

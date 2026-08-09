@@ -1,0 +1,90 @@
+//---------------------------------------------------------------------------
+
+#ifndef AktivnostiFormH
+#define AktivnostiFormH
+//---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+#include <Vcl.Controls.hpp>
+#include <Vcl.StdCtrls.hpp>
+#include <Vcl.Forms.hpp>
+#include <Vcl.ExtCtrls.hpp>
+#include <Data.DB.hpp>
+#include <Vcl.DBGrids.hpp>
+#include <Vcl.Grids.hpp>
+#include <FireDAC.Comp.Client.hpp>
+#include <FireDAC.Comp.DataSet.hpp>
+#include <FireDAC.DApt.hpp>
+#include <FireDAC.DApt.Intf.hpp>
+#include <FireDAC.DatS.hpp>
+#include <FireDAC.Phys.Intf.hpp>
+#include <FireDAC.Stan.Async.hpp>
+#include <FireDAC.Stan.Error.hpp>
+#include <FireDAC.Stan.Intf.hpp>
+#include <FireDAC.Stan.Option.hpp>
+#include <FireDAC.Stan.Param.hpp>
+//---------------------------------------------------------------------------
+class Tform_aktivnosti : public TForm
+{
+__published:	// IDE-managed Components
+	TPanel *panel_menu;
+	TButton *button_pocetna;
+	TButton *button_djeca;
+	TButton *button_aktivnosti;
+	TButton *button_skupine;
+	TButton *button_razvoj;
+	TButton *button_korisnici;
+	TButton *button_upute;
+	TButton *button_odjava;
+	TPanel *panel_header;
+	TLabel *label_naslov;
+	TPanel *panel_user;
+	TLabel *label_korisnik;
+	TLabel *label_uloga;
+	TPanel *panel_content;
+	TPanel *panel_alati;
+	TLabel *label_naslov_aktivnosti;
+	TLabel *label_opis;
+	TPanel *panel_filter;
+	TLabel *label_pretraga;
+	TLabel *label_podrucje;
+	TLabel *label_sortiranje;
+	TEdit *edit_pretraga;
+	TComboBox *combo_podrucje;
+	TComboBox *combo_sortiranje;
+	TPanel *panel_grid;
+	TDBGrid *grid_aktivnosti;
+	TPanel *panel_gumbi;
+	TButton *button_dodaj;
+	TButton *button_uredi;
+	TButton *button_obrisi;
+	TFDQuery *query_brisanje;
+	TFDQuery *query_podrucja;
+	TFDQuery *query_aktivnosti;
+	TDataSource *source_aktivnosti;
+	void __fastcall FormShow(TObject *Sender);
+	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+	void __fastcall button_pocetnaClick(TObject *Sender);
+	void __fastcall button_djecaClick(TObject *Sender);
+	void __fastcall button_skupineClick(TObject *Sender);
+	void __fastcall button_odjavaClick(TObject *Sender);
+	void __fastcall combo_podrucjeChange(TObject *Sender);
+	void __fastcall edit_pretragaChange(TObject *Sender);
+	void __fastcall combo_sortiranjeChange(TObject *Sender);
+	void __fastcall button_dodajClick(TObject *Sender);
+	void __fastcall button_urediClick(TObject *Sender);
+	void __fastcall button_obrisiClick(TObject *Sender);
+	void __fastcall grid_aktivnostiDblClick(TObject *Sender);
+	void __fastcall button_razvojClick(TObject *Sender);
+	void __fastcall button_korisniciClick(TObject *Sender);
+private:	// User declarations
+	void ucitajPodrucja();
+	void osvjeziPopisAktivnosti();
+	void postaviIzgledGrida();
+    void primijeniPrava();
+public:		// User declarations
+	__fastcall Tform_aktivnosti(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE Tform_aktivnosti *form_aktivnosti;
+//---------------------------------------------------------------------------
+#endif

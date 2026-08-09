@@ -22,6 +22,7 @@
 #include <FireDAC.Stan.Intf.hpp>
 #include <FireDAC.Stan.Option.hpp>
 #include <FireDAC.Stan.Param.hpp>
+#include <Vcl.Imaging.pngimage.hpp>
 //---------------------------------------------------------------------------
 class Tform_aktivnosti : public TForm
 {
@@ -37,9 +38,6 @@ __published:	// IDE-managed Components
 	TButton *button_odjava;
 	TPanel *panel_header;
 	TLabel *label_naslov;
-	TPanel *panel_user;
-	TLabel *label_korisnik;
-	TLabel *label_uloga;
 	TPanel *panel_content;
 	TPanel *panel_alati;
 	TLabel *label_naslov_aktivnosti;
@@ -61,6 +59,10 @@ __published:	// IDE-managed Components
 	TFDQuery *query_podrucja;
 	TFDQuery *query_aktivnosti;
 	TDataSource *source_aktivnosti;
+	TPanel *panel_user;
+	TLabel *label_korisnik;
+	TLabel *label_uloga;
+	TImage *imgKorisnik;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall button_pocetnaClick(TObject *Sender);
@@ -74,6 +76,9 @@ __published:	// IDE-managed Components
 	void __fastcall button_urediClick(TObject *Sender);
 	void __fastcall button_obrisiClick(TObject *Sender);
 	void __fastcall grid_aktivnostiDblClick(TObject *Sender);
+	void __fastcall button_razvojClick(TObject *Sender);
+	void __fastcall button_korisniciClick(TObject *Sender);
+	void __fastcall button_uputeClick(TObject *Sender);
 private:	// User declarations
 	void ucitajPodrucja();
 	void osvjeziPopisAktivnosti();

@@ -7,7 +7,8 @@ object data_module: Tdata_module
       'Database=mydb'
       'User_Name=root'
       'Password=2e7LksFs'
-      'DriverID=MySQL')
+      'DriverID=MySQL'
+      'CharacterSet=utf8')
     LoginPrompt = False
     Left = 304
     Top = 144

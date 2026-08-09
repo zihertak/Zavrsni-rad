@@ -1,0 +1,306 @@
+object form_upute: Tform_upute
+  Left = 0
+  Top = 0
+  Caption = 'Upute'
+  ClientHeight = 570
+  ClientWidth = 1060
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  WindowState = wsMaximized
+  OnClose = FormClose
+  OnShow = FormShow
+  TextHeight = 15
+  object panel_header: TPanel
+    Left = 0
+    Top = 0
+    Width = 1060
+    Height = 80
+    Align = alTop
+    BevelOuter = bvNone
+    Color = 16744448
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = 15267305
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 0
+    ExplicitLeft = -436
+    object label_naslov: TLabel
+      Left = 20
+      Top = 20
+      Width = 220
+      Height = 38
+      Caption = 'Naslov aplikacije'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -28
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object panel_user: TPanel
+      Left = 874
+      Top = 12
+      Width = 218
+      Height = 41
+      BevelOuter = bvNone
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = 15267305
+      Font.Height = 60
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 0
+      object label_korisnik: TLabel
+        Left = 1
+        Top = 0
+        Width = 26
+        Height = 21
+        Caption = ' '#55357#56420
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object label_uloga: TLabel
+        Left = 8
+        Top = 20
+        Width = 54
+        Height = 21
+        Caption = 'Uloga: -'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+    end
+  end
+  object panel_menu: TPanel
+    Left = 0
+    Top = 80
+    Width = 220
+    Height = 490
+    Align = alLeft
+    BevelOuter = bvNone
+    Color = 11064738
+    ParentBackground = False
+    TabOrder = 1
+    ExplicitTop = -20
+    ExplicitHeight = 590
+    DesignSize = (
+      220
+      490)
+    object button_pocetna: TButton
+      Left = 0
+      Top = 0
+      Width = 220
+      Height = 55
+      Align = alTop
+      Caption = 'Po'#269'etna'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+      TabStop = False
+      OnClick = button_pocetnaClick
+    end
+    object button_djeca: TButton
+      Left = 0
+      Top = 55
+      Width = 220
+      Height = 55
+      Align = alTop
+      Caption = 'Djeca'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 1
+      TabStop = False
+      OnClick = button_djecaClick
+    end
+    object button_aktivnosti: TButton
+      Left = 0
+      Top = 110
+      Width = 220
+      Height = 55
+      Align = alTop
+      Caption = 'Aktivnosti'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 2
+      TabStop = False
+      OnClick = button_aktivnostiClick
+    end
+    object button_skupine: TButton
+      Left = 0
+      Top = 165
+      Width = 220
+      Height = 55
+      Align = alTop
+      Caption = 'Skupine'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 3
+      TabStop = False
+      OnClick = button_skupineClick
+    end
+    object button_razvoj: TButton
+      Left = 0
+      Top = 220
+      Width = 220
+      Height = 55
+      Align = alTop
+      Caption = 'Razvoj'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 4
+      TabStop = False
+      OnClick = button_razvojClick
+    end
+    object button_korisnici: TButton
+      Left = 0
+      Top = 275
+      Width = 220
+      Height = 55
+      Align = alTop
+      Caption = 'Korisnici'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 5
+      TabStop = False
+      OnClick = button_korisniciClick
+      ExplicitLeft = -6
+      ExplicitTop = 281
+    end
+    object button_upute: TButton
+      Left = 0
+      Top = 330
+      Width = 220
+      Height = 55
+      Align = alTop
+      Caption = 'Upute'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 6
+      TabStop = False
+    end
+    object button_odjava: TButton
+      Left = 0
+      Top = 375
+      Width = 220
+      Height = 55
+      Anchors = [akLeft, akRight, akBottom]
+      Caption = 'Odjava'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 7
+      TabStop = False
+      OnClick = button_odjavaClick
+      ExplicitTop = 475
+    end
+  end
+  object panel_content: TPanel
+    Left = 220
+    Top = 80
+    Width = 840
+    Height = 490
+    Align = alClient
+    BevelOuter = bvNone
+    Color = clWhite
+    ParentBackground = False
+    TabOrder = 2
+    ExplicitLeft = 226
+    ExplicitTop = 86
+    object panel_alati: TPanel
+      Left = 0
+      Top = 0
+      Width = 840
+      Height = 90
+      Align = alTop
+      BevelOuter = bvNone
+      Color = clWhite
+      ParentBackground = False
+      TabOrder = 0
+      ExplicitTop = 8
+      object label_naslov_upute: TLabel
+        Left = 25
+        Top = 6
+        Width = 103
+        Height = 48
+        Caption = 'Upute'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -36
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object label_opis: TLabel
+        Left = 27
+        Top = 56
+        Width = 312
+        Height = 28
+        Caption = 'Kratke upute za kori'#353'tenje aplikacije'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clGray
+        Font.Height = -20
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+    end
+    object memo_upute: TMemo
+      Left = 0
+      Top = 90
+      Width = 840
+      Height = 400
+      Align = alClient
+      Color = clWhite
+      ReadOnly = True
+      ScrollBars = ssVertical
+      TabOrder = 1
+    end
+  end
+end

@@ -11,6 +11,9 @@
 #include "LoginForm.h"
 #include "KorisnickaPrava.h"
 #include "AktivnostiForm.h"
+#include "RazvojForm.h"
+#include "KorisniciForm.h"
+#include "UputeForm.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -24,13 +27,11 @@ __fastcall Tform_skupine::Tform_skupine(TComponent* Owner)
 void __fastcall Tform_skupine::FormShow(TObject *Sender)
 {
 	label_korisnik->Caption =
-		"Korisnik: " +
 		data_module->currentUserIme +
-		" " +
+		L" " +
 		data_module->currentUserPrezime;
 
 	label_uloga->Caption =
-		"Uloga: " +
 		data_module->currentUserUloga;
 
 	ucitajPedagoskeGodine();
@@ -462,6 +463,27 @@ void __fastcall Tform_skupine::button_aktivnostiClick(TObject *Sender)
 {
     this->Hide();
 	form_aktivnosti->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall Tform_skupine::button_razvojClick(TObject *Sender)
+{
+    this->Hide();
+    form_razvoj->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall Tform_skupine::button_korisniciClick(TObject *Sender)
+{
+    this->Hide();
+    form_korisnici->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall Tform_skupine::button_uputeClick(TObject *Sender)
+{
+    this->Hide();
+    form_upute->Show();
 }
 //---------------------------------------------------------------------------
 

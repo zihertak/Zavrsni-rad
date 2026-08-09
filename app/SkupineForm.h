@@ -22,15 +22,13 @@
 #include <FireDAC.Stan.Intf.hpp>
 #include <FireDAC.Stan.Option.hpp>
 #include <FireDAC.Stan.Param.hpp>
+#include <Vcl.Imaging.pngimage.hpp>
 //---------------------------------------------------------------------------
 class Tform_skupine : public TForm
 {
 __published:	// IDE-managed Components
 	TPanel *panel_header;
 	TLabel *label_naslov;
-	TPanel *panel_user;
-	TLabel *label_korisnik;
-	TLabel *label_uloga;
 	TPanel *panel_menu;
 	TButton *button_pocetna;
 	TButton *button_djeca;
@@ -61,6 +59,10 @@ __published:	// IDE-managed Components
 	TDataSource *source_skupine;
 	TFDQuery *query_pedagoske_godine;
 	TFDQuery *query_brisanje;
+	TPanel *panel_user;
+	TLabel *label_korisnik;
+	TLabel *label_uloga;
+	TImage *imgKorisnik;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall button_pocetnaClick(TObject *Sender);
 	void __fastcall button_djecaClick(TObject *Sender);
@@ -74,6 +76,9 @@ __published:	// IDE-managed Components
 	void __fastcall grid_skupineDblClick(TObject *Sender);
 	void __fastcall button_odjavaClick(TObject *Sender);
 	void __fastcall button_aktivnostiClick(TObject *Sender);
+	void __fastcall button_razvojClick(TObject *Sender);
+	void __fastcall button_korisniciClick(TObject *Sender);
+	void __fastcall button_uputeClick(TObject *Sender);
 private:	// User declarations
     void ucitajPedagoskeGodine();
 	void osvjeziPopisSkupina();

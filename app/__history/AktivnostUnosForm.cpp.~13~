@@ -1,0 +1,702 @@
+﻿//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "AktivnostUnosForm.h"
+#include "AktivnostiForm.h"
+#include "DatabaseModule.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+Tform_aktivnost_unos *form_aktivnost_unos;
+//---------------------------------------------------------------------------
+__fastcall Tform_aktivnost_unos::Tform_aktivnost_unos(TComponent* Owner)
+	: TForm(Owner),
+	  idAktivnost(0)
+{
+}
+//---------------------------------------------------------------------------
+void Tform_aktivnost_unos::ucitajPodrucja()
+{
+	check_podrucja->Items->Clear();
+
+	query_podrucja->Close();
+	query_podrucja->SQL->Clear();
+
+	query_podrucja->SQL->Add(
+		"SELECT "
+		"id_podrucje_razvoja, "
+		"naziv "
+		"FROM podrucje_razvoja "
+		"ORDER BY naziv ASC"
+	);
+
+	query_podrucja->Open();
+
+	while (!query_podrucja->Eof)
+	{
+		String naziv =
+			query_podrucja
+				->FieldByName("naziv")
+				->AsString;
+
+		int idPodrucje =
+			query_podrucja
+				->FieldByName("id_podrucje_razvoja")
+				->AsInteger;
+
+		check_podrucja->Items->AddObject(
+			naziv,
+			reinterpret_cast<TObject*>(
+				static_cast<NativeInt>(idPodrucje)
+			)
+		);
+
+		query_podrucja->Next();
+	}
+}
+
+void Tform_aktivnost_unos::pripremiZaDodavanje()
+{
+	idAktivnost = 0;
+	Caption = "Dodavanje aktivnosti";
+	edit_naziv->Clear();
+	memo_opis->Clear();
+	edit_trajanje->Clear();
+	edit_dob_od->Clear();
+	edit_dob_do->Clear();
+	memo_potrebne_stavke->Clear();
+	memo_upute->Clear();
+	ucitajRazineTezine();
+	combo_tezina->ItemIndex = 2;
+	check_aktivna->Checked = true;
+	ucitajPodrucja();
+}
+
+void Tform_aktivnost_unos::pripremiZaUredjivanje(
+	int odabraniIdAktivnost)
+{
+	idAktivnost = odabraniIdAktivnost;
+	Caption = "Uređivanje aktivnosti";
+    ucitajRazineTezine();
+	ucitajPodrucja();
+	query_aktivnost->Close();
+
+	query_aktivnost->SQL->Clear();
+
+	query_aktivnost->SQL->Add(
+		"SELECT * "
+		"FROM aktivnost "
+		"WHERE id_aktivnost = :id"
+	);
+
+	query_aktivnost
+		->ParamByName("id")
+		->AsInteger =
+		idAktivnost;
+
+	query_aktivnost->Open();
+    if (query_aktivnost->IsEmpty())
+	{
+	ShowMessage(
+		L"Aktivnost nije pronađena."
+	);
+
+	return;
+	}
+    edit_naziv->Text =
+	query_aktivnost
+		->FieldByName("naziv")
+		->AsString;
+
+	memo_opis->Text =
+		query_aktivnost
+			->FieldByName("opis")
+			->AsString;
+
+	edit_trajanje->Text =
+		query_aktivnost
+			->FieldByName("trajanje_minuta")
+			->AsString;
+
+	edit_dob_od->Text =
+		query_aktivnost
+			->FieldByName("dob_od")
+			->AsString;
+
+	edit_dob_do->Text =
+		query_aktivnost
+			->FieldByName("dob_do")
+			->AsString;
+
+	memo_potrebne_stavke->Text =
+		query_aktivnost
+			->FieldByName("potrebne_stavke")
+			->AsString;
+
+	memo_upute->Text =
+		query_aktivnost
+			->FieldByName("upute")
+		->AsString;
+
+    int razinaTezine =
+    query_aktivnost
+        ->FieldByName("razina_tezine")
+        ->AsInteger;
+
+	combo_tezina->ItemIndex =
+		razinaTezine - 1;
+
+	check_aktivna->Checked =
+		query_aktivnost
+			->FieldByName("aktivna")
+			->AsBoolean;
+
+    for (int i = 0; i < check_podrucja->Items->Count; i++)
+	{
+	check_podrucja->Checked[i] = false;
+	}
+    query_podrucja->Close();
+	query_podrucja->SQL->Clear();
+
+	query_podrucja->SQL->Add(
+		"SELECT id_podrucje_razvoja "
+		"FROM aktivnost_podrucje "
+		"WHERE id_aktivnost = :id_aktivnost"
+	);
+
+	query_podrucja
+		->ParamByName("id_aktivnost")
+		->AsInteger =
+		idAktivnost;
+
+	query_podrucja->Open();
+
+    while (!query_podrucja->Eof)
+	{
+	int idPodrucje =
+		query_podrucja
+			->FieldByName("id_podrucje_razvoja")
+			->AsInteger;
+
+	for (int i = 0; i < check_podrucja->Items->Count; i++)
+	{
+		NativeInt trenutniId =
+			reinterpret_cast<NativeInt>(
+				check_podrucja->Items->Objects[i]
+			);
+
+		if (trenutniId == idPodrucje)
+		{
+			check_podrucja->Checked[i] = true;
+			break;
+		}
+	}
+
+	query_podrucja->Next();
+	}
+}
+void __fastcall Tform_aktivnost_unos::button_odustaniClick(TObject *Sender)
+{
+	ModalResult = mrCancel;
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_aktivnost_unos::button_spremiClick(
+	TObject *Sender)
+{
+	String naziv =
+		edit_naziv->Text.Trim();
+
+	String opis =
+		memo_opis->Text.Trim();
+
+	String trajanjeTekst =
+		edit_trajanje->Text.Trim();
+
+	String dobOdTekst =
+		edit_dob_od->Text.Trim();
+
+	String dobDoTekst =
+		edit_dob_do->Text.Trim();
+
+	if (naziv.IsEmpty())
+	{
+		ShowMessage(
+			L"Unesite naziv aktivnosti."
+		);
+
+		edit_naziv->SetFocus();
+		return;
+	}
+
+	if (trajanjeTekst.IsEmpty())
+	{
+		ShowMessage(
+			L"Unesite trajanje aktivnosti."
+		);
+
+		edit_trajanje->SetFocus();
+		return;
+	}
+
+	if (dobOdTekst.IsEmpty())
+	{
+		ShowMessage(
+			L"Unesite minimalnu dob."
+		);
+
+		edit_dob_od->SetFocus();
+		return;
+	}
+
+	if (dobDoTekst.IsEmpty())
+	{
+		ShowMessage(
+			L"Unesite maksimalnu dob."
+		);
+
+		edit_dob_do->SetFocus();
+		return;
+	}
+
+	int trajanje;
+	int dobOd;
+	int dobDo;
+
+	if (!TryStrToInt(trajanjeTekst, trajanje))
+	{
+		ShowMessage(
+			L"Trajanje mora biti cijeli broj."
+		);
+
+		edit_trajanje->SetFocus();
+		return;
+	}
+
+	if (!TryStrToInt(dobOdTekst, dobOd))
+	{
+		ShowMessage(
+			L"Minimalna dob mora biti cijeli broj."
+		);
+
+		edit_dob_od->SetFocus();
+		return;
+	}
+
+	if (!TryStrToInt(dobDoTekst, dobDo))
+	{
+		ShowMessage(
+			L"Maksimalna dob mora biti cijeli broj."
+		);
+
+		edit_dob_do->SetFocus();
+		return;
+	}
+
+	if (trajanje <= 0)
+	{
+		ShowMessage(
+			L"Trajanje mora biti veće od 0 minuta."
+		);
+
+		edit_trajanje->SetFocus();
+		return;
+	}
+
+	if (dobOd < 0)
+	{
+		ShowMessage(
+			L"Minimalna dob ne može biti negativna."
+		);
+
+		edit_dob_od->SetFocus();
+		return;
+	}
+
+	if (dobDo < dobOd)
+	{
+		ShowMessage(
+			L"Maksimalna dob mora biti jednaka ili veća "
+			L"od minimalne dobi."
+		);
+
+		edit_dob_do->SetFocus();
+		return;
+	}
+    if (combo_tezina->ItemIndex < 0)
+	{
+    ShowMessage(
+        L"Odaberite razinu težine aktivnosti."
+    );
+
+    combo_tezina->SetFocus();
+    return;
+	}
+
+	bool odabranoPodrucje = false;
+
+	for (int i = 0;
+		 i < check_podrucja->Items->Count;
+		 i++)
+	{
+		if (check_podrucja->Checked[i])
+		{
+			odabranoPodrucje = true;
+			break;
+		}
+	}
+
+	if (!odabranoPodrucje)
+	{
+		ShowMessage(
+			L"Odaberite barem jedno područje razvoja."
+		);
+
+		return;
+	}
+
+	try
+	{
+		data_module
+			->connection
+			->StartTransaction();
+
+		if (idAktivnost == 0)
+		{
+			// DODAVANJE NOVE AKTIVNOSTI
+
+			query_spremanje->Close();
+			query_spremanje->SQL->Clear();
+
+			query_spremanje->SQL->Add(
+			"INSERT INTO aktivnost "
+			"("
+				"naziv, "
+				"opis, "
+				"trajanje_minuta, "
+				"dob_od, "
+				"dob_do, "
+				"potrebne_stavke, "
+				"upute, "
+				"razina_tezine, "
+				"aktivna"
+			") "
+			"VALUES "
+			"("
+				":naziv, "
+				":opis, "
+				":trajanje_minuta, "
+				":dob_od, "
+				":dob_do, "
+				":potrebne_stavke, "
+				":upute, "
+				":razina_tezine, "
+				":aktivna"
+			")"
+			);
+
+			query_spremanje
+				->ParamByName("naziv")
+				->AsString =
+				naziv;
+
+			query_spremanje
+				->ParamByName("opis")
+				->AsString =
+				opis;
+
+			query_spremanje
+				->ParamByName("trajanje_minuta")
+				->AsInteger =
+				trajanje;
+
+			query_spremanje
+				->ParamByName("dob_od")
+				->AsInteger =
+				dobOd;
+
+			query_spremanje
+				->ParamByName("dob_do")
+				->AsInteger =
+				dobDo;
+
+			query_spremanje
+				->ParamByName("potrebne_stavke")
+				->AsString =
+				memo_potrebne_stavke
+					->Text
+					.Trim();
+
+			query_spremanje
+				->ParamByName("upute")
+				->AsString =
+				memo_upute
+					->Text
+					.Trim();
+
+            query_spremanje
+				->ParamByName("razina_tezine")
+				->AsInteger =
+					combo_tezina->ItemIndex + 1;
+
+			query_spremanje
+				->ParamByName("aktivna")
+				->AsInteger =
+					check_aktivna->Checked ? 1 : 0;
+
+			query_spremanje->ExecSQL();
+
+			query_spremanje->Close();
+			query_spremanje->SQL->Clear();
+
+			query_spremanje->SQL->Add(
+				"SELECT LAST_INSERT_ID() AS novi_id"
+			);
+
+			query_spremanje->Open();
+
+			int noviIdAktivnost =
+				query_spremanje
+					->FieldByName("novi_id")
+					->AsInteger;
+
+			for (int i = 0;
+				 i < check_podrucja->Items->Count;
+				 i++)
+			{
+				if (!check_podrucja->Checked[i])
+				{
+					continue;
+				}
+
+				int idPodrucje =
+					static_cast<int>(
+						reinterpret_cast<NativeInt>(
+							check_podrucja
+								->Items
+								->Objects[i]
+						)
+					);
+
+				query_spremanje->Close();
+				query_spremanje->SQL->Clear();
+
+				query_spremanje->SQL->Add(
+					"INSERT INTO aktivnost_podrucje "
+					"(id_aktivnost, id_podrucje_razvoja) "
+					"VALUES "
+					"(:id_aktivnost, :id_podrucje)"
+				);
+
+				query_spremanje
+					->ParamByName("id_aktivnost")
+					->AsInteger =
+					noviIdAktivnost;
+
+				query_spremanje
+					->ParamByName("id_podrucje")
+					->AsInteger =
+					idPodrucje;
+
+				query_spremanje->ExecSQL();
+			}
+
+			data_module
+				->connection
+				->Commit();
+
+			ShowMessage(
+				L"Aktivnost je uspješno spremljena."
+			);
+
+			ModalResult = mrOk;
+		}
+		else
+		{
+			// UREĐIVANJE POSTOJEĆE AKTIVNOSTI
+
+			query_spremanje->Close();
+			query_spremanje->SQL->Clear();
+
+			query_spremanje->SQL->Add(
+				"UPDATE aktivnost SET "
+				"naziv = :naziv, "
+				"opis = :opis, "
+				"trajanje_minuta = :trajanje_minuta, "
+				"dob_od = :dob_od, "
+				"dob_do = :dob_do, "
+				"potrebne_stavke = :potrebne_stavke, "
+				"upute = :upute, "
+				"razina_tezine = :razina_tezine, "
+				"aktivna = :aktivna "
+				"WHERE id_aktivnost = :id_aktivnost"
+			);
+
+			query_spremanje
+				->ParamByName("naziv")
+				->AsString =
+				naziv;
+
+			query_spremanje
+				->ParamByName("opis")
+				->AsString =
+				opis;
+
+			query_spremanje
+				->ParamByName("trajanje_minuta")
+				->AsInteger =
+				trajanje;
+
+			query_spremanje
+				->ParamByName("dob_od")
+				->AsInteger =
+				dobOd;
+
+			query_spremanje
+				->ParamByName("dob_do")
+				->AsInteger =
+				dobDo;
+
+			query_spremanje
+				->ParamByName("potrebne_stavke")
+				->AsString =
+				memo_potrebne_stavke
+					->Text
+					.Trim();
+
+			query_spremanje
+				->ParamByName("upute")
+				->AsString =
+				memo_upute
+					->Text
+					.Trim();
+
+            query_spremanje
+				->ParamByName("razina_tezine")
+				->AsInteger =
+					combo_tezina->ItemIndex + 1;
+
+			query_spremanje
+				->ParamByName("aktivna")
+				->AsInteger =
+					check_aktivna->Checked ? 1 : 0;
+
+			query_spremanje
+				->ParamByName("id_aktivnost")
+				->AsInteger =
+				idAktivnost;
+
+			query_spremanje->ExecSQL();
+
+			// Brišemo stare veze s područjima razvoja
+
+			query_spremanje->Close();
+			query_spremanje->SQL->Clear();
+
+			query_spremanje->SQL->Add(
+				"DELETE FROM aktivnost_podrucje "
+				"WHERE id_aktivnost = :id_aktivnost"
+			);
+
+			query_spremanje
+				->ParamByName("id_aktivnost")
+				->AsInteger =
+				idAktivnost;
+
+			query_spremanje->ExecSQL();
+
+			// Spremamo trenutno označena područja razvoja
+
+			for (int i = 0;
+				 i < check_podrucja->Items->Count;
+				 i++)
+			{
+				if (!check_podrucja->Checked[i])
+				{
+					continue;
+				}
+
+				int idPodrucje =
+					static_cast<int>(
+						reinterpret_cast<NativeInt>(
+							check_podrucja
+								->Items
+								->Objects[i]
+						)
+					);
+
+				query_spremanje->Close();
+				query_spremanje->SQL->Clear();
+
+				query_spremanje->SQL->Add(
+					"INSERT INTO aktivnost_podrucje "
+					"(id_aktivnost, id_podrucje_razvoja) "
+					"VALUES "
+					"(:id_aktivnost, :id_podrucje)"
+				);
+
+				query_spremanje
+					->ParamByName("id_aktivnost")
+					->AsInteger =
+					idAktivnost;
+
+				query_spremanje
+					->ParamByName("id_podrucje")
+					->AsInteger =
+					idPodrucje;
+
+				query_spremanje->ExecSQL();
+			}
+
+			data_module
+				->connection
+				->Commit();
+
+			ShowMessage(
+				L"Aktivnost je uspješno izmijenjena."
+			);
+
+			ModalResult = mrOk;
+		}
+	}
+	catch (const Exception &e)
+	{
+		if (data_module->connection->InTransaction)
+		{
+			data_module
+				->connection
+				->Rollback();
+		}
+
+		ShowMessage(
+			L"Došlo je do pogreške pri spremanju aktivnosti:\n" +
+			e.Message
+		);
+	}
+}
+//---------------------------------------------------------------------------
+void Tform_aktivnost_unos::ucitajRazineTezine()
+{
+    combo_tezina->Items->Clear();
+
+    combo_tezina->Items->Add(
+        L"1 - Vrlo jednostavna"
+    );
+
+    combo_tezina->Items->Add(
+        L"2 - Jednostavna"
+    );
+
+    combo_tezina->Items->Add(
+        L"3 - Srednja"
+    );
+
+    combo_tezina->Items->Add(
+        L"4 - Napredna"
+    );
+
+    combo_tezina->Items->Add(
+        L"5 - Vrlo napredna"
+    );
+}

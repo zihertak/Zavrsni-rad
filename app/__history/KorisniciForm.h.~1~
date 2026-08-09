@@ -1,0 +1,21 @@
+//---------------------------------------------------------------------------
+
+#ifndef KorisniciFormH
+#define KorisniciFormH
+//---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+#include <Vcl.Controls.hpp>
+#include <Vcl.StdCtrls.hpp>
+#include <Vcl.Forms.hpp>
+//---------------------------------------------------------------------------
+class Tform_korisnici : public TForm
+{
+__published:	// IDE-managed Components
+private:	// User declarations
+public:		// User declarations
+	__fastcall Tform_korisnici(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE Tform_korisnici *form_korisnici;
+//---------------------------------------------------------------------------
+#endif

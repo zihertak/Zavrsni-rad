@@ -1,0 +1,162 @@
+﻿//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UputeForm.h"
+#include "DatabaseModule.h"
+#include "LoginForm.h"
+#include "DashboardForm.h"
+#include "DjecaForm.h"
+#include "SkupineForm.h"
+#include "AktivnostiForm.h"
+#include "RazvojForm.h"
+#include "KorisniciForm.h"
+#include "KorisnickaPrava.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+Tform_upute *form_upute;
+//---------------------------------------------------------------------------
+__fastcall Tform_upute::Tform_upute(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_upute::FormShow(TObject *Sender)
+{
+    label_korisnik->Caption =
+        L"Korisnik: " +
+        data_module->currentUserIme +
+        L" " +
+        data_module->currentUserPrezime;
+
+    label_uloga->Caption =
+        L"Uloga: " +
+        data_module->currentUserUloga;
+
+    TKorisnickaPrava prava(
+		data_module->currentUserUloga
+	);
+
+	button_korisnici->Visible =
+		prava.korisnici();
+
+	memo_upute->Lines->Clear();
+
+	memo_upute->Lines->Add(L"===============================================");
+	memo_upute->Lines->Add(L"             UPUTE ZA KORIŠTENJE");
+	memo_upute->Lines->Add(L"===============================================");
+	memo_upute->Lines->Add(L"");
+
+	memo_upute->Lines->Add(L"1. PRIJAVA");
+	memo_upute->Lines->Add(L"");
+	memo_upute->Lines->Add(L"- Prijavite se svojim korisničkim imenom i lozinkom.");
+	memo_upute->Lines->Add(L"- Ako su podaci ispravni otvorit će se Dashboard.");
+	memo_upute->Lines->Add(L"");
+
+	memo_upute->Lines->Add(L"2. DASHBOARD");
+	memo_upute->Lines->Add(L"");
+	memo_upute->Lines->Add(L"- Prikazuje osnovni pregled aplikacije.");
+	memo_upute->Lines->Add(L"- Putem izbornika pristupate svim modulima.");
+	memo_upute->Lines->Add(L"");
+
+	memo_upute->Lines->Add(L"3. DJECA");
+	memo_upute->Lines->Add(L"");
+	memo_upute->Lines->Add(L"- Dodavanje novog djeteta.");
+	memo_upute->Lines->Add(L"- Uređivanje postojećih podataka.");
+	memo_upute->Lines->Add(L"- Pretraga i filtriranje.");
+	memo_upute->Lines->Add(L"");
+
+	memo_upute->Lines->Add(L"4. SKUPINE");
+	memo_upute->Lines->Add(L"");
+	memo_upute->Lines->Add(L"- Upravljanje odgojnim skupinama.");
+	memo_upute->Lines->Add(L"");
+
+	memo_upute->Lines->Add(L"5. AKTIVNOSTI");
+	memo_upute->Lines->Add(L"");
+	memo_upute->Lines->Add(L"- Evidencija aktivnosti djece.");
+	memo_upute->Lines->Add(L"");
+
+	memo_upute->Lines->Add(L"6. RAZVOJ");
+	memo_upute->Lines->Add(L"");
+	memo_upute->Lines->Add(L"- Praćenje razvoja djece.");
+	memo_upute->Lines->Add(L"");
+
+	memo_upute->Lines->Add(L"7. KORISNICI");
+	memo_upute->Lines->Add(L"");
+	memo_upute->Lines->Add(L"- Dostupno samo administratoru.");
+	memo_upute->Lines->Add(L"- Dodavanje, uređivanje i deaktivacija korisnika.");
+	memo_upute->Lines->Add(L"");
+
+	memo_upute->Lines->Add(L"8. ODJAVA");
+	memo_upute->Lines->Add(L"");
+	memo_upute->Lines->Add(L"- Za završetak rada koristite gumb Odjava.");
+	memo_upute->Lines->Add(L"");
+
+	memo_upute->Lines->Add(L"===============================================");
+	memo_upute->Lines->Add(L"Vrtić App 1.0");
+	memo_upute->Lines->Add(L"Autor: Luka Ljubić");
+memo_upute->Lines->Add(L"===============================================");
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_upute::FormClose(TObject *Sender, TCloseAction &Action)
+{
+    Application->Terminate();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_upute::button_pocetnaClick(TObject *Sender)
+{
+    this->Hide();
+	form_dashboard->Show();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_upute::button_djecaClick(TObject *Sender)
+{
+    this->Hide();
+	form_djeca->Show();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_upute::button_aktivnostiClick(TObject *Sender)
+{
+    this->Hide();
+	form_aktivnosti->Show();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_upute::button_skupineClick(TObject *Sender)
+{
+    this->Hide();
+	form_skupine->Show();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_upute::button_razvojClick(TObject *Sender)
+{
+    this->Hide();
+	form_razvoj->Show();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_upute::button_korisniciClick(TObject *Sender)
+{
+    this->Hide();
+	form_korisnici->Show();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_upute::button_odjavaClick(TObject *Sender)
+{
+    data_module->currentUserID = 0;
+    data_module->currentUserIme = L"";
+    data_module->currentUserPrezime = L"";
+    data_module->currentUserUloga = L"";
+    data_module->currentUserSkupinaID = 0;
+
+    form_Login->edit_username->Clear();
+    form_Login->edit_password->Clear();
+
+    this->Hide();
+    form_dashboard->Hide();
+
+    form_Login->Show();
+    form_Login->BringToFront();
+	form_Login->edit_username->SetFocus();
+}
+//---------------------------------------------------------------------------

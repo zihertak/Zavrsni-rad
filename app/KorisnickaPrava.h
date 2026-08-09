@@ -25,5 +25,9 @@ public:
 	bool obrisiAktivnost() const;
 	bool zdravstvo() const;
 	bool samoSvojaSkupina() const;
+    bool unesiRazvojniPregled() const;
+	bool generirajPreporuku() const;
+	bool spremiPreporuku() const;
+	bool promijeniStatusPreporuke() const;
 };
 #endif

@@ -87,3 +87,30 @@ bool TKorisnickaPrava::obrisiAktivnost() const
 }
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
+
+bool TKorisnickaPrava::unesiRazvojniPregled() const
+{
+    return admin() || odgojitelj();
+}
+
+bool TKorisnickaPrava::generirajPreporuku() const
+{
+    return admin() ||
+           ravnatelj() ||
+           odgojitelj() ||
+           strucni();
+}
+
+bool TKorisnickaPrava::spremiPreporuku() const
+{
+    return admin() ||
+           odgojitelj() ||
+           strucni();
+}
+
+bool TKorisnickaPrava::promijeniStatusPreporuke() const
+{
+    return admin() ||
+           odgojitelj() ||
+           strucni();
+}
