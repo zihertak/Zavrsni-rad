@@ -376,4 +376,5 @@
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\FireDAC.Stan.Def.hpp \
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\FireDAC.Stan.Pool.hpp \
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\FireDAC.VCLUI.Wait.hpp \
-  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\FireDAC.DApt.hpp
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\FireDAC.DApt.hpp \
+  C:\Users\Luka\Desktop\NTP\app/Korisnik.h

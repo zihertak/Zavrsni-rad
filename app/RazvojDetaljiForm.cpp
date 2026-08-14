@@ -150,38 +150,6 @@ void Tform_razvoj_detalji::ucitajPregled(int idRazvojniPregled)
     }
 }
 
-TColor Tform_razvoj_detalji::bojaZaOcjenu(int ocjena)
-{
-    switch (ocjena)
-    {
-        case 1:
-            return clRed;
-
-        case 2:
-            return static_cast<TColor>(
-                RGB(255, 128, 0)
-            );
-
-        case 3:
-            return static_cast<TColor>(
-                RGB(255, 215, 0)
-            );
-
-        case 4:
-            return static_cast<TColor>(
-                RGB(50, 205, 50)
-            );
-
-        case 5:
-            return static_cast<TColor>(
-                RGB(0, 128, 0)
-            );
-
-        default:
-            return clGray;
-    }
-}
-
 void Tform_razvoj_detalji::postaviZvjezdice(
     TLabel *labela,
     int ocjena
@@ -191,5 +159,5 @@ void Tform_razvoj_detalji::postaviZvjezdice(
         napraviZvjezdice(ocjena);
 
     labela->Font->Color =
-        bojaZaOcjenu(ocjena);
+        razvojPomoc.BojaZaOcjenu(ocjena);
 }

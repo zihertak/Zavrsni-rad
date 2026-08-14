@@ -7,8 +7,10 @@
 class TKorisnickaPrava{
 private:
 	String uloga;
+	bool aktivan;
 public:
-	TKorisnickaPrava(const String &u);
+	TKorisnickaPrava(const String &u, bool akt = true);
+    bool jeAktivan() const;
     bool admin() const;
     bool ravnatelj() const;
     bool odgojitelj() const;

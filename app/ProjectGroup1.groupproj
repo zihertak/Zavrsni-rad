@@ -1,0 +1,60 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{1E5ED89E-75DF-4DA8-95A0-2AF5429E64E3}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="vrtic_app.cbproj">
+            <Dependencies>VrticPomocnaLib.cbproj;VrticKalendarModul.cbproj</Dependencies>
+        </Projects>
+        <Projects Include="VrticPomocnaLib.cbproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="VrticKalendarModul.cbproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="vrtic_app" DependsOnTargets="VrticPomocnaLib;VrticKalendarModul">
+        <MSBuild Projects="vrtic_app.cbproj"/>
+    </Target>
+    <Target Name="vrtic_app:Clean" DependsOnTargets="VrticPomocnaLib:Clean;VrticKalendarModul:Clean">
+        <MSBuild Projects="vrtic_app.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="vrtic_app:Make" DependsOnTargets="VrticPomocnaLib:Make;VrticKalendarModul:Make">
+        <MSBuild Projects="vrtic_app.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="VrticPomocnaLib">
+        <MSBuild Projects="VrticPomocnaLib.cbproj"/>
+    </Target>
+    <Target Name="VrticPomocnaLib:Clean">
+        <MSBuild Projects="VrticPomocnaLib.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="VrticPomocnaLib:Make">
+        <MSBuild Projects="VrticPomocnaLib.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="VrticKalendarModul">
+        <MSBuild Projects="VrticKalendarModul.cbproj"/>
+    </Target>
+    <Target Name="VrticKalendarModul:Clean">
+        <MSBuild Projects="VrticKalendarModul.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="VrticKalendarModul:Make">
+        <MSBuild Projects="VrticKalendarModul.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="vrtic_app;VrticPomocnaLib;VrticKalendarModul"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="vrtic_app:Clean;VrticPomocnaLib:Clean;VrticKalendarModul:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="vrtic_app:Make;VrticPomocnaLib:Make;VrticKalendarModul:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

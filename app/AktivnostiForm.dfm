@@ -24,14 +24,11 @@ object form_aktivnosti: Tform_aktivnosti
     Color = 11064738
     ParentBackground = False
     TabOrder = 0
-    DesignSize = (
-      220
-      500)
     object button_pocetna: TButton
       Left = 0
       Top = 0
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Po'#269'etna'
       Font.Charset = DEFAULT_CHARSET
@@ -46,9 +43,9 @@ object form_aktivnosti: Tform_aktivnosti
     end
     object button_djeca: TButton
       Left = 0
-      Top = 55
+      Top = 45
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Djeca'
       Font.Charset = DEFAULT_CHARSET
@@ -63,9 +60,9 @@ object form_aktivnosti: Tform_aktivnosti
     end
     object button_aktivnosti: TButton
       Left = 0
-      Top = 110
+      Top = 90
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Aktivnosti'
       Font.Charset = DEFAULT_CHARSET
@@ -79,9 +76,9 @@ object form_aktivnosti: Tform_aktivnosti
     end
     object button_skupine: TButton
       Left = 0
-      Top = 165
+      Top = 135
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Skupine'
       Font.Charset = DEFAULT_CHARSET
@@ -96,9 +93,9 @@ object form_aktivnosti: Tform_aktivnosti
     end
     object button_razvoj: TButton
       Left = 0
-      Top = 220
+      Top = 180
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Razvoj'
       Font.Charset = DEFAULT_CHARSET
@@ -113,9 +110,9 @@ object form_aktivnosti: Tform_aktivnosti
     end
     object button_korisnici: TButton
       Left = 0
-      Top = 275
+      Top = 225
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Korisnici'
       Font.Charset = DEFAULT_CHARSET
@@ -130,9 +127,9 @@ object form_aktivnosti: Tform_aktivnosti
     end
     object button_upute: TButton
       Left = 0
-      Top = 330
+      Top = 270
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Upute'
       Font.Charset = DEFAULT_CHARSET
@@ -145,13 +142,13 @@ object form_aktivnosti: Tform_aktivnosti
       TabStop = False
       OnClick = button_uputeClick
     end
-    object button_odjava: TButton
+    object button_zdravlje: TButton
       Left = 0
-      Top = 385
+      Top = 315
       Width = 220
-      Height = 55
-      Anchors = [akLeft, akRight, akBottom]
-      Caption = 'Odjava'
+      Height = 45
+      Align = alTop
+      Caption = 'Zdravlje'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -18
@@ -160,7 +157,42 @@ object form_aktivnosti: Tform_aktivnosti
       ParentFont = False
       TabOrder = 7
       TabStop = False
+      OnClick = button_zdravljeClick
+    end
+    object button_najave: TButton
+      Left = 0
+      Top = 360
+      Width = 220
+      Height = 45
+      Align = alTop
+      Caption = 'Najave'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 8
+      TabStop = False
+      OnClick = button_najaveClick
+    end
+    object button_odjava: TButton
+      Left = 0
+      Top = 455
+      Width = 220
+      Height = 45
+      Align = alBottom
+      Caption = 'Odjava'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 9
+      TabStop = False
       OnClick = button_odjavaClick
+      ExplicitTop = 405
     end
   end
   object panel_header: TPanel
@@ -179,7 +211,6 @@ object form_aktivnosti: Tform_aktivnosti
     ParentBackground = False
     ParentFont = False
     TabOrder = 1
-    ExplicitTop = 8
     object label_naslov: TLabel
       Left = 20
       Top = 20

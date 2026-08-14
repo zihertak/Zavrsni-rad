@@ -31,7 +31,6 @@ object form_razvoj: Tform_razvoj
     ParentBackground = False
     ParentFont = False
     TabOrder = 0
-    ExplicitTop = 1
     object label_naslov: TLabel
       Left = 20
       Top = 20
@@ -266,16 +265,11 @@ object form_razvoj: Tform_razvoj
     Color = 11064738
     ParentBackground = False
     TabOrder = 1
-    ExplicitTop = -59
-    ExplicitHeight = 500
-    DesignSize = (
-      220
-      590)
     object button_pocetna: TButton
       Left = 0
       Top = 0
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Po'#269'etna'
       Font.Charset = DEFAULT_CHARSET
@@ -290,9 +284,9 @@ object form_razvoj: Tform_razvoj
     end
     object button_djeca: TButton
       Left = 0
-      Top = 55
+      Top = 45
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Djeca'
       Font.Charset = DEFAULT_CHARSET
@@ -307,9 +301,9 @@ object form_razvoj: Tform_razvoj
     end
     object button_aktivnosti: TButton
       Left = 0
-      Top = 110
+      Top = 90
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Aktivnosti'
       Font.Charset = DEFAULT_CHARSET
@@ -324,9 +318,9 @@ object form_razvoj: Tform_razvoj
     end
     object button_skupine: TButton
       Left = 0
-      Top = 165
+      Top = 135
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Skupine'
       Font.Charset = DEFAULT_CHARSET
@@ -341,9 +335,9 @@ object form_razvoj: Tform_razvoj
     end
     object button_razvoj: TButton
       Left = 0
-      Top = 220
+      Top = 180
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Razvoj'
       Font.Charset = DEFAULT_CHARSET
@@ -357,9 +351,9 @@ object form_razvoj: Tform_razvoj
     end
     object button_korisnici: TButton
       Left = 0
-      Top = 275
+      Top = 225
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Korisnici'
       Font.Charset = DEFAULT_CHARSET
@@ -371,14 +365,12 @@ object form_razvoj: Tform_razvoj
       TabOrder = 5
       TabStop = False
       OnClick = button_korisniciClick
-      ExplicitLeft = -1
-      ExplicitTop = 281
     end
     object button_upute: TButton
       Left = 0
-      Top = 330
+      Top = 270
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Upute'
       Font.Charset = DEFAULT_CHARSET
@@ -391,13 +383,13 @@ object form_razvoj: Tform_razvoj
       TabStop = False
       OnClick = button_uputeClick
     end
-    object button_odjava: TButton
+    object button_zdravlje: TButton
       Left = 0
-      Top = 475
+      Top = 315
       Width = 220
-      Height = 55
-      Anchors = [akLeft, akRight, akBottom]
-      Caption = 'Odjava'
+      Height = 45
+      Align = alTop
+      Caption = 'Zdravlje'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -18
@@ -406,8 +398,42 @@ object form_razvoj: Tform_razvoj
       ParentFont = False
       TabOrder = 7
       TabStop = False
+      OnClick = button_zdravljeClick
+    end
+    object button_najave: TButton
+      Left = 0
+      Top = 360
+      Width = 220
+      Height = 45
+      Align = alTop
+      Caption = 'Najave'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 8
+      TabStop = False
+      OnClick = button_najaveClick
+    end
+    object button_odjava: TButton
+      Left = 0
+      Top = 545
+      Width = 220
+      Height = 45
+      Align = alBottom
+      Caption = 'Odjava'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 9
+      TabStop = False
       OnClick = button_odjavaClick
-      ExplicitTop = 385
+      ExplicitTop = 405
     end
   end
   object panel_content: TPanel
@@ -419,10 +445,6 @@ object form_razvoj: Tform_razvoj
     Color = clWhite
     ParentBackground = False
     TabOrder = 2
-    ExplicitLeft = 448
-    ExplicitTop = 288
-    ExplicitWidth = 185
-    ExplicitHeight = 41
     object panel_alati: TPanel
       Left = 1
       Top = 1
@@ -470,7 +492,6 @@ object form_razvoj: Tform_razvoj
       Color = clWhite
       ParentBackground = False
       TabOrder = 1
-      ExplicitLeft = 6
       object label_dijete: TLabel
         Left = 25
         Top = 10
@@ -529,6 +550,15 @@ object form_razvoj: Tform_razvoj
         TabOrder = 0
         OnChange = combo_dijeteChange
       end
+      object button_izvezi_profil: TButton
+        Left = 650
+        Top = 15
+        Width = 160
+        Height = 30
+        Caption = 'Izvezi profil'
+        TabOrder = 1
+        OnClick = button_izvezi_profilClick
+      end
     end
     object page_razvoj: TPageControl
       Left = 1
@@ -538,7 +568,6 @@ object form_razvoj: Tform_razvoj
       ActivePage = tab_preporuke
       Align = alClient
       TabOrder = 2
-      ExplicitHeight = 348
       object tab_procjena: TTabSheet
         Caption = 'Procjena'
         object panel_procjena: TPanel
@@ -551,9 +580,6 @@ object form_razvoj: Tform_razvoj
           Color = clWhite
           ParentBackground = False
           TabOrder = 0
-          ExplicitLeft = 1
-          ExplicitTop = -6
-          ExplicitHeight = 318
           object label_tjelesni: TLabel
             Left = 50
             Top = 15
@@ -1093,7 +1119,7 @@ object form_razvoj: Tform_razvoj
           object label_status_preporuke_naslov: TLabel
             Left = 0
             Top = 204
-            Width = 50
+            Width = 38
             Height = 15
             Caption = 'Status:'
             Font.Charset = DEFAULT_CHARSET
@@ -1269,6 +1295,22 @@ object form_razvoj: Tform_razvoj
   object query_ucitaj_preporuka_aktivnosti: TFDQuery
     Connection = data_module.connection
     Left = 368
+    Top = 432
+  end
+  object save_dialog_profil: TSaveDialog
+    Filter = 'Razvojni profil (*.dat)|*.dat'
+    DefaultExt = 'dat'
+    Left = 448
+    Top = 432
+  end
+  object query_izvoz_pregledi: TFDQuery
+    Connection = data_module.connection
+    Left = 512
+    Top = 432
+  end
+  object query_izvoz_ocjene: TFDQuery
+    Connection = data_module.connection
+    Left = 576
     Top = 432
   end
 end

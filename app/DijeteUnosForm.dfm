@@ -131,6 +131,42 @@ object form_dijete_unos: Tform_dijete_unos
       Style = csDropDownList
       TabOrder = 6
     end
+    object image_slika: TImage
+      Left = 424
+      Top = 30
+      Width = 100
+      Height = 100
+      Center = True
+      Proportional = True
+      Stretch = True
+    end
+    object button_ucitajSliku: TButton
+      Left = 424
+      Top = 140
+      Width = 100
+      Height = 30
+      Caption = 'U'#269'itaj sliku'
+      TabOrder = 7
+      OnClick = button_ucitajSlikuClick
+    end
+    object button_ukloniSliku: TButton
+      Left = 424
+      Top = 176
+      Width = 100
+      Height = 30
+      Caption = 'Ukloni sliku'
+      TabOrder = 8
+      OnClick = button_ukloniSlikuClick
+    end
+    object button_uvezi_profil: TButton
+      Left = 424
+      Top = 220
+      Width = 140
+      Height = 30
+      Caption = 'Uvezi razvojni profil'
+      TabOrder = 9
+      OnClick = button_uvezi_profilClick
+    end
   end
   object group_zdravstveni: TGroupBox
     Left = 24
@@ -220,17 +256,37 @@ object form_dijete_unos: Tform_dijete_unos
       'SELECT id_skupina, naziv'
       'FROM skupina'
       'ORDER BY naziv')
-    Left = 488
-    Top = 144
+    Left = 24
+    Top = 600
   end
   object query_spremanje: TFDQuery
     Connection = data_module.connection
-    Left = 496
-    Top = 232
+    Left = 120
+    Top = 600
   end
   object query_dijete: TFDQuery
     Connection = data_module.connection
-    Left = 496
-    Top = 304
+    Left = 216
+    Top = 600
+  end
+  object open_dialog_slika: TOpenDialog
+    Filter = 'Slike|*.jpg;*.jpeg;*.png'
+    Left = 312
+    Top = 600
+  end
+  object open_dialog_profil: TOpenDialog
+    Filter = 'Razvojni profil (*.dat)|*.dat'
+    Left = 376
+    Top = 600
+  end
+  object query_uvoz_pregled: TFDQuery
+    Connection = data_module.connection
+    Left = 440
+    Top = 600
+  end
+  object query_uvoz_procjena: TFDQuery
+    Connection = data_module.connection
+    Left = 504
+    Top = 600
   end
 end

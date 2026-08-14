@@ -13,6 +13,8 @@
 #include "RazvojForm.h"
 #include "KorisnikUnosForm.h"
 #include "UputeForm.h"
+#include "BolestiForm.h"
+#include "NajaveForm.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -57,32 +59,32 @@ void __fastcall Tform_korisnici::FormClose(TObject *Sender, TCloseAction &Action
 //---------------------------------------------------------------------------
 void __fastcall Tform_korisnici::button_pocetnaClick(TObject *Sender)
 {
-    this->Hide();
 	form_dashboard->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_korisnici::button_djecaClick(TObject *Sender)
 {
-	this->Hide();
 	form_djeca->Show();
+	this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_korisnici::button_aktivnostiClick(TObject *Sender)
 {
-	this->Hide();
 	form_aktivnosti->Show();
+	this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_korisnici::button_skupineClick(TObject *Sender)
 {
-	this->Hide();
 	form_skupine->Show();
+	this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_korisnici::button_razvojClick(TObject *Sender)
 {
-    this->Hide();
 	form_razvoj->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_korisnici::button_odjavaClick(TObject *Sender)
@@ -96,11 +98,11 @@ void __fastcall Tform_korisnici::button_odjavaClick(TObject *Sender)
     form_Login->edit_username->Clear();
     form_Login->edit_password->Clear();
 
-    this->Hide();
-    form_dashboard->Hide();
-
     form_Login->Show();
     form_Login->BringToFront();
+
+    this->Hide();
+    form_dashboard->Hide();
 	form_Login->edit_username->SetFocus();
 }
 //---------------------------------------------------------------------------
@@ -593,7 +595,19 @@ void Tform_korisnici::osvjeziGumbStatusa()
 }
 void __fastcall Tform_korisnici::button_uputeClick(TObject *Sender)
 {
-    this->Hide();
     form_upute->Show();
+    this->Hide();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_korisnici::button_zdravljeClick(TObject *Sender)
+{
+    form_bolesti->Show();
+    this->Hide();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_korisnici::button_najaveClick(TObject *Sender)
+{
+    form_najave->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------

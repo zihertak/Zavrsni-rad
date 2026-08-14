@@ -381,6 +381,7 @@
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\dinkumware64\vector \
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\dinkumware64\algorithm \
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\dinkumware64\xheap \
+  C:\Users\Luka\Desktop\NTP\app/RazvojPomoc.h \
   C:\Users\Luka\Desktop\NTP\app/DashboardForm.h \
   C:\Users\Luka\Desktop\NTP\app/DjecaForm.h \
   C:\Users\Luka\Desktop\NTP\app/SkupineForm.h \
@@ -395,9 +396,18 @@
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\FireDAC.Stan.Def.hpp \
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\FireDAC.Stan.Pool.hpp \
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\FireDAC.VCLUI.Wait.hpp \
+  C:\Users\Luka\Desktop\NTP\app/Korisnik.h \
   C:\Users\Luka\Desktop\NTP\app/RazvojDetaljiForm.h \
   C:\Users\Luka\Desktop\NTP\app/AktivnostUnosForm.h \
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\vcl\Vcl.CheckLst.hpp \
   C:\Users\Luka\Desktop\NTP\app/KorisnickaPrava.h \
   C:\Users\Luka\Desktop\NTP\app/KorisniciForm.h \
-  C:\Users\Luka\Desktop\NTP\app/UputeForm.h
+  C:\Users\Luka\Desktop\NTP\app/UputeForm.h \
+  C:\Users\Luka\Desktop\NTP\app/BolestiForm.h \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\System.JSON.hpp \
+  C:\Users\Luka\Desktop\NTP\app/NajaveForm.h \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\Xml.XMLDoc.hpp \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\Xml.xmldom.hpp \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\Xml.XMLConst.hpp \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\Xml.XMLIntf.hpp \
+  C:\Users\Luka\Desktop\NTP\app/TKalendarPomoc.h

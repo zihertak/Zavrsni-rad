@@ -15,6 +15,8 @@
 #include "KorisnickaPrava.h"
 #include "KorisniciForm.h"
 #include "UputeForm.h"
+#include "BolestiForm.h"
+#include "NajaveForm.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -34,26 +36,26 @@ __fastcall Tform_razvoj::Tform_razvoj(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall Tform_razvoj::button_pocetnaClick(TObject *Sender)
 {
-	this->Hide();
 	form_dashboard->Show();
+	this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_razvoj::button_djecaClick(TObject *Sender)
 {
-	this->Hide();
 	form_djeca->Show();
+	this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_razvoj::button_aktivnostiClick(TObject *Sender)
 {
-    this->Hide();
     form_aktivnosti->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_razvoj::button_skupineClick(TObject *Sender)
 {
-	this->Hide();
 	form_skupine->Show();
+	this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_razvoj::FormShow(TObject *Sender)
@@ -81,11 +83,11 @@ void __fastcall Tform_razvoj::button_odjavaClick(TObject *Sender)
     form_Login->edit_username->Clear();
     form_Login->edit_password->Clear();
 
-    this->Hide();
-    form_dashboard->Hide();
-
     form_Login->Show();
     form_Login->BringToFront();
+
+    this->Hide();
+    form_dashboard->Hide();
     form_Login->edit_username->SetFocus();
 }
 //---------------------------------------------------------------------------
@@ -334,6 +336,113 @@ void __fastcall Tform_razvoj::combo_dijeteChange(TObject *Sender)
     ucitajSpremljenuPreporuku();
 }
 //---------------------------------------------------------------------------
+// Izvozi cijelu razvojnu povijest odabranog djeteta (svi pregledi + ocjene)
+// u binarnu .dat datoteku - ime se sprema u fiksnih 100 znakova (dopunjeno
+// razmacima) da format ostane jednostavan zapis fiksne veličine.
+void __fastcall Tform_razvoj::button_izvezi_profilClick(TObject *Sender)
+{
+	if (odabranoDijeteID == 0)
+	{
+		ShowMessage(L"Odaberite dijete čiji profil želite izvesti.");
+		return;
+	}
+
+	if (!save_dialog_profil->Execute())
+	{
+		return;
+	}
+
+	String punoIme = combo_dijete->Text;
+
+	while (punoIme.Length() < 100)
+	{
+		punoIme = punoIme + L" ";
+	}
+
+	punoIme = punoIme.SubString(1, 100);
+
+	query_izvoz_pregledi->Close();
+	query_izvoz_pregledi->SQL->Clear();
+
+	query_izvoz_pregledi->SQL->Add(
+		"SELECT COUNT(*) AS broj FROM razvojni_pregled WHERE id_dijete = :id_dijete"
+	);
+
+	query_izvoz_pregledi->ParamByName("id_dijete")->AsInteger = odabranoDijeteID;
+	query_izvoz_pregledi->Open();
+
+	int brojPregleda = query_izvoz_pregledi->FieldByName("broj")->AsInteger;
+	query_izvoz_pregledi->Close();
+
+	query_izvoz_pregledi->SQL->Clear();
+
+	query_izvoz_pregledi->SQL->Add(
+		"SELECT id_razvojni_pregled, datum FROM razvojni_pregled "
+		"WHERE id_dijete = :id_dijete ORDER BY datum ASC"
+	);
+
+	query_izvoz_pregledi->ParamByName("id_dijete")->AsInteger = odabranoDijeteID;
+	query_izvoz_pregledi->Open();
+
+	TFileStream *stream = new TFileStream(save_dialog_profil->FileName, fmCreate);
+
+	try
+	{
+		stream->WriteBuffer(punoIme.c_str(), 100 * sizeof(wchar_t));
+		stream->WriteBuffer(&brojPregleda, sizeof(int));
+
+		while (!query_izvoz_pregledi->Eof)
+		{
+			int idPregled =
+				query_izvoz_pregledi->FieldByName("id_razvojni_pregled")->AsInteger;
+
+			double datum = query_izvoz_pregledi->FieldByName("datum")->AsDateTime;
+			stream->WriteBuffer(&datum, sizeof(double));
+
+			query_izvoz_ocjene->Close();
+			query_izvoz_ocjene->SQL->Clear();
+
+			query_izvoz_ocjene->SQL->Add(
+				"SELECT id_podrucje_razvoja, razina FROM procjena_podrucja "
+				"WHERE id_razvojni_pregled = :id_pregled"
+			);
+
+			query_izvoz_ocjene->ParamByName("id_pregled")->AsInteger = idPregled;
+			query_izvoz_ocjene->Open();
+
+			query_izvoz_ocjene->Last();
+			int brojOcjena = query_izvoz_ocjene->RecordCount;
+			query_izvoz_ocjene->First();
+
+			stream->WriteBuffer(&brojOcjena, sizeof(int));
+
+			while (!query_izvoz_ocjene->Eof)
+			{
+				int idPodrucje =
+					query_izvoz_ocjene->FieldByName("id_podrucje_razvoja")->AsInteger;
+
+				int razina = query_izvoz_ocjene->FieldByName("razina")->AsInteger;
+
+				stream->WriteBuffer(&idPodrucje, sizeof(int));
+				stream->WriteBuffer(&razina, sizeof(int));
+
+				query_izvoz_ocjene->Next();
+			}
+
+			query_izvoz_ocjene->Close();
+			query_izvoz_pregledi->Next();
+		}
+
+		ShowMessage(
+			L"Profil je izvezen (" + IntToStr(brojPregleda) + L" pregleda).");
+	}
+	__finally
+	{
+		delete stream;
+		query_izvoz_pregledi->Close();
+	}
+}
+//---------------------------------------------------------------------------
 
 void __fastcall Tform_razvoj::speed_tjelesniClick(TObject *Sender)
 {
@@ -352,7 +461,7 @@ void __fastcall Tform_razvoj::speed_tjelesniClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void Tform_razvoj::osvjeziTjelesneZvjezdice()
 {
-    TColor boja = bojaZaOcjenu(ocjenaTjelesni);
+    TColor boja = razvojPomoc.BojaZaOcjenu(ocjenaTjelesni);
 
     speed_tjelesni_1->Caption =
         ocjenaTjelesni >= 1 ? L"★" : L"☆";
@@ -430,7 +539,7 @@ void __fastcall Tform_razvoj::speed_spoznajniClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void Tform_razvoj::osvjeziSocioZvjezdice()
 {
-	TColor boja = bojaZaOcjenu(ocjenaSocio);
+	TColor boja = razvojPomoc.BojaZaOcjenu(ocjenaSocio);
     speed_socio_1->Caption =
         ocjenaSocio >= 1 ? L"★" : L"☆";
 
@@ -464,7 +573,7 @@ void Tform_razvoj::osvjeziSocioZvjezdice()
 
 void Tform_razvoj::osvjeziGovorneZvjezdice()
 {
-	TColor boja = bojaZaOcjenu(ocjenaGovorni);
+	TColor boja = razvojPomoc.BojaZaOcjenu(ocjenaGovorni);
 	speed_govorni_1->Caption =
         ocjenaGovorni >= 1 ? L"★" : L"☆";
 
@@ -498,7 +607,7 @@ void Tform_razvoj::osvjeziGovorneZvjezdice()
 
 void Tform_razvoj::osvjeziSpoznajneZvjezdice()
 {
-	TColor boja = bojaZaOcjenu(ocjenaSpoznajni);
+	TColor boja = razvojPomoc.BojaZaOcjenu(ocjenaSpoznajni);
     speed_spoznajni_1->Caption =
         ocjenaSpoznajni >= 1 ? L"★" : L"☆";
 
@@ -530,29 +639,6 @@ void Tform_razvoj::osvjeziSpoznajneZvjezdice()
 		ocjenaSpoznajni >= 5 ? boja : clGray;
 }
 
-TColor Tform_razvoj::bojaZaOcjenu(int ocjena)
-{
-    switch (ocjena)
-    {
-        case 1:
-            return clRed;                         // Crvena
-
-        case 2:
-            return static_cast<TColor>(RGB(255, 128, 0));   // Narančasta
-
-        case 3:
-            return static_cast<TColor>(RGB(255, 215, 0));   // Zlatno žuta
-
-        case 4:
-            return static_cast<TColor>(RGB(50, 205, 50));   // Lime zelena
-
-        case 5:
-            return static_cast<TColor>(RGB(0, 128, 0));     // Tamno zelena
-
-        default:
-            return clSilver;
-    }
-}
 void __fastcall Tform_razvoj::button_ocistiClick(TObject *Sender)
 {
     ocjenaTjelesni = 0;
@@ -2246,15 +2332,27 @@ void Tform_razvoj::ucitajSpremljenuPreporuku()
 }
 void __fastcall Tform_razvoj::button_korisniciClick(TObject *Sender)
 {
-    this->Hide();
     form_korisnici->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 
 void __fastcall Tform_razvoj::button_uputeClick(TObject *Sender)
 {
-    this->Hide();
     form_upute->Show();
+    this->Hide();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_razvoj::button_zdravljeClick(TObject *Sender)
+{
+    form_bolesti->Show();
+    this->Hide();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_razvoj::button_najaveClick(TObject *Sender)
+{
+    form_najave->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 

@@ -37,6 +37,8 @@ __published:	// IDE-managed Components
 	TButton *button_razvoj;
 	TButton *button_korisnici;
 	TButton *button_upute;
+	TButton *button_zdravlje;
+	TButton *button_najave;
 	TButton *button_odjava;
 	TPanel *panel_content;
 	TPanel *panel_alati;
@@ -55,6 +57,7 @@ __published:	// IDE-managed Components
 	TButton *button_dodaj;
 	TButton *button_uredi;
 	TButton *button_obrisi;
+	TButton *button_izvjestaj;
 	TFDQuery *query_skupine;
 	TDataSource *source_skupine;
 	TFDQuery *query_pedagoske_godine;
@@ -73,12 +76,15 @@ __published:	// IDE-managed Components
 	void __fastcall button_dodajClick(TObject *Sender);
 	void __fastcall button_urediClick(TObject *Sender);
 	void __fastcall button_obrisiClick(TObject *Sender);
+	void __fastcall button_izvjestajClick(TObject *Sender);
 	void __fastcall grid_skupineDblClick(TObject *Sender);
 	void __fastcall button_odjavaClick(TObject *Sender);
 	void __fastcall button_aktivnostiClick(TObject *Sender);
 	void __fastcall button_razvojClick(TObject *Sender);
 	void __fastcall button_korisniciClick(TObject *Sender);
 	void __fastcall button_uputeClick(TObject *Sender);
+	void __fastcall button_zdravljeClick(TObject *Sender);
+	void __fastcall button_najaveClick(TObject *Sender);
 private:	// User declarations
     void ucitajPedagoskeGodine();
 	void osvjeziPopisSkupina();

@@ -14,6 +14,9 @@
 #include "RazvojForm.h"
 #include "KorisniciForm.h"
 #include "UputeForm.h"
+#include "BolestiForm.h"
+#include "NajaveForm.h"
+#include "IzvjestajForm.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -51,14 +54,14 @@ void __fastcall Tform_skupine::FormShow(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall Tform_skupine::button_pocetnaClick(TObject *Sender)
 {
-	this->Hide();
 	form_dashboard->Show();
+	this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_skupine::button_djecaClick(TObject *Sender)
 {
-	this->Hide();
 	form_djeca->Show();
+	this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_skupine::FormClose(TObject *Sender, TCloseAction &Action)
@@ -416,6 +419,11 @@ void __fastcall Tform_skupine::button_obrisiClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
+void __fastcall Tform_skupine::button_izvjestajClick(TObject *Sender)
+{
+	form_izvjestaj->ShowModal();
+}
+//---------------------------------------------------------------------------
 
 void __fastcall Tform_skupine::grid_skupineDblClick(TObject *Sender)
 {
@@ -434,11 +442,11 @@ void __fastcall Tform_skupine::button_odjavaClick(TObject *Sender)
 	form_Login->edit_username->Clear();
 	form_Login->edit_password->Clear();
 
-	this->Hide();
-	form_dashboard->Hide();
-
 	form_Login->Show();
 	form_Login->BringToFront();
+
+	this->Hide();
+	form_dashboard->Hide();
 	form_Login->edit_username->SetFocus();
 }
 //---------------------------------------------------------------------------
@@ -461,29 +469,41 @@ void Tform_skupine::primijeniPrava()
 
 void __fastcall Tform_skupine::button_aktivnostiClick(TObject *Sender)
 {
-    this->Hide();
 	form_aktivnosti->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 
 void __fastcall Tform_skupine::button_razvojClick(TObject *Sender)
 {
-    this->Hide();
     form_razvoj->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 
 void __fastcall Tform_skupine::button_korisniciClick(TObject *Sender)
 {
-    this->Hide();
     form_korisnici->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 
 void __fastcall Tform_skupine::button_uputeClick(TObject *Sender)
 {
-    this->Hide();
     form_upute->Show();
+    this->Hide();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_skupine::button_zdravljeClick(TObject *Sender)
+{
+    form_bolesti->Show();
+    this->Hide();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_skupine::button_najaveClick(TObject *Sender)
+{
+    form_najave->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 

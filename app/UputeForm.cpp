@@ -13,6 +13,8 @@
 #include "RazvojForm.h"
 #include "KorisniciForm.h"
 #include "KorisnickaPrava.h"
+#include "BolestiForm.h"
+#include "NajaveForm.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -111,38 +113,50 @@ void __fastcall Tform_upute::FormClose(TObject *Sender, TCloseAction &Action)
 //---------------------------------------------------------------------------
 void __fastcall Tform_upute::button_pocetnaClick(TObject *Sender)
 {
-    this->Hide();
 	form_dashboard->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_upute::button_djecaClick(TObject *Sender)
 {
-    this->Hide();
 	form_djeca->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_upute::button_aktivnostiClick(TObject *Sender)
 {
-    this->Hide();
 	form_aktivnosti->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_upute::button_skupineClick(TObject *Sender)
 {
-    this->Hide();
 	form_skupine->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_upute::button_razvojClick(TObject *Sender)
 {
-    this->Hide();
 	form_razvoj->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_upute::button_korisniciClick(TObject *Sender)
 {
-    this->Hide();
 	form_korisnici->Show();
+    this->Hide();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_upute::button_zdravljeClick(TObject *Sender)
+{
+    form_bolesti->Show();
+    this->Hide();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_upute::button_najaveClick(TObject *Sender)
+{
+    form_najave->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_upute::button_odjavaClick(TObject *Sender)
@@ -156,11 +170,11 @@ void __fastcall Tform_upute::button_odjavaClick(TObject *Sender)
     form_Login->edit_username->Clear();
     form_Login->edit_password->Clear();
 
-    this->Hide();
-    form_dashboard->Hide();
-
     form_Login->Show();
     form_Login->BringToFront();
+
+    this->Hide();
+    form_dashboard->Hide();
 	form_Login->edit_username->SetFocus();
 }
 //---------------------------------------------------------------------------

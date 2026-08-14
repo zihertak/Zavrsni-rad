@@ -4,20 +4,25 @@
 #pragma hdrstop
 #include <tchar.h>
 //---------------------------------------------------------------------------
+USEFORM("NajaveForm.cpp", form_najave);
+USEFORM("RazvojDetaljiForm.cpp", form_razvoj_detalji);
+USEFORM("RazvojForm.cpp", form_razvoj);
+USEFORM("KorisnikUnosForm.cpp", form_korisnik_unos);
 USEFORM("LoginForm.cpp", form_Login);
+USEFORM("NajavaUnosForm.cpp", form_najava_unos);
+USEFORM("SkupinaUnosForm.cpp", form_skupina_unos);
+USEFORM("SkupineForm.cpp", form_skupine);
+USEFORM("UputeForm.cpp", form_upute);
+USEFORM("BolestUnosForm.cpp", form_bolest_unos);
 USEFORM("DashboardForm.cpp", form_dashboard);
 USEFORM("DatabaseModule.cpp", data_module); /* TDataModule: File Type */
-USEFORM("DjecaForm.cpp", form_djeca);
-USEFORM("DijeteUnosForm.cpp", form_dijete_unos);
-USEFORM("SkupineForm.cpp", form_skupine);
-USEFORM("SkupinaUnosForm.cpp", form_skupina_unos);
 USEFORM("AktivnostiForm.cpp", form_aktivnosti);
 USEFORM("AktivnostUnosForm.cpp", form_aktivnost_unos);
-USEFORM("RazvojForm.cpp", form_razvoj);
-USEFORM("RazvojDetaljiForm.cpp", form_razvoj_detalji);
+USEFORM("BolestiForm.cpp", form_bolesti);
 USEFORM("KorisniciForm.cpp", form_korisnici);
-USEFORM("KorisnikUnosForm.cpp", form_korisnik_unos);
-USEFORM("UputeForm.cpp", form_upute);
+USEFORM("DijeteUnosForm.cpp", form_dijete_unos);
+USEFORM("DjecaForm.cpp", form_djeca);
+USEFORM("IzvjestajForm.cpp", form_izvjestaj);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
@@ -39,6 +44,11 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 		Application->CreateForm(__classid(Tform_korisnici), &form_korisnici);
 		Application->CreateForm(__classid(Tform_korisnik_unos), &form_korisnik_unos);
 		Application->CreateForm(__classid(Tform_upute), &form_upute);
+		Application->CreateForm(__classid(Tform_bolesti), &form_bolesti);
+		Application->CreateForm(__classid(Tform_najave), &form_najave);
+		Application->CreateForm(__classid(Tform_najava_unos), &form_najava_unos);
+		Application->CreateForm(__classid(Tform_bolest_unos), &form_bolest_unos);
+		Application->CreateForm(__classid(Tform_izvjestaj), &form_izvjestaj);
 		Application->Run();
 	}
 	catch (Exception &exception)

@@ -5,6 +5,7 @@
 
 #include "KorisnikUnosForm.h"
 #include "DatabaseModule.h"
+#include "Sigurnost.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -443,7 +444,8 @@ void __fastcall Tform_korisnik_unos::button_spremiClick(TObject *Sender)
 
         query_spremanje
             ->ParamByName(L"lozinka")
-            ->AsWideString = lozinka;
+            ->AsWideString =
+                Hashiraj(lozinka, GenerirajSol(username));
 	}
         else
     {
@@ -474,7 +476,8 @@ void __fastcall Tform_korisnik_unos::button_spremiClick(TObject *Sender)
 
             query_spremanje
                 ->ParamByName(L"lozinka")
-                ->AsWideString = lozinka;
+                ->AsWideString =
+                    Hashiraj(lozinka, GenerirajSol(username));
         }
 
         query_spremanje

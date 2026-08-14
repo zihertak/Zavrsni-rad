@@ -19,6 +19,7 @@
 #include <FireDAC.Stan.Intf.hpp>
 #include <FireDAC.Stan.Option.hpp>
 #include <FireDAC.Stan.Param.hpp>
+#include "RazvojPomoc.h"
 //---------------------------------------------------------------------------
 class Tform_razvoj_detalji : public TForm
 {
@@ -44,7 +45,7 @@ __published:	// IDE-managed Components
 	TFDQuery *query_detalji;
 private:	// User declarations
 	String napraviZvjezdice(int ocjena);
-    TColor bojaZaOcjenu(int ocjena);
+	TRazvojPomoc razvojPomoc;
 	void postaviZvjezdice(TLabel *labela, int ocjena);
 public:		// User declarations
 	__fastcall Tform_razvoj_detalji(TComponent* Owner);

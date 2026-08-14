@@ -37,6 +37,8 @@ __published:	// IDE-managed Components
 	TButton *button_razvoj;
 	TButton *button_korisnici;
 	TButton *button_upute;
+	TButton *button_zdravlje;
+	TButton *button_najave;
 	TButton *button_odjava;
 	TPanel *panel_content;
 	TPanel *panel_alati;
@@ -81,6 +83,8 @@ __published:	// IDE-managed Components
 	void __fastcall button_statusClick(TObject *Sender);
 	void __fastcall grid_korisniciCellClick(TColumn *Column);
 	void __fastcall button_uputeClick(TObject *Sender);
+	void __fastcall button_zdravljeClick(TObject *Sender);
+	void __fastcall button_najaveClick(TObject *Sender);
 private:	// User declarations
     void ucitajUloge();
 	void osvjeziPopisKorisnika();

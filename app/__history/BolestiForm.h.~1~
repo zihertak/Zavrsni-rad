@@ -1,0 +1,89 @@
+//---------------------------------------------------------------------------
+
+#ifndef BolestiFormH
+#define BolestiFormH
+//---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+#include <Vcl.Controls.hpp>
+#include <Vcl.StdCtrls.hpp>
+#include <Vcl.Forms.hpp>
+#include <Vcl.ExtCtrls.hpp>
+#include <Vcl.Grids.hpp>
+#include <Vcl.ComCtrls.hpp>
+#include <Vcl.Imaging.pngimage.hpp>
+#include <FireDAC.Comp.Client.hpp>
+#include <System.JSON.hpp>
+//---------------------------------------------------------------------------
+class Tform_bolesti : public TForm
+{
+__published:	// IDE-managed Components
+	TFDQuery *query_djeca;
+	TPanel *panel_menu;
+	TButton *button_pocetna;
+	TButton *button_djeca;
+	TButton *button_aktivnosti;
+	TButton *button_skupine;
+	TButton *button_razvoj;
+	TButton *button_korisnici;
+	TButton *button_upute;
+	TButton *button_odjava;
+	TPanel *panel_header;
+	TLabel *label_naslov;
+	TPanel *panel_user;
+	TLabel *label_korisnik;
+	TLabel *label_uloga;
+	TImage *imgKorisnik;
+	TPanel *panel_content;
+	TPanel *panel_alati;
+	TLabel *label_naslov_bolesti;
+	TLabel *label_opis;
+	TPanel *panel_upozorenja;
+	TMemo *memo_upozorenja;
+	TPanel *panel_grid;
+	TStringGrid *grid_bolesti;
+	TPanel *panel_unos;
+	TLabel *label_dijete;
+	TComboBox *combo_dijete;
+	TLabel *label_od;
+	TDateTimePicker *date_od;
+	TLabel *label_do;
+	TDateTimePicker *date_do;
+	TLabel *label_razlog;
+	TComboBox *combo_razlog;
+	TLabel *label_napomena;
+	TEdit *edit_napomena;
+	TButton *button_spremi;
+	TButton *button_novi;
+	TButton *button_obrisi;
+	void __fastcall FormShow(TObject *Sender);
+	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+	void __fastcall button_pocetnaClick(TObject *Sender);
+	void __fastcall button_djecaClick(TObject *Sender);
+	void __fastcall button_aktivnostiClick(TObject *Sender);
+	void __fastcall button_skupineClick(TObject *Sender);
+	void __fastcall button_razvojClick(TObject *Sender);
+	void __fastcall button_korisniciClick(TObject *Sender);
+	void __fastcall button_uputeClick(TObject *Sender);
+	void __fastcall button_odjavaClick(TObject *Sender);
+	void __fastcall grid_bolestiClick(TObject *Sender);
+	void __fastcall button_noviClick(TObject *Sender);
+	void __fastcall button_spremiClick(TObject *Sender);
+	void __fastcall button_obrisiClick(TObject *Sender);
+private:	// User declarations
+	int odabraniRedak;
+	TJSONArray *nizBolesti;
+	void ucitajDjecu();
+	void ucitajBolesti();
+	void popuniGrid();
+	void spremiBolesti();
+	void izracunajUpozorenja();
+	String putanjaDatoteke();
+	String imeDjeteta(int idDijete);
+	int skupinaDjeteta(int idDijete);
+public:		// User declarations
+	__fastcall Tform_bolesti(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE Tform_bolesti *form_bolesti;
+//---------------------------------------------------------------------------
+#endif

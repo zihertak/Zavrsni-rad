@@ -8,6 +8,8 @@
 #include <Vcl.StdCtrls.hpp>
 #include <Vcl.Forms.hpp>
 #include <Vcl.ComCtrls.hpp>
+#include <Vcl.ExtCtrls.hpp>
+#include <Vcl.Dialogs.hpp>
 #include <Data.DB.hpp>
 #include <FireDAC.Comp.Client.hpp>
 #include <FireDAC.Comp.DataSet.hpp>
@@ -51,10 +53,23 @@ __published:	// IDE-managed Components
 	TFDQuery *query_skupine;
 	TFDQuery *query_spremanje;
 	TFDQuery *query_dijete;
+	TImage *image_slika;
+	TButton *button_ucitajSliku;
+	TButton *button_ukloniSliku;
+	TOpenDialog *open_dialog_slika;
+	TButton *button_uvezi_profil;
+	TOpenDialog *open_dialog_profil;
+	TFDQuery *query_uvoz_pregled;
+	TFDQuery *query_uvoz_procjena;
 	void __fastcall button_spremiClick(TObject *Sender);
+	void __fastcall button_ucitajSlikuClick(TObject *Sender);
+	void __fastcall button_ukloniSlikuClick(TObject *Sender);
+	void __fastcall button_uvezi_profilClick(TObject *Sender);
 private:	// User declarations
 	int idDijete;
 	bool samoZdravstveniPodaci;
+	String odabranaSlikaPutanja;
+	bool slikaPromijenjena;
 	void ucitajSkupine();
     void primijeniPrava();
 public:		// User declarations

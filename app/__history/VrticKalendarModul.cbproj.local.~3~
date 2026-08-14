@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.171,C:\Users\Luka\Desktop\NTP\app\VrticKalendarModul.cbproj=C:\Users\Luka\Documents\Embarcadero\Studio\Projects\Project1.cbproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.004,=C:\Users\Luka\Documents\Embarcadero\Studio\Projects\File1.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.916,=C:\Users\Luka\Documents\Embarcadero\Studio\Projects\Project1PCH1.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.137,C:\Users\Luka\Desktop\NTP\app\File1.cpp=C:\Users\Luka\Documents\Embarcadero\Studio\Projects\File1.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.111,C:\Users\Luka\Desktop\NTP\app\VrticKalendarModulPCH1.h=C:\Users\Luka\Documents\Embarcadero\Studio\Projects\Project1PCH1.h</Transaction>
+  </Transactions>
+</BorlandProject>

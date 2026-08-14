@@ -14,6 +14,14 @@
 #include "RazvojForm.h"
 #include "KorisniciForm.h"
 #include "UputeForm.h"
+#include "BolestiForm.h"
+#include "NajaveForm.h"
+#include <IniFiles.hpp>
+//---------------------------------------------------------------------------
+static String PutanjaPostavkiIni()
+{
+	return ExtractFilePath(Application->ExeName) + "postavke.ini";
+}
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -28,8 +36,8 @@ __fastcall Tform_djeca::Tform_djeca(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall Tform_djeca::button_pocetnaClick(TObject *Sender)
 {
-    this->Hide();
 	form_dashboard->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_djeca::FormShow(TObject *Sender)
@@ -81,7 +89,27 @@ void Tform_djeca::ucitajSkupine()
 		);
         query_skupine->Next();
 	}
-    combo_skupina->ItemIndex = 0;
+
+	TIniFile *ini = new TIniFile(PutanjaPostavkiIni());
+	int zadnjaSkupina;
+	try
+	{
+		zadnjaSkupina = ini->ReadInteger("Djeca", "ZadnjaSkupina", 0);
+	}
+	__finally
+	{
+		delete ini;
+	}
+
+	combo_skupina->ItemIndex = 0;
+	for (int i = 0; i < combo_skupina->Items->Count; i++)
+	{
+		if (reinterpret_cast<NativeInt>(combo_skupina->Items->Objects[i]) == zadnjaSkupina)
+		{
+			combo_skupina->ItemIndex = i;
+			break;
+		}
+	}
 }
 void Tform_djeca::osvjeziPopisDjece()
 {
@@ -214,6 +242,23 @@ void __fastcall Tform_djeca::edit_pretragaChange(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall Tform_djeca::combo_skupinaChange(TObject *Sender)
 {
+	NativeInt idSkupina = 0;
+	if (combo_skupina->ItemIndex >= 0)
+	{
+		idSkupina = reinterpret_cast<NativeInt>(
+			combo_skupina->Items->Objects[combo_skupina->ItemIndex]);
+	}
+
+	TIniFile *ini = new TIniFile(PutanjaPostavkiIni());
+	try
+	{
+		ini->WriteInteger("Djeca", "ZadnjaSkupina", (int)idSkupina);
+	}
+	__finally
+	{
+		delete ini;
+	}
+
     osvjeziPopisDjece();
 }
 //---------------------------------------------------------------------------
@@ -411,10 +456,10 @@ void __fastcall Tform_djeca::button_odjavaClick(TObject *Sender)
     data_module->currentUserSkupinaID = 0;
 	form_Login->edit_username->Clear();
 	form_Login->edit_password->Clear();
-	this->Hide();
-	form_dashboard->Hide();
     form_Login->Show();
     form_Login->BringToFront();
+	this->Hide();
+	form_dashboard->Hide();
 	form_Login->edit_username->SetFocus();
 }
 //---------------------------------------------------------------------------
@@ -430,40 +475,8 @@ void __fastcall Tform_djeca::query_djecaCalcFields(TDataSet *DataSet)
     TDateTime datumRodjenja =
         query_djeca->FieldByName("datum_rodjenja")->AsDateTime;
 
-    unsigned short godinaRodjenja;
-    unsigned short mjesecRodjenja;
-    unsigned short danRodjenja;
-
-    unsigned short trenutnaGodina;
-    unsigned short trenutniMjesec;
-    unsigned short trenutniDan;
-
-    datumRodjenja.DecodeDate(
-        &godinaRodjenja,
-        &mjesecRodjenja,
-        &danRodjenja
-    );
-
-    Date().DecodeDate(
-        &trenutnaGodina,
-        &trenutniMjesec,
-        &trenutniDan
-    );
-
-    int dob = trenutnaGodina - godinaRodjenja;
-
-    if (
-        trenutniMjesec < mjesecRodjenja ||
-        (
-            trenutniMjesec == mjesecRodjenja &&
-            trenutniDan < danRodjenja
-        )
-    )
-    {
-        dob--;
-    }
-
-	query_djeca->FieldByName("Dob")->AsInteger = dob;
+    query_djeca->FieldByName("Dob")->AsInteger =
+        razvojPomoc.IzracunajDob(datumRodjenja);
 }
 //---------------------------------------------------------------------------
 
@@ -512,22 +525,22 @@ void Tform_djeca::primijeniPrava()
 }
 void __fastcall Tform_djeca::button_skupineClick(TObject *Sender)
 {
-	this->Hide();
 	form_skupine->Show();
+	this->Hide();
 }
 //---------------------------------------------------------------------------
 
 void __fastcall Tform_djeca::button_aktivnostiClick(TObject *Sender)
 {
-    this->Hide();
 	form_aktivnosti->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 
 void __fastcall Tform_djeca::button_razvojClick(TObject *Sender)
 {
-    this->Hide();
     form_razvoj->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 
@@ -536,15 +549,27 @@ void __fastcall Tform_djeca::button_razvojClick(TObject *Sender)
 
 void __fastcall Tform_djeca::button_korisniciClick(TObject *Sender)
 {
-    this->Hide();
     form_korisnici->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 
 void __fastcall Tform_djeca::button_uputeClick(TObject *Sender)
 {
-    this->Hide();
     form_upute->Show();
+    this->Hide();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_djeca::button_zdravljeClick(TObject *Sender)
+{
+    form_bolesti->Show();
+    this->Hide();
+}
+//---------------------------------------------------------------------------
+void __fastcall Tform_djeca::button_najaveClick(TObject *Sender)
+{
+    form_najave->Show();
+    this->Hide();
 }
 //---------------------------------------------------------------------------
 

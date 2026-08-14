@@ -189,6 +189,18 @@
             <DependentOn>AktivnostUnosForm.h</DependentOn>
             <BuildOrder>11</BuildOrder>
         </CppCompile>
+        <CppCompile Include="BolestiForm.cpp">
+            <Form>form_bolesti</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>BolestiForm.h</DependentOn>
+            <BuildOrder>19</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="BolestUnosForm.cpp">
+            <Form>form_bolest_unos</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>BolestUnosForm.h</DependentOn>
+            <BuildOrder>22</BuildOrder>
+        </CppCompile>
         <CppCompile Include="DashboardForm.cpp">
             <Form>form_dashboard</Form>
             <FormType>dfm</FormType>
@@ -202,6 +214,10 @@
             <DependentOn>DatabaseModule.h</DependentOn>
             <BuildOrder>4</BuildOrder>
         </CppCompile>
+        <CppCompile Include="DatumHelper.cpp">
+            <DependentOn>DatumHelper.h</DependentOn>
+            <BuildOrder>23</BuildOrder>
+        </CppCompile>
         <CppCompile Include="DijeteUnosForm.cpp">
             <Form>form_dijete_unos</Form>
             <FormType>dfm</FormType>
@@ -214,6 +230,12 @@
             <DependentOn>DjecaForm.h</DependentOn>
             <BuildOrder>5</BuildOrder>
         </CppCompile>
+        <CppCompile Include="IzvjestajForm.cpp">
+            <Form>form_izvjestaj</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>IzvjestajForm.h</DependentOn>
+            <BuildOrder>24</BuildOrder>
+        </CppCompile>
         <CppCompile Include="KorisniciForm.cpp">
             <Form>form_korisnici</Form>
             <FormType>dfm</FormType>
@@ -223,6 +245,10 @@
         <CppCompile Include="KorisnickaPrava.cpp">
             <DependentOn>KorisnickaPrava.h</DependentOn>
             <BuildOrder>7</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="Korisnik.cpp">
+            <DependentOn>Korisnik.h</DependentOn>
+            <BuildOrder>17</BuildOrder>
         </CppCompile>
         <CppCompile Include="KorisnikUnosForm.cpp">
             <Form>form_korisnik_unos</Form>
@@ -236,6 +262,18 @@
             <DependentOn>LoginForm.h</DependentOn>
             <BuildOrder>2</BuildOrder>
         </CppCompile>
+        <CppCompile Include="NajavaUnosForm.cpp">
+            <Form>form_najava_unos</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>NajavaUnosForm.h</DependentOn>
+            <BuildOrder>21</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="NajaveForm.cpp">
+            <Form>form_najave</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>NajaveForm.h</DependentOn>
+            <BuildOrder>20</BuildOrder>
+        </CppCompile>
         <CppCompile Include="RazvojDetaljiForm.cpp">
             <Form>form_razvoj_detalji</Form>
             <FormType>dfm</FormType>
@@ -247,6 +285,10 @@
             <FormType>dfm</FormType>
             <DependentOn>RazvojForm.h</DependentOn>
             <BuildOrder>12</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="Sigurnost.cpp">
+            <DependentOn>Sigurnost.h</DependentOn>
+            <BuildOrder>18</BuildOrder>
         </CppCompile>
         <CppCompile Include="SkupinaUnosForm.cpp">
             <Form>form_skupina_unos</Form>
@@ -273,20 +315,33 @@
             <BuildOrder>1</BuildOrder>
             <PCH>true</PCH>
         </PCHCompile>
+        <LibFiles Include="Win64\Debug\VrticKalendarModul.a" Condition="'$(Platform)'=='Win64' Or '$(Platform)'=='Win64x'">
+            <BuildOrder>26</BuildOrder>
+            <IgnorePath>true</IgnorePath>
+        </LibFiles>
+        <LibFiles Include="Win64\Debug\VrticPomocnaLib.a" Condition="'$(Platform)'=='Win64' Or '$(Platform)'=='Win64x'">
+            <BuildOrder>25</BuildOrder>
+            <IgnorePath>true</IgnorePath>
+        </LibFiles>
+        <FormResources Include="NajaveForm.dfm"/>
+        <FormResources Include="RazvojDetaljiForm.dfm"/>
+        <FormResources Include="RazvojForm.dfm"/>
+        <FormResources Include="KorisnikUnosForm.dfm"/>
         <FormResources Include="LoginForm.dfm"/>
+        <FormResources Include="NajavaUnosForm.dfm"/>
+        <FormResources Include="SkupinaUnosForm.dfm"/>
+        <FormResources Include="SkupineForm.dfm"/>
+        <FormResources Include="UputeForm.dfm"/>
+        <FormResources Include="BolestUnosForm.dfm"/>
         <FormResources Include="DashboardForm.dfm"/>
         <FormResources Include="DatabaseModule.dfm"/>
-        <FormResources Include="DjecaForm.dfm"/>
-        <FormResources Include="DijeteUnosForm.dfm"/>
-        <FormResources Include="SkupineForm.dfm"/>
-        <FormResources Include="SkupinaUnosForm.dfm"/>
         <FormResources Include="AktivnostiForm.dfm"/>
         <FormResources Include="AktivnostUnosForm.dfm"/>
-        <FormResources Include="RazvojForm.dfm"/>
-        <FormResources Include="RazvojDetaljiForm.dfm"/>
+        <FormResources Include="BolestiForm.dfm"/>
         <FormResources Include="KorisniciForm.dfm"/>
-        <FormResources Include="KorisnikUnosForm.dfm"/>
-        <FormResources Include="UputeForm.dfm"/>
+        <FormResources Include="DijeteUnosForm.dfm"/>
+        <FormResources Include="DjecaForm.dfm"/>
+        <FormResources Include="IzvjestajForm.dfm"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -374,6 +429,18 @@
                 <DeployFile LocalName=".\Win64\Debug\vrtic_app.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win64">
                         <RemoteName>vrtic_app.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Win64\Debug\VrticKalendarModul.a" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Win64\Debug\VrticPomocnaLib.a" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

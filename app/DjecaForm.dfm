@@ -25,14 +25,11 @@ object form_djeca: Tform_djeca
     Color = 11064738
     ParentBackground = False
     TabOrder = 0
-    DesignSize = (
-      220
-      500)
     object button_pocetna: TButton
       Left = 0
       Top = 0
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Po'#269'etna'
       Font.Charset = DEFAULT_CHARSET
@@ -47,9 +44,9 @@ object form_djeca: Tform_djeca
     end
     object button_djeca: TButton
       Left = 0
-      Top = 55
+      Top = 45
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Djeca'
       Font.Charset = DEFAULT_CHARSET
@@ -63,9 +60,9 @@ object form_djeca: Tform_djeca
     end
     object button_aktivnosti: TButton
       Left = 0
-      Top = 110
+      Top = 90
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Aktivnosti'
       Font.Charset = DEFAULT_CHARSET
@@ -80,9 +77,9 @@ object form_djeca: Tform_djeca
     end
     object button_skupine: TButton
       Left = 0
-      Top = 165
+      Top = 135
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Skupine'
       Font.Charset = DEFAULT_CHARSET
@@ -97,9 +94,9 @@ object form_djeca: Tform_djeca
     end
     object button_razvoj: TButton
       Left = 0
-      Top = 220
+      Top = 180
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Razvoj'
       Font.Charset = DEFAULT_CHARSET
@@ -114,9 +111,9 @@ object form_djeca: Tform_djeca
     end
     object button_korisnici: TButton
       Left = 0
-      Top = 275
+      Top = 225
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Korisnici'
       Font.Charset = DEFAULT_CHARSET
@@ -131,9 +128,9 @@ object form_djeca: Tform_djeca
     end
     object button_upute: TButton
       Left = 0
-      Top = 330
+      Top = 270
       Width = 220
-      Height = 55
+      Height = 45
       Align = alTop
       Caption = 'Upute'
       Font.Charset = DEFAULT_CHARSET
@@ -145,15 +142,14 @@ object form_djeca: Tform_djeca
       TabOrder = 6
       TabStop = False
       OnClick = button_uputeClick
-      ExplicitTop = 324
     end
-    object button_odjava: TButton
+    object button_zdravlje: TButton
       Left = 0
-      Top = 385
+      Top = 315
       Width = 220
-      Height = 55
-      Anchors = [akLeft, akRight, akBottom]
-      Caption = 'Odjava'
+      Height = 45
+      Align = alTop
+      Caption = 'Zdravlje'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -18
@@ -162,7 +158,42 @@ object form_djeca: Tform_djeca
       ParentFont = False
       TabOrder = 7
       TabStop = False
+      OnClick = button_zdravljeClick
+    end
+    object button_najave: TButton
+      Left = 0
+      Top = 360
+      Width = 220
+      Height = 45
+      Align = alTop
+      Caption = 'Najave'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 8
+      TabStop = False
+      OnClick = button_najaveClick
+    end
+    object button_odjava: TButton
+      Left = 0
+      Top = 455
+      Width = 220
+      Height = 45
+      Align = alBottom
+      Caption = 'Odjava'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 9
+      TabStop = False
       OnClick = button_odjavaClick
+      ExplicitTop = 405
     end
   end
   object panel_header: TPanel
@@ -518,7 +549,6 @@ object form_djeca: Tform_djeca
       Color = clWhite
       ParentBackground = False
       TabOrder = 2
-      ExplicitHeight = 290
       object grid_djeca: TDBGrid
         Left = 0
         Top = 0
@@ -581,15 +611,14 @@ object form_djeca: Tform_djeca
     Connection = data_module.connection
     SQL.Strings = (
       'SELECT'
-      '    d.id_dijete,'
-      '    d.ime,'
-      '    d.prezime,'
-      '    d.datum_rodjenja,'
-      '    s.naziv AS skupina'
-      'FROM dijete d'
-      'JOIN skupina s'
-      '    ON d.id_skupina = s.id_skupina'
-      'ORDER BY d.prezime, d.ime;')
+      '    id_dijete,'
+      '    ime,'
+      '    prezime,'
+      '    datum_rodjenja,'
+      '    id_skupina'
+      'FROM dijete'
+      'WHERE 1 = 1'
+      'ORDER BY prezime, ime;')
     Left = 800
     Top = 392
     object query_djecaid_dijete: TIntegerField

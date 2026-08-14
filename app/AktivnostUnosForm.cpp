@@ -6,6 +6,12 @@
 #include "AktivnostUnosForm.h"
 #include "AktivnostiForm.h"
 #include "DatabaseModule.h"
+#include <IniFiles.hpp>
+//---------------------------------------------------------------------------
+static String PutanjaPostavkiIni()
+{
+	return ExtractFilePath(Application->ExeName) + "postavke.ini";
+}
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -83,7 +89,18 @@ void Tform_aktivnost_unos::pripremiZaDodavanje()
 	memo_potrebne_stavke->Clear();
 	memo_upute->Clear();
 	ucitajRazineTezine();
-	combo_tezina->ItemIndex = 2;
+
+	TIniFile *ini = new TIniFile(PutanjaPostavkiIni());
+	try
+	{
+		combo_tezina->ItemIndex =
+			ini->ReadInteger("Aktivnosti", "ZadnjaRazinaTezine", 2);
+	}
+	__finally
+	{
+		delete ini;
+	}
+
 	check_aktivna->Checked = true;
 	ucitajPodrucja();
 }
@@ -474,6 +491,19 @@ void __fastcall Tform_aktivnost_unos::button_spremiClick(
 					check_aktivna->Checked ? 1 : 0;
 
 			query_spremanje->ExecSQL();
+
+			TIniFile *ini = new TIniFile(PutanjaPostavkiIni());
+			try
+			{
+				ini->WriteInteger(
+					"Aktivnosti",
+					"ZadnjaRazinaTezine",
+					combo_tezina->ItemIndex);
+			}
+			__finally
+			{
+				delete ini;
+			}
 
 			query_spremanje->Close();
 			query_spremanje->SQL->Clear();

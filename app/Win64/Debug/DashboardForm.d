@@ -381,6 +381,7 @@
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\FireDAC.Stan.Pool.hpp \
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\FireDAC.VCLUI.Wait.hpp \
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\FireDAC.DApt.hpp \
+  C:\Users\Luka\Desktop\NTP\app/Korisnik.h \
   C:\Users\Luka\Desktop\NTP\app/LoginForm.h \
   C:\Users\Luka\Desktop\NTP\app/DjecaForm.h \
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\vcl\Vcl.DBGrids.hpp \
@@ -390,6 +391,7 @@
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\vcl\Vcl.ImageCollection.hpp \
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\vcl\Vcl.BaseImageCollection.hpp \
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\vcl\Vcl.VirtualImageList.hpp \
+  C:\Users\Luka\Desktop\NTP\app/RazvojPomoc.h \
   C:\Users\Luka\Desktop\NTP\app/KorisnickaPrava.h \
   C:\Users\Luka\Desktop\NTP\app/SkupineForm.h \
   C:\Users\Luka\Desktop\NTP\app/AktivnostiForm.h \
@@ -398,4 +400,15 @@
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\dinkumware64\algorithm \
   c:\program\ files\ (x86)\embarcadero\studio\23.0\include\dinkumware64\xheap \
   C:\Users\Luka\Desktop\NTP\app/KorisniciForm.h \
-  C:\Users\Luka\Desktop\NTP\app/UputeForm.h
+  C:\Users\Luka\Desktop\NTP\app/UputeForm.h \
+  C:\Users\Luka\Desktop\NTP\app/BolestiForm.h \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\System.JSON.hpp \
+  C:\Users\Luka\Desktop\NTP\app/NajaveForm.h \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\Xml.XMLDoc.hpp \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\Xml.xmldom.hpp \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\Xml.XMLConst.hpp \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\Xml.XMLIntf.hpp \
+  C:\Users\Luka\Desktop\NTP\app/TKalendarPomoc.h \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\System.Net.HttpClient.hpp \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\System.Net.URLClient.hpp \
+  c:\program\ files\ (x86)\embarcadero\studio\23.0\include\windows\rtl\System.Net.Mime.hpp

@@ -25,8 +25,10 @@
 #include <Vcl.DBGrids.hpp>
 #include <Vcl.Grids.hpp>
 #include <Vcl.Imaging.pngimage.hpp>
+#include <Vcl.Dialogs.hpp>
 #include <vector>
 #include <algorithm>
+#include "RazvojPomoc.h"
 //---------------------------------------------------------------------------
 class Tform_razvoj : public TForm
 {
@@ -41,6 +43,8 @@ __published:	// IDE-managed Components
 	TButton *button_razvoj;
 	TButton *button_korisnici;
 	TButton *button_upute;
+	TButton *button_zdravlje;
+	TButton *button_najave;
 	TButton *button_odjava;
 	TPanel *panel_content;
 	TPanel *panel_alati;
@@ -49,6 +53,10 @@ __published:	// IDE-managed Components
 	TPanel *panel_odabir_djeteta;
 	TLabel *label_dijete;
 	TComboBox *combo_dijete;
+	TButton *button_izvezi_profil;
+	TSaveDialog *save_dialog_profil;
+	TFDQuery *query_izvoz_pregledi;
+	TFDQuery *query_izvoz_ocjene;
 	TLabel *label_skupina_naslov;
 	TLabel *label_skupina;
 	TLabel *label_dob_naslov;
@@ -131,6 +139,7 @@ __published:	// IDE-managed Components
 	void __fastcall button_odjavaClick(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall combo_dijeteChange(TObject *Sender);
+	void __fastcall button_izvezi_profilClick(TObject *Sender);
 	void __fastcall speed_tjelesniClick(TObject *Sender);
 	void __fastcall speed_socioClick(TObject *Sender);
 	void __fastcall speed_govorniClick(TObject *Sender);
@@ -143,6 +152,8 @@ __published:	// IDE-managed Components
 	void __fastcall button_otvori_aktivnostClick(TObject *Sender);
 	void __fastcall button_korisniciClick(TObject *Sender);
 	void __fastcall button_uputeClick(TObject *Sender);
+	void __fastcall button_zdravljeClick(TObject *Sender);
+	void __fastcall button_najaveClick(TObject *Sender);
 private:	// User declarations
     void ucitajDjecu();
 	void ocistiPodatkeDjeteta();
@@ -156,7 +167,7 @@ private:	// User declarations
 	void osvjeziGovorneZvjezdice();
 	int ocjenaSpoznajni;
 	void osvjeziSpoznajneZvjezdice();
-	TColor bojaZaOcjenu(int ocjena);
+	TRazvojPomoc razvojPomoc;
 	void ucitajPovijest();
 	void postaviIzgledPovijesti();
     bool ucitajPregledeZaPreporuke(

@@ -24,6 +24,8 @@ __published:	// IDE-managed Components
 	TButton *button_razvoj;
 	TButton *button_korisnici;
 	TButton *button_upute;
+	TButton *button_zdravlje;
+	TButton *button_najave;
 	TButton *button_odjava;
 	TImage *slika_background;
 	TPanel *panel_dobrodosli;
@@ -32,6 +34,9 @@ __published:	// IDE-managed Components
 	TLabel *label_korisnik;
 	TLabel *label_uloga;
 	TImage *imgKorisnik;
+	TPanel *panel_vrijeme;
+	TLabel *label_vrijeme;
+	TLabel *label_prikladnost;
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall button_odjavaClick(TObject *Sender);
@@ -41,7 +46,12 @@ __published:	// IDE-managed Components
 	void __fastcall button_razvojClick(TObject *Sender);
 	void __fastcall button_korisniciClick(TObject *Sender);
 	void __fastcall button_uputeClick(TObject *Sender);
+	void __fastcall button_zdravljeClick(TObject *Sender);
+	void __fastcall button_najaveClick(TObject *Sender);
 private:	// User declarations
+	void dohvatiVrijeme();
+	String opisVremena(int weathercode);
+	bool prikladnoZaVani(double temperatura, int weathercode);
 public:		// User declarations
 	__fastcall Tform_dashboard(TComponent* Owner);
 };

@@ -23,6 +23,7 @@
 #include <FireDAC.DApt.Intf.hpp>
 #include <FireDAC.DatS.hpp>
 #include <FireDAC.Stan.Param.hpp>
+#include "Korisnik.h"
 //---------------------------------------------------------------------------
 class Tdata_module : public TDataModule
 {
@@ -38,6 +39,7 @@ public:		// User declarations
 	String currentUserPrezime;
 	String currentUserUloga;
     int currentUserSkupinaID;
+    TKorisnik trenutniKorisnik;
 };
 //---------------------------------------------------------------------------
 extern PACKAGE Tdata_module *data_module;
