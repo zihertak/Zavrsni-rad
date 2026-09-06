@@ -1,5 +1,0 @@
-object data_module: Tdata_module
-  Height = 1080
-  Width = 1440
-  PixelsPerInch = 144
-end
