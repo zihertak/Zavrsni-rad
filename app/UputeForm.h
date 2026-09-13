@@ -9,6 +9,7 @@
 #include <Vcl.Forms.hpp>
 #include <Vcl.ExtCtrls.hpp>
 #include <Vcl.Imaging.pngimage.hpp>
+#include <Vcl.ComCtrls.hpp>
 //---------------------------------------------------------------------------
 class Tform_upute : public TForm
 {
@@ -33,7 +34,7 @@ __published:	// IDE-managed Components
 	TPanel *panel_alati;
 	TLabel *label_naslov_upute;
 	TLabel *label_opis;
-	TMemo *memo_upute;
+	TRichEdit *richedit_upute;
 	TImage *imgKorisnik;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
@@ -47,6 +48,8 @@ __published:	// IDE-managed Components
 	void __fastcall button_zdravljeClick(TObject *Sender);
 	void __fastcall button_najaveClick(TObject *Sender);
 private:	// User declarations
+	void DodajNaslov(const String &tekst);
+	void DodajRedak(const String &tekst = L"");
 public:		// User declarations
 	__fastcall Tform_upute(TComponent* Owner);
 };

@@ -125,26 +125,9 @@ object form_aktivnosti: Tform_aktivnosti
       TabStop = False
       OnClick = button_korisniciClick
     end
-    object button_upute: TButton
-      Left = 0
-      Top = 270
-      Width = 220
-      Height = 45
-      Align = alTop
-      Caption = 'Upute'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -18
-      Font.Name = 'Segoe UI'
-      Font.Style = [fsBold]
-      ParentFont = False
-      TabOrder = 6
-      TabStop = False
-      OnClick = button_uputeClick
-    end
     object button_zdravlje: TButton
       Left = 0
-      Top = 315
+      Top = 270
       Width = 220
       Height = 45
       Align = alTop
@@ -155,13 +138,13 @@ object form_aktivnosti: Tform_aktivnosti
       Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 7
+      TabOrder = 6
       TabStop = False
       OnClick = button_zdravljeClick
     end
     object button_najave: TButton
       Left = 0
-      Top = 360
+      Top = 315
       Width = 220
       Height = 45
       Align = alTop
@@ -172,9 +155,26 @@ object form_aktivnosti: Tform_aktivnosti
       Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 8
+      TabOrder = 7
       TabStop = False
       OnClick = button_najaveClick
+    end
+    object button_upute: TButton
+      Left = 0
+      Top = 360
+      Width = 220
+      Height = 45
+      Align = alTop
+      Caption = 'Upute'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 8
+      TabStop = False
+      OnClick = button_uputeClick
     end
     object button_odjava: TButton
       Left = 0
@@ -192,7 +192,6 @@ object form_aktivnosti: Tform_aktivnosti
       TabOrder = 9
       TabStop = False
       OnClick = button_odjavaClick
-      ExplicitTop = 405
     end
   end
   object panel_header: TPanel
@@ -216,7 +215,7 @@ object form_aktivnosti: Tform_aktivnosti
       Top = 20
       Width = 220
       Height = 38
-      Caption = 'Naslov aplikacije'
+      Caption = 'Svijet malih ljudi'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -28
@@ -596,7 +595,7 @@ object form_aktivnosti: Tform_aktivnosti
       end
       object button_obrisi: TButton
         Left = 480
-        Top = 10
+        Top = 6
         Width = 120
         Height = 35
         Caption = 'Obri'#353'i'

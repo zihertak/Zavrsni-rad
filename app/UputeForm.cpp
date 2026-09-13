@@ -25,6 +25,28 @@ __fastcall Tform_upute::Tform_upute(TComponent* Owner)
 {
 }
 //---------------------------------------------------------------------------
+void Tform_upute::DodajNaslov(const String &tekst)
+{
+	int pocetak = richedit_upute->GetTextLen();
+
+	richedit_upute->Lines->Add(tekst);
+
+	richedit_upute->SelStart = pocetak;
+	richedit_upute->SelLength = tekst.Length();
+	richedit_upute->SelAttributes->Style = TFontStyles() << fsBold;
+}
+//---------------------------------------------------------------------------
+void Tform_upute::DodajRedak(const String &tekst)
+{
+	int pocetak = richedit_upute->GetTextLen();
+
+	richedit_upute->Lines->Add(tekst);
+
+	richedit_upute->SelStart = pocetak;
+	richedit_upute->SelLength = tekst.Length();
+	richedit_upute->SelAttributes->Style = TFontStyles();
+}
+//---------------------------------------------------------------------------
 void __fastcall Tform_upute::FormShow(TObject *Sender)
 {
 	label_korisnik->Caption =
@@ -42,68 +64,93 @@ void __fastcall Tform_upute::FormShow(TObject *Sender)
 	button_korisnici->Visible =
 		prava.korisnici();
 
-	memo_upute->Lines->Clear();
+	richedit_upute->Lines->Clear();
 
-	memo_upute->Lines->Add(L"UPUTE ZA KORIŠTENJE");
-	memo_upute->Lines->Add(L"");
-	memo_upute->Lines->Add(L"Ova aplikacija namijenjena je upravljanju podacima dječjeg vrtića.");
-	memo_upute->Lines->Add(L"Pristup pojedinim funkcijama ovisi o ulozi prijavljenog korisnika.");
-	memo_upute->Lines->Add(L"");
+	DodajNaslov(L"UPUTE ZA KORIŠTENJE");
+	DodajRedak();
+	DodajRedak(L"Ova aplikacija namijenjena je upravljanju podacima dječjeg vrtića.");
+	DodajRedak(L"Pristup pojedinim funkcijama ovisi o ulozi prijavljenog korisnika.");
+	DodajRedak();
 
-	memo_upute->Lines->Add(L"1. PRIJAVA");
-	memo_upute->Lines->Add(L"");
-	memo_upute->Lines->Add(L"Za prijavu unesite korisničko ime i lozinku.");
-	memo_upute->Lines->Add(L"Nakon uspješne prijave otvara se početni zaslon aplikacije.");
-	memo_upute->Lines->Add(L"");
+	DodajNaslov(L"1. PRIJAVA");
+	DodajRedak();
+	DodajRedak(L"Za prijavu unesite korisničko ime i lozinku.");
+	DodajRedak(L"Nakon uspješne prijave otvara se početni zaslon aplikacije.");
+	DodajRedak();
 
-	memo_upute->Lines->Add(L"2. POČETNI ZASLON");
-	memo_upute->Lines->Add(L"");
-	memo_upute->Lines->Add(L"Početni zaslon omogućuje pristup svim modulima aplikacije.");
-	memo_upute->Lines->Add(L"Odaberite željeni modul putem izbornika s lijeve strane.");
-	memo_upute->Lines->Add(L"");
+	DodajNaslov(L"2. POČETNI ZASLON");
+	DodajRedak();
+	DodajRedak(L"Početni zaslon omogućuje pristup svim modulima aplikacije te");
+	DodajRedak(L"prikazuje kratku dobrodošlicu i trenutnu vremensku prognozu za");
+	DodajRedak(L"Zagreb (procjena prikladnosti za aktivnosti vani).");
+	DodajRedak();
 
-	memo_upute->Lines->Add(L"3. DJECA");
-	memo_upute->Lines->Add(L"");
-	memo_upute->Lines->Add(L"Modul Djeca služi za pregled i upravljanje podacima o djeci.");
-	memo_upute->Lines->Add(L"Moguće je pretraživanje, filtriranje te dodavanje, uređivanje");
-	memo_upute->Lines->Add(L"i brisanje podataka, ovisno o korisničkim ovlastima.");
-	memo_upute->Lines->Add(L"");
+	DodajNaslov(L"3. DJECA");
+	DodajRedak();
+	DodajRedak(L"Pregled i upravljanje podacima o djeci - osnovni podaci,");
+	DodajRedak(L"fotografija i zdravstveni podaci. Moguće je pretraživanje,");
+	DodajRedak(L"filtriranje po skupini i sortiranje. Gumb \"Preporuke za sve\"");
+	DodajRedak(L"generira razvojne preporuke za svu trenutno prikazanu djecu");
+	DodajRedak(L"odjednom, a gumb \"Razvoj\" otvara razvojnu karticu odabranog");
+	DodajRedak(L"djeteta.");
+	DodajRedak();
 
-	memo_upute->Lines->Add(L"4. SKUPINE");
-	memo_upute->Lines->Add(L"");
-	memo_upute->Lines->Add(L"U ovom modulu upravlja se odgojnim skupinama.");
-	memo_upute->Lines->Add(L"Omogućeno je dodavanje, uređivanje i pregled skupina.");
-	memo_upute->Lines->Add(L"");
+	DodajNaslov(L"4. AKTIVNOSTI");
+	DodajRedak();
+	DodajRedak(L"Evidencija aktivnosti namijenjenih djeci - dodavanje, pregled,");
+	DodajRedak(L"uređivanje i povezivanje s razvojnim područjima na koja pojedina");
+	DodajRedak(L"aktivnost utječe.");
+	DodajRedak();
 
-	memo_upute->Lines->Add(L"5. AKTIVNOSTI");
-	memo_upute->Lines->Add(L"");
-	memo_upute->Lines->Add(L"Modul Aktivnosti služi za evidenciju aktivnosti provedenih");
-	memo_upute->Lines->Add(L"s djecom te njihov pregled i uređivanje.");
-	memo_upute->Lines->Add(L"");
+	DodajNaslov(L"5. SKUPINE");
+	DodajRedak();
+	DodajRedak(L"Upravljanje odgojnim skupinama - dodavanje, uređivanje i pregled");
+	DodajRedak(L"skupina, te izrada izvještaja po skupini (moguć izvoz u PDF).");
+	DodajRedak();
 
-	memo_upute->Lines->Add(L"6. RAZVOJ");
-	memo_upute->Lines->Add(L"");
-	memo_upute->Lines->Add(L"Omogućuje vođenje razvojnih pregleda djece te izradu");
-	memo_upute->Lines->Add(L"preporuka za daljnji rad.");
-	memo_upute->Lines->Add(L"");
+	DodajNaslov(L"6. RAZVOJ");
+	DodajRedak();
+	DodajRedak(L"Unos razvojnih pregleda djece (ocjene po četiri razvojna");
+	DodajRedak(L"područja) te izrada preporuka za daljnji rad - pojedinačno za");
+	DodajRedak(L"jedno dijete, ili grupno za svu prikazanu djecu odjednom (radi");
+	DodajRedak(L"se paralelno, u pozadini). Dostupan je i izvoz/uvoz cjelokupnog");
+	DodajRedak(L"razvojnog profila djeteta, npr. pri prelasku u drugi vrtić.");
+	DodajRedak();
 
-	memo_upute->Lines->Add(L"7. KORISNICI");
-	memo_upute->Lines->Add(L"");
-	memo_upute->Lines->Add(L"Modul je namijenjen administratoru.");
-	memo_upute->Lines->Add(L"Omogućuje upravljanje korisničkim računima te njihovim");
-	memo_upute->Lines->Add(L"ovlastima i statusom.");
-	memo_upute->Lines->Add(L"");
+	DodajNaslov(L"7. KORISNICI");
+	DodajRedak();
+	DodajRedak(L"Modul je namijenjen administratoru. Omogućuje upravljanje");
+	DodajRedak(L"korisničkim računima te njihovim ulogama i statusom");
+	DodajRedak(L"(aktivan/neaktivan).");
+	DodajRedak();
 
-	memo_upute->Lines->Add(L"8. ZAVRŠETAK RADA");
-	memo_upute->Lines->Add(L"");
-	memo_upute->Lines->Add(L"Po završetku rada zatvorite aplikaciju ili se odjavite");
-	memo_upute->Lines->Add(L"ako je ta mogućnost dostupna.");
-	memo_upute->Lines->Add(L"");
+	DodajNaslov(L"8. ZDRAVLJE");
+	DodajRedak();
+	DodajRedak(L"Evidencija bolesti i izostanaka djece. Aplikacija upozorava");
+	DodajRedak(L"ako je dijete bolesno tri ili više puta u zadnjih 30 dana, ili");
+	DodajRedak(L"ako je u istoj skupini u zadnjih 14 dana bolesno troje ili više");
+	DodajRedak(L"djece (moguća epidemija).");
+	DodajRedak();
 
-	memo_upute->Lines->Add(L"NAPOMENA");
-	memo_upute->Lines->Add(L"");
-	memo_upute->Lines->Add(L"Dostupnost pojedinih funkcija ovisi o ulozi prijavljenog");
-	memo_upute->Lines->Add(L"korisnika i dodijeljenim ovlastima.");
+	DodajNaslov(L"9. NAJAVE");
+	DodajRedak();
+	DodajRedak(L"Nadolazeći događaji i obavijesti vrtića - prikazuje broj dana");
+	DodajRedak(L"preostalih do događaja i upozorava ako događaj pada na vikend.");
+	DodajRedak();
+
+	DodajNaslov(L"10. ZAVRŠETAK RADA");
+	DodajRedak();
+	DodajRedak(L"Po završetku rada zatvorite aplikaciju ili se odjavite ako je ta");
+	DodajRedak(L"mogućnost dostupna.");
+	DodajRedak();
+
+	DodajNaslov(L"NAPOMENA");
+	DodajRedak();
+	DodajRedak(L"Dostupnost pojedinih funkcija ovisi o ulozi prijavljenog");
+	DodajRedak(L"korisnika i dodijeljenim ovlastima.");
+
+	richedit_upute->SelStart = 0;
+	richedit_upute->SelLength = 0;
 	}
 //---------------------------------------------------------------------------
 void __fastcall Tform_upute::FormClose(TObject *Sender, TCloseAction &Action)

@@ -5,9 +5,8 @@
 #include "Sigurnost.h"
 #include <vcl.h>
 #include <System.Hash.hpp>
-
-// Sol se generira po pravilu iz korisničkog imena (obrnuto, velika slova) -
-// ne sprema se nigdje, svaki put se izračuna iznova.
+#pragma package(smart_init)
+//---------------------------------------------------------------------------
 String GenerirajSol(const String &username)
 {
 	String obrnuto = "";
@@ -24,4 +23,3 @@ String Hashiraj(const String &lozinka, const String &sol)
 	return hash.GetHashString(lozinka + sol);
 }
 //---------------------------------------------------------------------------
-#pragma package(smart_init)

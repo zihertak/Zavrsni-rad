@@ -38,8 +38,8 @@ public:		// User declarations
 	String currentUserIme;
 	String currentUserPrezime;
 	String currentUserUloga;
-    int currentUserSkupinaID;
-    TKorisnik trenutniKorisnik;
+	int currentUserSkupinaID;
+	TKorisnik trenutniKorisnik;
 };
 //---------------------------------------------------------------------------
 extern PACKAGE Tdata_module *data_module;

@@ -35,7 +35,7 @@ object form_upute: Tform_upute
       Top = 20
       Width = 220
       Height = 38
-      Caption = 'Naslov aplikacije'
+      Caption = 'Svijet malih ljudi'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -28
@@ -366,25 +366,9 @@ object form_upute: Tform_upute
       TabStop = False
       OnClick = button_korisniciClick
     end
-    object button_upute: TButton
-      Left = 0
-      Top = 270
-      Width = 220
-      Height = 45
-      Align = alTop
-      Caption = 'Upute'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -18
-      Font.Name = 'Segoe UI'
-      Font.Style = [fsBold]
-      ParentFont = False
-      TabOrder = 6
-      TabStop = False
-    end
     object button_zdravlje: TButton
       Left = 0
-      Top = 315
+      Top = 270
       Width = 220
       Height = 45
       Align = alTop
@@ -395,13 +379,13 @@ object form_upute: Tform_upute
       Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 7
+      TabOrder = 6
       TabStop = False
       OnClick = button_zdravljeClick
     end
     object button_najave: TButton
       Left = 0
-      Top = 360
+      Top = 315
       Width = 220
       Height = 45
       Align = alTop
@@ -412,9 +396,25 @@ object form_upute: Tform_upute
       Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 8
+      TabOrder = 7
       TabStop = False
       OnClick = button_najaveClick
+    end
+    object button_upute: TButton
+      Left = 0
+      Top = 360
+      Width = 220
+      Height = 45
+      Align = alTop
+      Caption = 'Upute'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 8
+      TabStop = False
     end
     object button_odjava: TButton
       Left = 0
@@ -482,16 +482,24 @@ object form_upute: Tform_upute
         ParentFont = False
       end
     end
-    object memo_upute: TMemo
+    object richedit_upute: TRichEdit
       Left = 0
       Top = 90
       Width = 840
       Height = 400
       Align = alClient
+      BorderStyle = bsNone
       Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 1
+      Zoom = 100
     end
   end
 end

@@ -154,51 +154,7 @@ __published:	// IDE-managed Components
 	void __fastcall button_uputeClick(TObject *Sender);
 	void __fastcall button_zdravljeClick(TObject *Sender);
 	void __fastcall button_najaveClick(TObject *Sender);
-private:	// User declarations
-    void ucitajDjecu();
-	void ocistiPodatkeDjeteta();
-	int odabranoDijeteID;
-	void ucitajPodatkeDjeteta();
-	int ocjenaTjelesni;
-	void osvjeziTjelesneZvjezdice();
-	int ocjenaSocio;
-	void osvjeziSocioZvjezdice();
-	int ocjenaGovorni;
-	void osvjeziGovorneZvjezdice();
-	int ocjenaSpoznajni;
-	void osvjeziSpoznajneZvjezdice();
-	TRazvojPomoc razvojPomoc;
-	void ucitajPovijest();
-	void postaviIzgledPovijesti();
-    bool ucitajPregledeZaPreporuke(
-    int &zadnjiPregledID,
-    int &prethodniPregledID,
-    TDateTime &datumZadnjeg,
-    bool &postojiPrethodni
-	);
-    String odrediTrend(
-    int trenutnaRazina,
-    int prethodnaRazina,
-    bool postojiPrethodna
-	);
-
-	void ucitajAnalizePodrucja(
-		int zadnjiPregledID,
-		int prethodniPregledID,
-		bool postojiPrethodni
-	);
-    int odrediCiljanuTezinu(
-    int trenutnaRazina,
-    const String &trend
-	);
-
-	int izracunajPrioritet(
-		int trenutnaRazina,
-		const String &trend
-	);
-	void izracunajTezineIPrioritete();
-    bool aktivnostJeVecOdabrana(int idAktivnost);
-	void odaberiPreporuceneAktivnosti();
+public:
 	struct TAnalizaPodrucja
 	{
 		int idPodrucje;
@@ -223,21 +179,93 @@ private:	// User declarations
 
 		int tezinaAktivnosti;
 	};
+private:	// User declarations
+    void ucitajDjecu();
+	void ocistiPodatkeDjeteta();
+	int odabranoDijeteID;
+	void ucitajPodatkeDjeteta();
+	int ocjenaTjelesni;
+	void osvjeziTjelesneZvjezdice();
+	int ocjenaSocio;
+	void osvjeziSocioZvjezdice();
+	int ocjenaGovorni;
+	void osvjeziGovorneZvjezdice();
+	int ocjenaSpoznajni;
+	void osvjeziSpoznajneZvjezdice();
+	TRazvojPomoc razvojPomoc;
+	void ucitajPovijest();
+	void postaviIzgledPovijesti();
+    String odrediTrend(
+    int trenutnaRazina,
+    int prethodnaRazina,
+    bool postojiPrethodna
+	);
+    int odrediCiljanuTezinu(
+    int trenutnaRazina,
+    const String &trend
+	);
+	int izracunajPrioritet(
+		int trenutnaRazina,
+		const String &trend
+	);
+    bool aktivnostJeVecOdabrana(
+        const std::vector<TPreporucenaAktivnost> &aktivnosti,
+        int idAktivnost
+    );
 	std::vector<TAnalizaPodrucja> analizePodrucja;
 	std::vector<TPreporucenaAktivnost> preporuceneAktivnosti;
-	String generirajOpciZakljucak();
-	String generirajPopisAktivnosti();
-	String generirajOpciRazlog();
     int generiraniPregledID;
 	bool preporukaGenerirana;
-	int spremiGlavnuPreporuku();
-	void spremiAktivnostiPreporuke(int preporukaID);
 	void popuniComboAktivnosti();
 	void primijeniPrava();
 	void ocistiPrikazPreporuke();
 	void ucitajSpremljenuPreporuku();
 public:		// User declarations
 	__fastcall Tform_razvoj(TComponent* Owner);
+	void OdaberiDijeteID(int idDijete);
+
+    bool ucitajPregledeZaPreporuke(
+    TFDConnection *konekcija,
+    int idDijete,
+    int &zadnjiPregledID,
+    int &prethodniPregledID,
+    TDateTime &datumZadnjeg,
+    bool &postojiPrethodni
+	);
+	std::vector<TAnalizaPodrucja> ucitajAnalizePodrucja(
+		TFDConnection *konekcija,
+		int zadnjiPregledID,
+		int prethodniPregledID,
+		bool postojiPrethodni
+	);
+	void izracunajTezineIPrioritete(std::vector<TAnalizaPodrucja> &analize);
+	std::vector<TPreporucenaAktivnost> odaberiPreporuceneAktivnosti(
+		TFDConnection *konekcija,
+		int idDijete,
+		const std::vector<TAnalizaPodrucja> &analize
+	);
+	String generirajOpciZakljucak(
+		const std::vector<TAnalizaPodrucja> &analize
+	);
+	String generirajPopisAktivnosti(
+		const std::vector<TPreporucenaAktivnost> &aktivnosti
+	);
+	String generirajOpciRazlog(
+		const std::vector<TAnalizaPodrucja> &analize,
+		const std::vector<TPreporucenaAktivnost> &aktivnosti
+	);
+	int spremiGlavnuPreporuku(
+		TFDConnection *konekcija,
+		int idPregled,
+		const String &status,
+		const String &razlog,
+		const String &zakljucak
+	);
+	void spremiAktivnostiPreporuke(
+		TFDConnection *konekcija,
+		int preporukaID,
+		const std::vector<TPreporucenaAktivnost> &aktivnosti
+	);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE Tform_razvoj *form_razvoj;

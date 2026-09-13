@@ -16,6 +16,7 @@
 #include "UputeForm.h"
 #include "BolestiForm.h"
 #include "NajaveForm.h"
+#include "PreporukeGrupnoForm.h"
 #include <IniFiles.hpp>
 //---------------------------------------------------------------------------
 static String PutanjaPostavkiIni()
@@ -60,11 +61,29 @@ void __fastcall Tform_djeca::FormShow(TObject *Sender)
 	combo_sortiranje->Items->Add(L"Ime Ž-A");
 	combo_sortiranje->Items->Add(L"Najmlađi prvo");
 	combo_sortiranje->Items->Add(L"Najstariji prvo");
-	combo_sortiranje->ItemIndex = 0;
+
+	TIniFile *iniSort = new TIniFile(PutanjaPostavkiIni());
+	int zadnjeSortiranje;
+	try
+	{
+		zadnjeSortiranje = iniSort->ReadInteger("Djeca", "ZadnjeSortiranje", 0);
+	}
+	__finally
+	{
+		delete iniSort;
+	}
+
+	if (zadnjeSortiranje < 0 || zadnjeSortiranje >= combo_sortiranje->Items->Count)
+	{
+		zadnjeSortiranje = 0;
+	}
+
+	combo_sortiranje->ItemIndex = zadnjeSortiranje;
 
 	osvjeziPopisDjece();
     primijeniPrava();
 }
+//---------------------------------------------------------------------------
 void Tform_djeca::ucitajSkupine()
 {
 	combo_skupina->Items->Clear();
@@ -153,36 +172,36 @@ void Tform_djeca::osvjeziPopisDjece()
     }
 
 	if (prava.samoSvojaSkupina())
-{
-    if (data_module->currentUserSkupinaID == 0)
-    {
-        query_djeca->SQL->Add(
-            "AND 1 = 0 "
-        );
-    }
-    else
-    {
-        query_djeca->SQL->Add(
-            "AND id_skupina = :id_skupina_odgojitelja "
-        );
+	{
+		if (data_module->currentUserSkupinaID == 0)
+		{
+			query_djeca->SQL->Add(
+				"AND 1 = 0 "
+			);
+		}
+		else
+		{
+			query_djeca->SQL->Add(
+				"AND id_skupina = :id_skupina_odgojitelja "
+			);
 
-        query_djeca
-            ->ParamByName("id_skupina_odgojitelja")
-            ->AsInteger =
-            data_module->currentUserSkupinaID;
-    }
-}
-else if (idSkupina != 0)
-{
-    query_djeca->SQL->Add(
-        "AND id_skupina = :id_skupina "
-    );
+			query_djeca
+				->ParamByName("id_skupina_odgojitelja")
+				->AsInteger =
+				data_module->currentUserSkupinaID;
+		}
+	}
+	else if (idSkupina != 0)
+	{
+		query_djeca->SQL->Add(
+			"AND id_skupina = :id_skupina "
+		);
 
-    query_djeca
-        ->ParamByName("id_skupina")
-        ->AsInteger =
-        static_cast<int>(idSkupina);
-}
+		query_djeca
+			->ParamByName("id_skupina")
+			->AsInteger =
+			static_cast<int>(idSkupina);
+	}
 
     switch (combo_sortiranje->ItemIndex)
     {
@@ -264,12 +283,23 @@ void __fastcall Tform_djeca::combo_skupinaChange(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall Tform_djeca::combo_sortiranjeChange(TObject *Sender)
 {
+	TIniFile *ini = new TIniFile(PutanjaPostavkiIni());
+	try
+	{
+		ini->WriteInteger("Djeca", "ZadnjeSortiranje", combo_sortiranje->ItemIndex);
+	}
+	__finally
+	{
+		delete ini;
+	}
+
     osvjeziPopisDjece();
 }
+//---------------------------------------------------------------------------
 void Tform_djeca::postaviIzgledGrida()
 {
 	query_djeca->FieldByName("id_dijete")->Visible = false;
-    query_djeca->FieldByName("id_skupina")->Visible = false;
+	query_djeca->FieldByName("id_skupina")->Visible = false;
 	query_djeca->FieldByName("ime")->DisplayLabel = L"Ime";
 	query_djeca->FieldByName("ime")->DisplayWidth = 20;
 	query_djeca->FieldByName("prezime")->DisplayLabel = L"Prezime";
@@ -277,7 +307,7 @@ void Tform_djeca::postaviIzgledGrida()
 	query_djeca->FieldByName("datum_rodjenja")->Visible = false;
 	query_djeca->FieldByName("Dob")->DisplayLabel = L"Dob";
 	query_djeca->FieldByName("Dob")->DisplayWidth = 20;
-    query_djeca->FieldByName("Dob")->Alignment = taCenter;
+	query_djeca->FieldByName("Dob")->Alignment = taCenter;
 	query_djeca->FieldByName("NazivSkupine")->DisplayLabel = L"Skupina";
 	query_djeca->FieldByName("NazivSkupine")->DisplayWidth = 20;
 }
@@ -343,24 +373,23 @@ void __fastcall Tform_djeca::button_obrisiClick(TObject *Sender)
         return;
 	}
 
-    if (prava.odgojitelj())
+	if (prava.odgojitelj())
 	{
-    int idSkupineDjeteta =
-        query_djeca
-            ->FieldByName("id_skupina")
-            ->AsInteger;
+		int idSkupineDjeteta =
+			query_djeca
+				->FieldByName("id_skupina")
+				->AsInteger;
 
-    if (idSkupineDjeteta !=
-        data_module->currentUserSkupinaID)
-    {
-        ShowMessage(
-            "Možete brisati samo djecu iz svoje skupine."
-        );
-        return;
-    }
+		if (idSkupineDjeteta !=
+			data_module->currentUserSkupinaID)
+		{
+			ShowMessage(
+				"Možete brisati samo djecu iz svoje skupine."
+			);
+			return;
+		}
 	}
 
-    // Dohvat podataka odabranog djeteta
     int idDijete =
         query_djeca
             ->FieldByName("id_dijete")
@@ -376,7 +405,6 @@ void __fastcall Tform_djeca::button_obrisiClick(TObject *Sender)
             ->FieldByName("prezime")
             ->AsString;
 
-    // Potvrda brisanja
     int odgovor = MessageDlg(
         L"Želite li zaista obrisati dijete:\n\n" +
         ime + L" " + prezime + L"?",
@@ -394,7 +422,6 @@ void __fastcall Tform_djeca::button_obrisiClick(TObject *Sender)
     {
         data_module->connection->StartTransaction();
 
-        // Prvo brišemo zdravstvene podatke
         query_brisanje->Close();
         query_brisanje->SQL->Clear();
 
@@ -409,7 +436,6 @@ void __fastcall Tform_djeca::button_obrisiClick(TObject *Sender)
 
         query_brisanje->ExecSQL();
 
-        // Nakon toga brišemo dijete
         query_brisanje->Close();
         query_brisanje->SQL->Clear();
 
@@ -444,6 +470,95 @@ void __fastcall Tform_djeca::button_obrisiClick(TObject *Sender)
             e.Message
         );
     }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall Tform_djeca::button_generiraj_sveClick(TObject *Sender)
+{
+	TKorisnickaPrava prava(data_module->currentUserUloga);
+
+	if (!prava.generirajPreporuku() || !prava.spremiPreporuku())
+	{
+		ShowMessage(L"Nemate pravo generiranja preporuka.");
+		return;
+	}
+
+	if (query_djeca->IsEmpty())
+	{
+		ShowMessage(L"Nema djece u trenutnom prikazu.");
+		return;
+	}
+
+	std::vector<TDijeteZaPreporuku> listaDjece;
+
+	query_djeca->DisableControls();
+
+	try
+	{
+		query_djeca->First();
+
+		while (!query_djeca->Eof)
+		{
+			TDijeteZaPreporuku dijete;
+
+			dijete.idDijete =
+				query_djeca->FieldByName("id_dijete")->AsInteger;
+
+			dijete.imePrezime =
+				query_djeca->FieldByName("ime")->AsString +
+				L" " +
+				query_djeca->FieldByName("prezime")->AsString;
+
+			listaDjece.push_back(dijete);
+
+			query_djeca->Next();
+		}
+	}
+	__finally
+	{
+		query_djeca->EnableControls();
+	}
+
+	int odgovor = MessageDlg(
+		L"Generirati i spremiti preporuke za " +
+		IntToStr(static_cast<int>(listaDjece.size())) +
+		L" djece iz trenutnog prikaza?\n\n"
+		L"Za djecu koja nemaju razvojni pregled preporuka će biti "
+		L"preskočena.",
+		mtConfirmation,
+		TMsgDlgButtons() << mbYes << mbNo,
+		0
+	);
+
+	if (odgovor != mrYes)
+	{
+		return;
+	}
+
+	form_preporuke_grupno->PokreniZaDjecu(listaDjece);
+	form_preporuke_grupno->ShowModal();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall Tform_djeca::button_razvoj_djetetaClick(TObject *Sender)
+{
+	int idDijete = 0;
+
+	if (!query_djeca->IsEmpty())
+	{
+		idDijete =
+			query_djeca
+				->FieldByName("id_dijete")
+				->AsInteger;
+	}
+
+	form_razvoj->Show();
+	this->Hide();
+
+	if (idDijete != 0)
+	{
+		form_razvoj->OdaberiDijeteID(idDijete);
+	}
 }
 //---------------------------------------------------------------------------
 
@@ -500,6 +615,8 @@ void Tform_djeca::primijeniPrava()
 		prava.urediDijete();
     button_obrisi->Enabled =
 		prava.obrisiDijete();
+    button_generiraj_sve->Enabled =
+        prava.generirajPreporuku() && prava.spremiPreporuku();
     button_korisnici->Visible =
         prava.korisnici();
     combo_skupina->Visible =
@@ -542,9 +659,6 @@ void __fastcall Tform_djeca::button_razvojClick(TObject *Sender)
     form_razvoj->Show();
     this->Hide();
 }
-//---------------------------------------------------------------------------
-
-
 //---------------------------------------------------------------------------
 
 void __fastcall Tform_djeca::button_korisniciClick(TObject *Sender)

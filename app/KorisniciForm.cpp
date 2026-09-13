@@ -1,4 +1,4 @@
-﻿//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 #include <vcl.h>
 #pragma hdrstop
@@ -52,9 +52,8 @@ void __fastcall Tform_korisnici::FormShow(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_korisnici::FormClose(TObject *Sender, TCloseAction &Action)
-
 {
-     Application->Terminate();
+	Application->Terminate();
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_korisnici::button_pocetnaClick(TObject *Sender)
@@ -151,7 +150,7 @@ void Tform_korisnici::ucitajUloge()
     query_uloge->Close();
     combo_uloga->ItemIndex = 0;
 }
-
+//---------------------------------------------------------------------------
 void Tform_korisnici::osvjeziPopisKorisnika()
 {
     String pretraga = edit_pretraga->Text.Trim();
@@ -284,7 +283,7 @@ void Tform_korisnici::osvjeziPopisKorisnika()
 	postaviIzgledGrida();
 	osvjeziGumbStatusa();
 }
-
+//---------------------------------------------------------------------------
 void Tform_korisnici::postaviIzgledGrida()
 {
     query_korisnici
@@ -355,6 +354,7 @@ void Tform_korisnici::postaviIzgledGrida()
 		->FieldByName(L"status_korisnika")
 		->Alignment = taCenter;
 }
+//---------------------------------------------------------------------------
 void __fastcall Tform_korisnici::edit_pretragaChange(TObject *Sender)
 {
 	osvjeziPopisKorisnika();
@@ -411,155 +411,149 @@ void __fastcall Tform_korisnici::grid_korisniciDblClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall Tform_korisnici::button_statusClick(TObject *Sender)
 {
-     if (
-        !query_korisnici->Active ||
-        query_korisnici->IsEmpty()
-    )
-    {
-        ShowMessage(
-            L"Odaberite korisnika kojem želite promijeniti status."
-        );
-        return;
-    }
+	if (!query_korisnici->Active || query_korisnici->IsEmpty())
+	{
+		ShowMessage(
+			L"Odaberite korisnika kojem želite promijeniti status."
+		);
+		return;
+	}
 
-    int idKorisnik =
-        query_korisnici
-            ->FieldByName(L"id_korisnik")
-            ->AsInteger;
+	int idKorisnik =
+		query_korisnici
+			->FieldByName(L"id_korisnik")
+			->AsInteger;
 
-    String ime =
-        query_korisnici
-            ->FieldByName(L"ime")
-            ->AsWideString;
-
-    String prezime =
-        query_korisnici
-            ->FieldByName(L"prezime")
-            ->AsWideString;
-
-    String username =
-        query_korisnici
-            ->FieldByName(L"username")
+	String ime =
+		query_korisnici
+			->FieldByName(L"ime")
 			->AsWideString;
 
-    String nazivUloge =
-    query_korisnici
-        ->FieldByName(L"naziv_uloge")
-		->AsWideString;
+	String prezime =
+		query_korisnici
+			->FieldByName(L"prezime")
+			->AsWideString;
 
-    bool trenutnoAktivan =
-        query_korisnici
-            ->FieldByName(L"aktivan")
-            ->AsBoolean;
+	String username =
+		query_korisnici
+			->FieldByName(L"username")
+			->AsWideString;
+
+	String nazivUloge =
+		query_korisnici
+			->FieldByName(L"naziv_uloge")
+			->AsWideString;
+
+	bool trenutnoAktivan =
+		query_korisnici
+			->FieldByName(L"aktivan")
+			->AsBoolean;
 
 	bool noviStatus = !trenutnoAktivan;
-        if (
-        trenutnoAktivan &&
-        idKorisnik == data_module->currentUserID
-    )
-    {
-        ShowMessage(
-            L"Ne možete deaktivirati vlastiti korisnički račun."
-        );
-        return;
-	}
-    if (
-    trenutnoAktivan &&
-    SameText(nazivUloge, L"Administrator")
-)
-{
-    query_provjera_admina->Close();
-    query_provjera_admina->SQL->Clear();
 
-    query_provjera_admina->SQL->Add(
-        L"SELECT COUNT(*) AS broj_admina "
-        L"FROM korisnik k "
-        L"INNER JOIN uloga u "
-        L"    ON u.id_uloga = k.id_uloga "
-        L"WHERE u.naziv = :naziv_uloge "
-        L"AND k.aktivan = 1"
-    );
-
-    query_provjera_admina
-        ->ParamByName(L"naziv_uloge")
-        ->AsWideString = L"Administrator";
-
-    query_provjera_admina->Open();
-
-    int brojAktivnihAdministratora =
-        query_provjera_admina
-            ->FieldByName(L"broj_admina")
-            ->AsInteger;
-
-    query_provjera_admina->Close();
-
-    if (brojAktivnihAdministratora <= 1)
-    {
-        ShowMessage(
-            L"Nije moguće deaktivirati posljednjeg "
-            L"aktivnog administratora."
-        );
-        return;
-    }
+	if (trenutnoAktivan && idKorisnik == data_module->currentUserID)
+	{
+		ShowMessage(
+			L"Ne možete deaktivirati vlastiti korisnički račun."
+		);
+		return;
 	}
 
-        String radnja =
-        trenutnoAktivan
-            ? L"deaktivirati"
-            : L"aktivirati";
+	if (trenutnoAktivan && SameText(nazivUloge, L"Administrator"))
+	{
+		query_provjera_admina->Close();
+		query_provjera_admina->SQL->Clear();
 
-    int odgovor = MessageDlg(
-        L"Želite li zaista " +
-        radnja +
-        L" korisnika:\n\n" +
-        ime + L" " + prezime +
-        L" (" + username + L")?",
-        mtConfirmation,
-        TMsgDlgButtons() << mbYes << mbNo,
-        0
-    );
+		query_provjera_admina->SQL->Add(
+			L"SELECT COUNT(*) AS broj_admina "
+			L"FROM korisnik k "
+			L"INNER JOIN uloga u "
+			L"    ON u.id_uloga = k.id_uloga "
+			L"WHERE u.naziv = :naziv_uloge "
+			L"AND k.aktivan = 1"
+		);
 
-    if (odgovor != mrYes)
-    {
-        return;
+		query_provjera_admina
+			->ParamByName(L"naziv_uloge")
+			->AsWideString = L"Administrator";
+
+		query_provjera_admina->Open();
+
+		int brojAktivnihAdministratora =
+			query_provjera_admina
+				->FieldByName(L"broj_admina")
+				->AsInteger;
+
+		query_provjera_admina->Close();
+
+		if (brojAktivnihAdministratora <= 1)
+		{
+			ShowMessage(
+				L"Nije moguće deaktivirati posljednjeg "
+				L"aktivnog administratora."
+			);
+			return;
+		}
 	}
-        try
-    {
-        query_status->Close();
-        query_status->SQL->Clear();
 
-        query_status->SQL->Add(
-            L"UPDATE korisnik "
-            L"SET aktivan = :aktivan "
-            L"WHERE id_korisnik = :id_korisnik"
-        );
+	String radnja =
+		trenutnoAktivan
+			? L"deaktivirati"
+			: L"aktivirati";
 
-        query_status
-            ->ParamByName(L"aktivan")
-            ->AsInteger =
-            noviStatus ? 1 : 0;
+	int odgovor = MessageDlg(
+		L"Želite li zaista " +
+		radnja +
+		L" korisnika:\n\n" +
+		ime + L" " + prezime +
+		L" (" + username + L")?",
+		mtConfirmation,
+		TMsgDlgButtons() << mbYes << mbNo,
+		0
+	);
 
-        query_status
-            ->ParamByName(L"id_korisnik")
-            ->AsInteger = idKorisnik;
+	if (odgovor != mrYes)
+	{
+		return;
+	}
 
-        query_status->ExecSQL();
+	try
+	{
+		query_status->Close();
+		query_status->SQL->Clear();
 
-        ShowMessage(
-            noviStatus
-                ? L"Korisnik je uspješno aktiviran."
-                : L"Korisnik je uspješno deaktiviran."
-        );
+		query_status->SQL->Add(
+			L"UPDATE korisnik "
+			L"SET aktivan = :aktivan "
+			L"WHERE id_korisnik = :id_korisnik"
+		);
 
-        osvjeziPopisKorisnika();
-    }
-    catch (const Exception &e)
-    {
-        ShowMessage(
-            L"Došlo je do pogreške pri promjeni statusa korisnika:\n" +
-            e.Message
-        );
-    }
+		query_status
+			->ParamByName(L"aktivan")
+			->AsInteger =
+			noviStatus ? 1 : 0;
+
+		query_status
+			->ParamByName(L"id_korisnik")
+			->AsInteger = idKorisnik;
+
+		query_status->ExecSQL();
+
+		ShowMessage(
+			noviStatus
+				? L"Korisnik je uspješno aktiviran."
+				: L"Korisnik je uspješno deaktiviran."
+		);
+
+		osvjeziPopisKorisnika();
+	}
+	catch (const Exception &e)
+	{
+		ShowMessage(
+			L"Došlo je do pogreške pri promjeni statusa korisnika:\n" +
+			e.Message
+		);
+	}
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_korisnici::grid_korisniciCellClick(TColumn *Column)
@@ -593,6 +587,7 @@ void Tform_korisnici::osvjeziGumbStatusa()
 
     button_status->Enabled = true;
 }
+//---------------------------------------------------------------------------
 void __fastcall Tform_korisnici::button_uputeClick(TObject *Sender)
 {
     form_upute->Show();

@@ -21,6 +21,7 @@ __published:	// IDE-managed Components
 	TLabel *label_password;
 	TEdit *edit_password;
 	TButton *button_login;
+	TLabel *label_zadnja_prijava;
 	void __fastcall button_loginClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 private:	// User declarations

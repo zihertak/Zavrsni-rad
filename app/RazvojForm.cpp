@@ -1,4 +1,4 @@
-﻿//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 #include <vcl.h>
 #pragma hdrstop
@@ -114,7 +114,6 @@ void Tform_razvoj::ucitajDjecu()
         "WHERE 1 = 1 "
     );
 
-    // Odgojitelj vidi samo djecu svoje skupine.
     if (prava.samoSvojaSkupina())
     {
         query_djeca->SQL->Add(
@@ -234,7 +233,6 @@ void Tform_razvoj::ucitajPodatkeDjeteta()
         return;
     }
 
-    // Skupina
     if (query_djeca->FieldByName("naziv_skupine")->IsNull)
     {
         label_skupina->Caption = L"Nije dodijeljena";
@@ -247,7 +245,6 @@ void Tform_razvoj::ucitajPodatkeDjeteta()
                 ->AsString;
     }
 
-    // Dob
     if (query_djeca->FieldByName("datum_rodjenja")->IsNull)
     {
         label_dob->Caption = L"-";
@@ -296,7 +293,6 @@ void Tform_razvoj::ucitajPodatkeDjeteta()
             IntToStr(dob) + L" godina";
     }
 
-	// Posljednji pregled
     if (query_djeca->FieldByName("zadnji_pregled")->IsNull)
     {
         label_zadnji_pregled->Caption =
@@ -336,9 +332,33 @@ void __fastcall Tform_razvoj::combo_dijeteChange(TObject *Sender)
     ucitajSpremljenuPreporuku();
 }
 //---------------------------------------------------------------------------
-// Izvozi cijelu razvojnu povijest odabranog djeteta (svi pregledi + ocjene)
-// u binarnu .dat datoteku - ime se sprema u fiksnih 100 znakova (dopunjeno
-// razmacima) da format ostane jednostavan zapis fiksne veličine.
+void Tform_razvoj::OdaberiDijeteID(int idDijete)
+{
+	for (int i = 0; i < combo_dijete->Items->Count; i++)
+	{
+		int trenutniID =
+			static_cast<int>(
+				reinterpret_cast<NativeInt>(
+					combo_dijete->Items->Objects[i]
+				)
+			);
+
+		if (trenutniID == idDijete)
+		{
+			combo_dijete->ItemIndex = i;
+
+			odabranoDijeteID = idDijete;
+			ocistiPrikazPreporuke();
+
+			ucitajPodatkeDjeteta();
+			ucitajPovijest();
+			ucitajSpremljenuPreporuku();
+
+			break;
+		}
+	}
+}
+//---------------------------------------------------------------------------
 void __fastcall Tform_razvoj::button_izvezi_profilClick(TObject *Sender)
 {
 	if (odabranoDijeteID == 0)
@@ -729,7 +749,6 @@ void __fastcall Tform_razvoj::button_spremiClick(TObject *Sender)
     {
         data_module->connection->StartTransaction();
 
-        // Spremanje osnovnih podataka razvojnog pregleda
         query_spremi_pregled->Close();
         query_spremi_pregled->SQL->Clear();
 
@@ -771,7 +790,6 @@ void __fastcall Tform_razvoj::button_spremiClick(TObject *Sender)
 
         query_spremi_pregled->ExecSQL();
 
-        // Dohvat ID-a upravo spremljenog pregleda
         query_spremi_pregled->Close();
         query_spremi_pregled->SQL->Clear();
 
@@ -788,7 +806,6 @@ void __fastcall Tform_razvoj::button_spremiClick(TObject *Sender)
 
         query_spremi_pregled->Close();
 
-        // Priprema SQL-a za četiri razvojna područja
         query_spremi_procjenu->Close();
         query_spremi_procjenu->SQL->Clear();
 
@@ -818,7 +835,6 @@ void __fastcall Tform_razvoj::button_spremiClick(TObject *Sender)
             ->AsInteger =
                 noviPregledID;
 
-        // Tjelesni i psihomotorni razvoj
         query_spremi_procjenu
             ->ParamByName("razina")
             ->AsInteger =
@@ -830,7 +846,6 @@ void __fastcall Tform_razvoj::button_spremiClick(TObject *Sender)
 
         query_spremi_procjenu->ExecSQL();
 
-        // Socio-emocionalni razvoj
         query_spremi_procjenu
             ->ParamByName("razina")
             ->AsInteger =
@@ -842,7 +857,6 @@ void __fastcall Tform_razvoj::button_spremiClick(TObject *Sender)
 
         query_spremi_procjenu->ExecSQL();
 
-        // Govorni razvoj
         query_spremi_procjenu
             ->ParamByName("razina")
             ->AsInteger =
@@ -854,7 +868,6 @@ void __fastcall Tform_razvoj::button_spremiClick(TObject *Sender)
 
         query_spremi_procjenu->ExecSQL();
 
-        // Spoznajni razvoj
         query_spremi_procjenu
             ->ParamByName("razina")
             ->AsInteger =
@@ -989,6 +1002,8 @@ void __fastcall Tform_razvoj::grid_povijestDblClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 bool Tform_razvoj::ucitajPregledeZaPreporuke(
+    TFDConnection *konekcija,
+    int idDijete,
     int &zadnjiPregledID,
     int &prethodniPregledID,
     TDateTime &datumZadnjeg,
@@ -999,52 +1014,50 @@ bool Tform_razvoj::ucitajPregledeZaPreporuke(
     datumZadnjeg = 0;
     postojiPrethodni = false;
 
-    query_pregledi_preporuke->Close();
-    query_pregledi_preporuke->SQL->Clear();
+    TFDQuery *query = new TFDQuery(NULL);
+    query->Connection = konekcija;
 
-    query_pregledi_preporuke->SQL->Add(
-        L"SELECT id_razvojni_pregled, datum "
-        L"FROM razvojni_pregled "
-        L"WHERE id_dijete = :id_dijete "
-        L"ORDER BY datum DESC, id_razvojni_pregled DESC "
-        L"LIMIT 2"
-    );
-
-    query_pregledi_preporuke->ParamByName(L"id_dijete")->AsInteger =
-        odabranoDijeteID;
-
-    query_pregledi_preporuke->Open();
-
-    if (query_pregledi_preporuke->IsEmpty())
+    try
     {
-        query_pregledi_preporuke->Close();
-        return false;
+        query->SQL->Add(
+            L"SELECT id_razvojni_pregled, datum "
+            L"FROM razvojni_pregled "
+            L"WHERE id_dijete = :id_dijete "
+            L"ORDER BY datum DESC, id_razvojni_pregled DESC "
+            L"LIMIT 2"
+        );
+
+        query->ParamByName(L"id_dijete")->AsInteger = idDijete;
+
+        query->Open();
+
+        if (query->IsEmpty())
+        {
+            return false;
+        }
+
+        zadnjiPregledID =
+            query->FieldByName(L"id_razvojni_pregled")->AsInteger;
+
+        datumZadnjeg =
+            query->FieldByName(L"datum")->AsDateTime;
+
+        query->Next();
+
+        if (!query->Eof)
+        {
+            prethodniPregledID =
+                query->FieldByName(L"id_razvojni_pregled")->AsInteger;
+
+            postojiPrethodni = true;
+        }
+
+        return true;
     }
-
-    zadnjiPregledID =
-        query_pregledi_preporuke
-            ->FieldByName(L"id_razvojni_pregled")
-            ->AsInteger;
-
-    datumZadnjeg =
-        query_pregledi_preporuke
-            ->FieldByName(L"datum")
-            ->AsDateTime;
-
-    query_pregledi_preporuke->Next();
-
-    if (!query_pregledi_preporuke->Eof)
+    __finally
     {
-        prethodniPregledID =
-            query_pregledi_preporuke
-                ->FieldByName(L"id_razvojni_pregled")
-                ->AsInteger;
-
-        postojiPrethodni = true;
+        delete query;
     }
-
-    query_pregledi_preporuke->Close();
-    return true;
 }
 //---------------------------------------------------------------------------
 String Tform_razvoj::odrediTrend(
@@ -1070,86 +1083,80 @@ String Tform_razvoj::odrediTrend(
     return L"Stabilno";
 }
 
-void Tform_razvoj::ucitajAnalizePodrucja(
+std::vector<Tform_razvoj::TAnalizaPodrucja> Tform_razvoj::ucitajAnalizePodrucja(
+    TFDConnection *konekcija,
     int zadnjiPregledID,
     int prethodniPregledID,
     bool postojiPrethodni)
 {
-    analizePodrucja.clear();
+    std::vector<TAnalizaPodrucja> analize;
 
     int trenutneRazine[5] = {0, 0, 0, 0, 0};
     int prethodneRazine[5] = {0, 0, 0, 0, 0};
 
-    // Dohvat ocjena zadnjeg pregleda
-    query_ocjene_preporuke->Close();
-    query_ocjene_preporuke->SQL->Clear();
+    TFDQuery *query = new TFDQuery(NULL);
+    query->Connection = konekcija;
 
-    query_ocjene_preporuke->SQL->Add(
-        L"SELECT "
-        L"id_podrucje_razvoja, "
-        L"razina "
-        L"FROM procjena_podrucja "
-        L"WHERE id_razvojni_pregled = :id_pregled"
-    );
-
-    query_ocjene_preporuke
-        ->ParamByName(L"id_pregled")
-        ->AsInteger = zadnjiPregledID;
-
-    query_ocjene_preporuke->Open();
-
-    while (!query_ocjene_preporuke->Eof)
+    try
     {
-        int idPodrucje =
-            query_ocjene_preporuke
-                ->FieldByName(L"id_podrucje_razvoja")
-                ->AsInteger;
+        query->SQL->Add(
+            L"SELECT "
+            L"id_podrucje_razvoja, "
+            L"razina "
+            L"FROM procjena_podrucja "
+            L"WHERE id_razvojni_pregled = :id_pregled"
+        );
 
-        int razina =
-            query_ocjene_preporuke
-                ->FieldByName(L"razina")
-                ->AsInteger;
+        query->ParamByName(L"id_pregled")->AsInteger = zadnjiPregledID;
 
-        if (idPodrucje >= 1 && idPodrucje <= 4)
-        {
-            trenutneRazine[idPodrucje] = razina;
-        }
+        query->Open();
 
-        query_ocjene_preporuke->Next();
-    }
-
-    query_ocjene_preporuke->Close();
-
-    // Dohvat ocjena prethodnog pregleda, ako postoji
-    if (postojiPrethodni)
-    {
-        query_ocjene_preporuke
-            ->ParamByName(L"id_pregled")
-            ->AsInteger = prethodniPregledID;
-
-        query_ocjene_preporuke->Open();
-
-        while (!query_ocjene_preporuke->Eof)
+        while (!query->Eof)
         {
             int idPodrucje =
-                query_ocjene_preporuke
-                    ->FieldByName(L"id_podrucje_razvoja")
-                    ->AsInteger;
+                query->FieldByName(L"id_podrucje_razvoja")->AsInteger;
 
             int razina =
-                query_ocjene_preporuke
-                    ->FieldByName(L"razina")
-                    ->AsInteger;
+                query->FieldByName(L"razina")->AsInteger;
 
             if (idPodrucje >= 1 && idPodrucje <= 4)
             {
-                prethodneRazine[idPodrucje] = razina;
+                trenutneRazine[idPodrucje] = razina;
             }
 
-            query_ocjene_preporuke->Next();
+            query->Next();
         }
 
-        query_ocjene_preporuke->Close();
+        query->Close();
+
+        if (postojiPrethodni)
+        {
+            query->ParamByName(L"id_pregled")->AsInteger = prethodniPregledID;
+
+            query->Open();
+
+            while (!query->Eof)
+            {
+                int idPodrucje =
+                    query->FieldByName(L"id_podrucje_razvoja")->AsInteger;
+
+                int razina =
+                    query->FieldByName(L"razina")->AsInteger;
+
+                if (idPodrucje >= 1 && idPodrucje <= 4)
+                {
+                    prethodneRazine[idPodrucje] = razina;
+                }
+
+                query->Next();
+            }
+
+            query->Close();
+        }
+    }
+    __finally
+    {
+        delete query;
     }
 
     String naziviPodrucja[5];
@@ -1182,12 +1189,13 @@ void Tform_razvoj::ucitajAnalizePodrucja(
                 analiza.postojiPrethodna
             );
 
-        // Ovo računamo u koraku 6.
         analiza.ciljanaTezina = 0;
         analiza.prioritet = 0;
 
-        analizePodrucja.push_back(analiza);
+        analize.push_back(analiza);
     }
+
+    return analize;
 }
 
 int Tform_razvoj::odrediCiljanuTezinu(
@@ -1228,7 +1236,6 @@ int Tform_razvoj::odrediCiljanuTezinu(
         }
     }
 
-    // Stabilno ili prvi pregled
     switch (trenutnaRazina)
     {
         case 1: return 2;
@@ -1294,31 +1301,34 @@ int Tform_razvoj::izracunajPrioritet(
     return prioritet;
 }
 
-void Tform_razvoj::izracunajTezineIPrioritete()
+void Tform_razvoj::izracunajTezineIPrioritete(
+    std::vector<TAnalizaPodrucja> &analize)
 {
-    for (unsigned int i = 0; i < analizePodrucja.size(); i++)
+    for (unsigned int i = 0; i < analize.size(); i++)
     {
-        analizePodrucja[i].ciljanaTezina =
+        analize[i].ciljanaTezina =
             odrediCiljanuTezinu(
-                analizePodrucja[i].trenutnaRazina,
-                analizePodrucja[i].trend
+                analize[i].trenutnaRazina,
+                analize[i].trend
             );
 
-        analizePodrucja[i].prioritet =
+        analize[i].prioritet =
             izracunajPrioritet(
-                analizePodrucja[i].trenutnaRazina,
-                analizePodrucja[i].trend
+                analize[i].trenutnaRazina,
+                analize[i].trend
             );
     }
 }
 
-bool Tform_razvoj::aktivnostJeVecOdabrana(int idAktivnost)
+bool Tform_razvoj::aktivnostJeVecOdabrana(
+    const std::vector<TPreporucenaAktivnost> &aktivnosti,
+    int idAktivnost)
 {
     for (unsigned int i = 0;
-         i < preporuceneAktivnosti.size();
+         i < aktivnosti.size();
          i++)
     {
-        if (preporuceneAktivnosti[i].idAktivnost == idAktivnost)
+        if (aktivnosti[i].idAktivnost == idAktivnost)
         {
             return true;
         }
@@ -1327,21 +1337,21 @@ bool Tform_razvoj::aktivnostJeVecOdabrana(int idAktivnost)
     return false;
 }
 
-void Tform_razvoj::odaberiPreporuceneAktivnosti()
+std::vector<Tform_razvoj::TPreporucenaAktivnost> Tform_razvoj::odaberiPreporuceneAktivnosti(
+    TFDConnection *konekcija,
+    int idDijete,
+    const std::vector<TAnalizaPodrucja> &analize)
 {
-    preporuceneAktivnosti.clear();
+    std::vector<TPreporucenaAktivnost> preporuceneAktivnosti;
 
-    if (analizePodrucja.empty())
+    if (analize.empty())
     {
-        return;
+        return preporuceneAktivnosti;
     }
 
-    // Radimo kopiju kako ne bismo promijenili izvorni redoslijed
-    // četiriju razvojnih područja.
     std::vector<TAnalizaPodrucja> sortiraneAnalize =
-        analizePodrucja;
+        analize;
 
-    // Veći prioritet ide prvi.
     std::sort(
         sortiraneAnalize.begin(),
         sortiraneAnalize.end(),
@@ -1352,123 +1362,115 @@ void Tform_razvoj::odaberiPreporuceneAktivnosti()
         }
     );
 
-    for (unsigned int i = 0;
-         i < sortiraneAnalize.size();
-         i++)
+    TFDQuery *query = new TFDQuery(NULL);
+    query->Connection = konekcija;
+
+    try
     {
-        // Ukupno želimo najviše tri aktivnosti.
-        if (preporuceneAktivnosti.size() >= 3)
+        for (unsigned int i = 0;
+             i < sortiraneAnalize.size();
+             i++)
         {
-            break;
-        }
-
-        const TAnalizaPodrucja &analiza =
-            sortiraneAnalize[i];
-
-        /*
-          Iz područja najvećeg prioriteta pokušavamo uzeti
-          do dvije aktivnosti.
-
-          Iz ostalih područja uzimamo najviše jednu.
-        */
-        int maksimalnoIzPodrucja;
-
-        if (i == 0)
-        {
-            maksimalnoIzPodrucja = 2;
-        }
-        else
-        {
-            maksimalnoIzPodrucja = 1;
-        }
-
-        int odabranoIzPodrucja = 0;
-
-        query_aktivnosti_preporuke->Close();
-        query_aktivnosti_preporuke->SQL->Clear();
-
-        query_aktivnosti_preporuke->SQL->Add(
-            L"SELECT DISTINCT "
-            L"    a.id_aktivnost, "
-            L"    a.naziv, "
-			L"    a.razina_tezine, "
-			L"    a.trajanje_minuta "
-            L"FROM aktivnost a "
-            L"INNER JOIN aktivnost_podrucje ap "
-            L"    ON ap.id_aktivnost = a.id_aktivnost "
-            L"WHERE ap.id_podrucje_razvoja = :id_podrucje "
-            L"  AND a.aktivna = 1 "
-            L"  AND TIMESTAMPDIFF( "
-            L"          YEAR, "
-            L"          (SELECT d.datum_rodjenja "
-            L"           FROM dijete d "
-            L"           WHERE d.id_dijete = :id_dijete), "
-            L"          CURDATE() "
-            L"      ) BETWEEN a.dob_od AND a.dob_do "
-            L"ORDER BY "
-            L"    ABS(a.razina_tezine - :ciljana_tezina), "
-            L"    a.trajanje_minuta, "
-            L"    a.naziv"
-        );
-
-        query_aktivnosti_preporuke
-            ->ParamByName(L"id_podrucje")
-            ->AsInteger = analiza.idPodrucje;
-
-        query_aktivnosti_preporuke
-            ->ParamByName(L"id_dijete")
-            ->AsInteger = odabranoDijeteID;
-
-        query_aktivnosti_preporuke
-            ->ParamByName(L"ciljana_tezina")
-            ->AsInteger = analiza.ciljanaTezina;
-
-        query_aktivnosti_preporuke->Open();
-
-        while (!query_aktivnosti_preporuke->Eof &&
-               odabranoIzPodrucja < maksimalnoIzPodrucja &&
-               preporuceneAktivnosti.size() < 3)
-        {
-            int idAktivnost =
-                query_aktivnosti_preporuke
-                    ->FieldByName(L"id_aktivnost")
-                    ->AsInteger;
-
-            if (!aktivnostJeVecOdabrana(idAktivnost))
+            if (preporuceneAktivnosti.size() >= 3)
             {
-                TPreporucenaAktivnost aktivnost;
-
-                aktivnost.idAktivnost = idAktivnost;
-                aktivnost.idPodrucje = analiza.idPodrucje;
-
-                aktivnost.nazivAktivnosti =
-                    query_aktivnosti_preporuke
-                        ->FieldByName(L"naziv")
-                        ->AsString;
-
-                aktivnost.nazivPodrucja =
-                    analiza.nazivPodrucja;
-
-                aktivnost.tezinaAktivnosti =
-                    query_aktivnosti_preporuke
-                        ->FieldByName(L"razina_tezine")
-                        ->AsInteger;
-
-                preporuceneAktivnosti.push_back(aktivnost);
-
-                odabranoIzPodrucja++;
+                break;
             }
 
-            query_aktivnosti_preporuke->Next();
-        }
+            const TAnalizaPodrucja &analiza =
+                sortiraneAnalize[i];
 
-        query_aktivnosti_preporuke->Close();
+            int maksimalnoIzPodrucja;
+
+            if (i == 0)
+            {
+                maksimalnoIzPodrucja = 2;
+            }
+            else
+            {
+                maksimalnoIzPodrucja = 1;
+            }
+
+            int odabranoIzPodrucja = 0;
+
+            query->Close();
+            query->SQL->Clear();
+
+            query->SQL->Add(
+                L"SELECT DISTINCT "
+                L"    a.id_aktivnost, "
+                L"    a.naziv, "
+                L"    a.razina_tezine, "
+                L"    a.trajanje_minuta "
+                L"FROM aktivnost a "
+                L"INNER JOIN aktivnost_podrucje ap "
+                L"    ON ap.id_aktivnost = a.id_aktivnost "
+                L"WHERE ap.id_podrucje_razvoja = :id_podrucje "
+                L"  AND a.aktivna = 1 "
+                L"  AND TIMESTAMPDIFF( "
+                L"          YEAR, "
+                L"          (SELECT d.datum_rodjenja "
+                L"           FROM dijete d "
+                L"           WHERE d.id_dijete = :id_dijete), "
+                L"          CURDATE() "
+                L"      ) BETWEEN a.dob_od AND a.dob_do "
+                L"ORDER BY "
+                L"    ABS(a.razina_tezine - :ciljana_tezina), "
+                L"    a.trajanje_minuta, "
+                L"    a.naziv"
+            );
+
+            query->ParamByName(L"id_podrucje")->AsInteger = analiza.idPodrucje;
+            query->ParamByName(L"id_dijete")->AsInteger = idDijete;
+            query->ParamByName(L"ciljana_tezina")->AsInteger = analiza.ciljanaTezina;
+
+            query->Open();
+
+            while (!query->Eof &&
+                   odabranoIzPodrucja < maksimalnoIzPodrucja &&
+                   preporuceneAktivnosti.size() < 3)
+            {
+                int idAktivnost =
+                    query->FieldByName(L"id_aktivnost")->AsInteger;
+
+                if (!aktivnostJeVecOdabrana(preporuceneAktivnosti, idAktivnost))
+                {
+                    TPreporucenaAktivnost aktivnost;
+
+                    aktivnost.idAktivnost = idAktivnost;
+                    aktivnost.idPodrucje = analiza.idPodrucje;
+
+                    aktivnost.nazivAktivnosti =
+                        query->FieldByName(L"naziv")->AsString;
+
+                    aktivnost.nazivPodrucja =
+                        analiza.nazivPodrucja;
+
+                    aktivnost.tezinaAktivnosti =
+                        query->FieldByName(L"razina_tezine")->AsInteger;
+
+                    preporuceneAktivnosti.push_back(aktivnost);
+
+                    odabranoIzPodrucja++;
+                }
+
+                query->Next();
+            }
+
+            query->Close();
+        }
     }
+    __finally
+    {
+        delete query;
+    }
+
+    return preporuceneAktivnosti;
 }
 
-String Tform_razvoj::generirajOpciZakljucak()
+String Tform_razvoj::generirajOpciZakljucak(
+    const std::vector<TAnalizaPodrucja> &analize)
 {
-    if (analizePodrucja.empty())
+    if (analize.empty())
     {
         return L"Nema dostupnih podataka za izradu zaključka.";
     }
@@ -1480,34 +1482,34 @@ String Tform_razvoj::generirajOpciZakljucak()
 
     int indeksNajvecegPrioriteta = 0;
 
-    for (unsigned int i = 0; i < analizePodrucja.size(); i++)
+    for (unsigned int i = 0; i < analize.size(); i++)
     {
-        if (analizePodrucja[i].trend == L"Pad")
+        if (analize[i].trend == L"Pad")
         {
             brojPadova++;
         }
-        else if (analizePodrucja[i].trend == L"Rast")
+        else if (analize[i].trend == L"Rast")
         {
             brojRastova++;
         }
-        else if (analizePodrucja[i].trend == L"Stabilno")
+        else if (analize[i].trend == L"Stabilno")
         {
             brojStabilnih++;
         }
-        else if (analizePodrucja[i].trend == L"Prvi pregled")
+        else if (analize[i].trend == L"Prvi pregled")
         {
             brojPrvihPregleda++;
         }
 
-        if (analizePodrucja[i].prioritet >
-            analizePodrucja[indeksNajvecegPrioriteta].prioritet)
+        if (analize[i].prioritet >
+            analize[indeksNajvecegPrioriteta].prioritet)
         {
             indeksNajvecegPrioriteta = i;
         }
     }
 
     const TAnalizaPodrucja &prioritetnoPodrucje =
-        analizePodrucja[indeksNajvecegPrioriteta];
+        analize[indeksNajvecegPrioriteta];
 
     String zakljucak;
 
@@ -1559,9 +1561,10 @@ String Tform_razvoj::generirajOpciZakljucak()
     return zakljucak;
 }
 
-String Tform_razvoj::generirajPopisAktivnosti()
+String Tform_razvoj::generirajPopisAktivnosti(
+    const std::vector<TPreporucenaAktivnost> &aktivnosti)
 {
-    if (preporuceneAktivnosti.empty())
+    if (aktivnosti.empty())
     {
         return L"Nisu pronađene prikladne aktivnosti.";
     }
@@ -1569,23 +1572,23 @@ String Tform_razvoj::generirajPopisAktivnosti()
     String rezultat;
 
     for (unsigned int i = 0;
-         i < preporuceneAktivnosti.size();
+         i < aktivnosti.size();
          i++)
     {
         rezultat +=
             IntToStr(static_cast<int>(i + 1)) +
             L". " +
-            preporuceneAktivnosti[i].nazivAktivnosti;
+            aktivnosti[i].nazivAktivnosti;
 
         rezultat +=
             L"\r\n   Područje: " +
-            preporuceneAktivnosti[i].nazivPodrucja;
+            aktivnosti[i].nazivPodrucja;
 
         rezultat +=
             L"\r\n   Težina: " +
-            IntToStr(preporuceneAktivnosti[i].tezinaAktivnosti);
+            IntToStr(aktivnosti[i].tezinaAktivnosti);
 
-        if (i + 1 < preporuceneAktivnosti.size())
+        if (i + 1 < aktivnosti.size())
         {
             rezultat += L"\r\n\r\n";
         }
@@ -1594,31 +1597,33 @@ String Tform_razvoj::generirajPopisAktivnosti()
     return rezultat;
 }
 
-String Tform_razvoj::generirajOpciRazlog()
+String Tform_razvoj::generirajOpciRazlog(
+    const std::vector<TAnalizaPodrucja> &analize,
+    const std::vector<TPreporucenaAktivnost> &aktivnosti)
 {
-    if (preporuceneAktivnosti.empty())
+    if (aktivnosti.empty())
     {
         return L"Nije moguće oblikovati razlog jer nisu pronađene prikladne aktivnosti.";
     }
 
-    if (analizePodrucja.empty())
+    if (analize.empty())
     {
         return L"Nema dostupnih razvojnih podataka.";
     }
 
     int indeksNajvecegPrioriteta = 0;
 
-    for (unsigned int i = 1; i < analizePodrucja.size(); i++)
+    for (unsigned int i = 1; i < analize.size(); i++)
     {
-        if (analizePodrucja[i].prioritet >
-            analizePodrucja[indeksNajvecegPrioriteta].prioritet)
+        if (analize[i].prioritet >
+            analize[indeksNajvecegPrioriteta].prioritet)
         {
             indeksNajvecegPrioriteta = i;
         }
     }
 
     const TAnalizaPodrucja &prioritetnoPodrucje =
-        analizePodrucja[indeksNajvecegPrioriteta];
+        analize[indeksNajvecegPrioriteta];
 
     String razlog =
         L"Odabrane aktivnosti odgovaraju dobi djeteta, području razvoja "
@@ -1657,7 +1662,7 @@ String Tform_razvoj::generirajOpciRazlog()
             L"odabrane prema trenutačnoj procjeni i dobi djeteta.";
     }
 
-    if (preporuceneAktivnosti.size() == 1)
+    if (aktivnosti.size() == 1)
     {
         razlog +=
             L"\r\n\r\nPronađena je jedna prikladna aktivnost.";
@@ -1666,7 +1671,7 @@ String Tform_razvoj::generirajOpciRazlog()
     {
         razlog +=
             L"\r\n\r\nOdabrano je " +
-            IntToStr(static_cast<int>(preporuceneAktivnosti.size())) +
+            IntToStr(static_cast<int>(aktivnosti.size())) +
             L" aktivnosti kako bi preporuka bila dovoljno konkretna, "
             L"ali i pregledna.";
     }
@@ -1683,7 +1688,6 @@ void __fastcall Tform_razvoj::button_generiraj_preporukuClick(
 		ShowMessage(L"Nemate pravo generiranja preporuke.");
 		return;
 	}
-    // Brišemo rezultat prethodnog generiranja.
     memo_zakljucak->Clear();
     memo_preporucene_aktivnosti->Clear();
     memo_razlog_preporuke->Clear();
@@ -1696,12 +1700,9 @@ void __fastcall Tform_razvoj::button_generiraj_preporukuClick(
 	combo_preporucene_aktivnosti->Enabled = false;
 	button_otvori_aktivnost->Enabled = false;
 
-    // Reset podataka prethodno generirane preporuke.
     generiraniPregledID = 0;
     preporukaGenerirana = false;
 
-    // Dok se nova preporuka uspješno ne generira,
-    // nije dopušteno spremanje.
     button_spremi_preporuku->Enabled = false;
 
     if (odabranoDijeteID <= 0)
@@ -1717,9 +1718,10 @@ void __fastcall Tform_razvoj::button_generiraj_preporukuClick(
 
     try
     {
-        // 1. Dohvat zadnjeg i prethodnog pregleda.
         bool postojiPregled =
             ucitajPregledeZaPreporuke(
+                data_module->connection,
+                odabranoDijeteID,
                 zadnjiPregledID,
                 prethodniPregledID,
                 datumZadnjeg,
@@ -1740,12 +1742,13 @@ void __fastcall Tform_razvoj::button_generiraj_preporukuClick(
             return;
         }
 
-        // 2. Dohvat ocjena i izračun trendova.
-        ucitajAnalizePodrucja(
-            zadnjiPregledID,
-            prethodniPregledID,
-            postojiPrethodni
-        );
+        analizePodrucja =
+            ucitajAnalizePodrucja(
+                data_module->connection,
+                zadnjiPregledID,
+                prethodniPregledID,
+                postojiPrethodni
+            );
 
         if (analizePodrucja.empty())
         {
@@ -1761,32 +1764,31 @@ void __fastcall Tform_razvoj::button_generiraj_preporukuClick(
             return;
         }
 
-        // 3. Određivanje ciljane težine i prioriteta područja.
-        izracunajTezineIPrioritete();
+        izracunajTezineIPrioritete(analizePodrucja);
 
-        // 4. Odabir najprikladnijih aktivnosti.
-        odaberiPreporuceneAktivnosti();
+        preporuceneAktivnosti =
+            odaberiPreporuceneAktivnosti(
+                data_module->connection,
+                odabranoDijeteID,
+                analizePodrucja
+            );
 
-        // 5. Prikaz konačne preporuke.
         memo_zakljucak->Text =
-            generirajOpciZakljucak();
+            generirajOpciZakljucak(analizePodrucja);
 
         memo_preporucene_aktivnosti->Text =
-            generirajPopisAktivnosti();
+            generirajPopisAktivnosti(preporuceneAktivnosti);
 
         memo_razlog_preporuke->Text =
-			generirajOpciRazlog();
+			generirajOpciRazlog(analizePodrucja, preporuceneAktivnosti);
 
         popuniComboAktivnosti();
 
-        // Svaka nova preporuka početno dobiva status Predložena.
         combo_status_preporuke->ItemIndex = 0;
 
-        // Pamtimo pregled uz koji pripada generirana preporuka.
         generiraniPregledID = zadnjiPregledID;
         preporukaGenerirana = true;
 
-		// Spremanje je dopušteno tek nakon uspješnog generiranja.
 		button_spremi_preporuku->Enabled =
 			prava.spremiPreporuku();
 		combo_status_preporuke->Enabled =
@@ -1810,161 +1812,153 @@ void __fastcall Tform_razvoj::button_generiraj_preporukuClick(
     }
 }
 //---------------------------------------------------------------------------
-int Tform_razvoj::spremiGlavnuPreporuku()
+int Tform_razvoj::spremiGlavnuPreporuku(
+    TFDConnection *konekcija,
+    int idPregled,
+    const String &status,
+    const String &razlog,
+    const String &zakljucak)
 {
-    if (!preporukaGenerirana || generiraniPregledID <= 0)
+    if (idPregled <= 0)
     {
         throw Exception(L"Preporuka nije generirana.");
     }
 
-    if (combo_status_preporuke->ItemIndex < 0)
+    if (status.IsEmpty())
     {
         throw Exception(L"Odaberite status preporuke.");
     }
 
     int preporukaID = 0;
 
-    // Provjera postoji li preporuka za isti razvojni pregled.
-    query_provjeri_preporuku->Close();
-    query_provjeri_preporuku->SQL->Clear();
-    query_provjeri_preporuku->SQL->Add(
-        L"SELECT id_preporuka "
-        L"FROM preporuka "
-        L"WHERE id_razvojni_pregled = :id_pregled "
-        L"LIMIT 1"
-    );
+    TFDQuery *query = new TFDQuery(NULL);
+    query->Connection = konekcija;
 
-    query_provjeri_preporuku
-        ->ParamByName(L"id_pregled")
-        ->AsInteger = generiraniPregledID;
-
-    query_provjeri_preporuku->Open();
-
-    if (!query_provjeri_preporuku->IsEmpty())
+    try
     {
-        preporukaID =
-            query_provjeri_preporuku
-                ->FieldByName(L"id_preporuka")
-                ->AsInteger;
-    }
-
-    query_provjeri_preporuku->Close();
-
-    query_spremi_preporuku->Close();
-    query_spremi_preporuku->SQL->Clear();
-
-    if (preporukaID > 0)
-    {
-        // Preporuka već postoji pa ažuriramo njezin sadržaj.
-        query_spremi_preporuku->SQL->Add(
-            L"UPDATE preporuka SET "
-            L"    razlog = :razlog, "
-            L"    status = :status, "
-            L"    datum = CURDATE(), "
-            L"    napomena = :napomena "
-            L"WHERE id_preporuka = :id_preporuka"
+        query->SQL->Add(
+            L"SELECT id_preporuka "
+            L"FROM preporuka "
+            L"WHERE id_razvojni_pregled = :id_pregled "
+            L"LIMIT 1"
         );
 
-        query_spremi_preporuku
-            ->ParamByName(L"id_preporuka")
-            ->AsInteger = preporukaID;
+        query->ParamByName(L"id_pregled")->AsInteger = idPregled;
+
+        query->Open();
+
+        if (!query->IsEmpty())
+        {
+            preporukaID =
+                query->FieldByName(L"id_preporuka")->AsInteger;
+        }
+
+        query->Close();
+        query->SQL->Clear();
+
+        if (preporukaID > 0)
+        {
+            query->SQL->Add(
+                L"UPDATE preporuka SET "
+                L"    razlog = :razlog, "
+                L"    status = :status, "
+                L"    datum = CURDATE(), "
+                L"    napomena = :napomena "
+                L"WHERE id_preporuka = :id_preporuka"
+            );
+
+            query->ParamByName(L"id_preporuka")->AsInteger = preporukaID;
+        }
+        else
+        {
+            query->SQL->Add(
+                L"INSERT INTO preporuka "
+                L"    (razlog, status, datum, napomena, id_razvojni_pregled) "
+                L"VALUES "
+                L"    (:razlog, :status, CURDATE(), :napomena, :id_pregled)"
+            );
+
+            query->ParamByName(L"id_pregled")->AsInteger = idPregled;
+        }
+
+        query->ParamByName(L"razlog")->AsString = razlog;
+        query->ParamByName(L"status")->AsString = status;
+
+        query->ParamByName(L"napomena")->AsString = zakljucak;
+
+        query->ExecSQL();
+
+        if (preporukaID == 0)
+        {
+            query->Close();
+            query->SQL->Clear();
+            query->SQL->Add(
+                L"SELECT LAST_INSERT_ID() AS id_preporuka"
+            );
+            query->Open();
+
+            preporukaID =
+                query->FieldByName(L"id_preporuka")->AsInteger;
+
+            query->Close();
+        }
     }
-    else
+    __finally
     {
-        // Za ovaj pregled još ne postoji preporuka.
-        query_spremi_preporuku->SQL->Add(
-            L"INSERT INTO preporuka "
-            L"    (razlog, status, datum, napomena, id_razvojni_pregled) "
-            L"VALUES "
-            L"    (:razlog, :status, CURDATE(), :napomena, :id_pregled)"
-        );
-
-        query_spremi_preporuku
-            ->ParamByName(L"id_pregled")
-            ->AsInteger = generiraniPregledID;
-    }
-
-    query_spremi_preporuku
-        ->ParamByName(L"razlog")
-        ->AsString = memo_razlog_preporuke->Text;
-
-    query_spremi_preporuku
-        ->ParamByName(L"status")
-        ->AsString = combo_status_preporuke->Text;
-
-    // Postojeći stupac napomena koristimo za opći zaključak.
-    query_spremi_preporuku
-        ->ParamByName(L"napomena")
-        ->AsString = memo_zakljucak->Text;
-
-    query_spremi_preporuku->ExecSQL();
-
-    // Nakon INSERT-a dohvaćamo ID novog zapisa.
-    if (preporukaID == 0)
-    {
-        query_provjeri_preporuku->Close();
-        query_provjeri_preporuku->SQL->Clear();
-        query_provjeri_preporuku->SQL->Add(
-            L"SELECT LAST_INSERT_ID() AS id_preporuka"
-        );
-        query_provjeri_preporuku->Open();
-
-        preporukaID =
-            query_provjeri_preporuku
-                ->FieldByName(L"id_preporuka")
-                ->AsInteger;
-
-        query_provjeri_preporuku->Close();
+        delete query;
     }
 
     return preporukaID;
 }
 
-void Tform_razvoj::spremiAktivnostiPreporuke(int preporukaID)
+void Tform_razvoj::spremiAktivnostiPreporuke(
+    TFDConnection *konekcija,
+    int preporukaID,
+    const std::vector<TPreporucenaAktivnost> &aktivnosti)
 {
     if (preporukaID <= 0)
     {
         throw Exception(L"Neispravan ID preporuke.");
     }
 
-    // Ako preporuka već postoji, prvo brišemo stare veze.
-    query_spremi_preporuka_aktivnost->Close();
-    query_spremi_preporuka_aktivnost->SQL->Clear();
-    query_spremi_preporuka_aktivnost->SQL->Add(
-        L"DELETE FROM preporuka_aktivnost "
-        L"WHERE id_preporuka = :id_preporuka"
-    );
+    TFDQuery *query = new TFDQuery(NULL);
+    query->Connection = konekcija;
 
-    query_spremi_preporuka_aktivnost
-        ->ParamByName(L"id_preporuka")
-        ->AsInteger = preporukaID;
-
-    query_spremi_preporuka_aktivnost->ExecSQL();
-
-    // Spremamo sve trenutno odabrane aktivnosti.
-    for (unsigned int i = 0;
-         i < preporuceneAktivnosti.size();
-         i++)
+    try
     {
-        query_spremi_preporuka_aktivnost->Close();
-        query_spremi_preporuka_aktivnost->SQL->Clear();
-        query_spremi_preporuka_aktivnost->SQL->Add(
-            L"INSERT INTO preporuka_aktivnost "
-            L"    (id_preporuka, id_aktivnost) "
-            L"VALUES "
-            L"    (:id_preporuka, :id_aktivnost)"
+        query->SQL->Add(
+            L"DELETE FROM preporuka_aktivnost "
+            L"WHERE id_preporuka = :id_preporuka"
         );
 
-        query_spremi_preporuka_aktivnost
-            ->ParamByName(L"id_preporuka")
-            ->AsInteger = preporukaID;
+        query->ParamByName(L"id_preporuka")->AsInteger = preporukaID;
 
-        query_spremi_preporuka_aktivnost
-            ->ParamByName(L"id_aktivnost")
-            ->AsInteger =
-                preporuceneAktivnosti[i].idAktivnost;
+        query->ExecSQL();
 
-        query_spremi_preporuka_aktivnost->ExecSQL();
+        for (unsigned int i = 0;
+             i < aktivnosti.size();
+             i++)
+        {
+            query->Close();
+            query->SQL->Clear();
+            query->SQL->Add(
+                L"INSERT INTO preporuka_aktivnost "
+                L"    (id_preporuka, id_aktivnost) "
+                L"VALUES "
+                L"    (:id_preporuka, :id_aktivnost)"
+            );
+
+            query->ParamByName(L"id_preporuka")->AsInteger = preporukaID;
+
+            query->ParamByName(L"id_aktivnost")->AsInteger =
+                aktivnosti[i].idAktivnost;
+
+            query->ExecSQL();
+        }
+    }
+    __finally
+    {
+        delete query;
     }
 }
 void __fastcall Tform_razvoj::button_spremi_preporukuClick(TObject *Sender)
@@ -2001,9 +1995,19 @@ void __fastcall Tform_razvoj::button_spremi_preporukuClick(TObject *Sender)
         data_module->connection->StartTransaction();
 
         int preporukaID =
-            spremiGlavnuPreporuku();
+            spremiGlavnuPreporuku(
+                data_module->connection,
+                generiraniPregledID,
+                combo_status_preporuke->Text,
+                memo_razlog_preporuke->Text,
+                memo_zakljucak->Text
+            );
 
-        spremiAktivnostiPreporuke(preporukaID);
+        spremiAktivnostiPreporuke(
+            data_module->connection,
+            preporukaID,
+            preporuceneAktivnosti
+        );
 
         data_module->connection->Commit();
 
@@ -2093,7 +2097,6 @@ void Tform_razvoj::primijeniPrava()
     bool smijeUnosPregleda =
         prava.unesiRazvojniPregled();
 
-    // Razvojni pregled
     speed_tjelesni_1->Enabled = smijeUnosPregleda;
     speed_tjelesni_2->Enabled = smijeUnosPregleda;
     speed_tjelesni_3->Enabled = smijeUnosPregleda;
@@ -2123,21 +2126,14 @@ void Tform_razvoj::primijeniPrava()
     button_ocisti->Enabled = smijeUnosPregleda;
     button_spremi->Enabled = smijeUnosPregleda;
 
-    // Preporuke
     button_generiraj_preporuku->Enabled =
         prava.generirajPreporuku();
 
     combo_status_preporuke->Enabled =
         prava.promijeniStatusPreporuke();
 
-    /*
-      Gumb spremanja ostaje isključen dok preporuka nije generirana.
-      Nakon generiranja dodatno ćemo provjeriti pravo spremanja.
-    */
     button_spremi_preporuku->Enabled = false;
 
-    // Readonly detalje aktivnosti svi smiju otvoriti,
-    // ali gumb ostaje ugašen dok nema generiranih aktivnosti.
     button_otvori_aktivnost->Enabled = false;
 
     button_korisnici->Visible =
@@ -2316,7 +2312,7 @@ void Tform_razvoj::ucitajSpremljenuPreporuku()
     query_ucitaj_preporuka_aktivnosti->Close();
 
     memo_preporucene_aktivnosti->Text =
-        generirajPopisAktivnosti();
+        generirajPopisAktivnosti(preporuceneAktivnosti);
 
     popuniComboAktivnosti();
 
@@ -2355,4 +2351,3 @@ void __fastcall Tform_razvoj::button_najaveClick(TObject *Sender)
     this->Hide();
 }
 //---------------------------------------------------------------------------
-

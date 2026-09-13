@@ -7,33 +7,30 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 //---------------------------------------------------------------------------
-// Ocjena razvoja (1-5) -> boja za prikaz zvjezdica. Ranije je ista funkcija
-// postojala odvojeno i identično u RazvojForm.cpp i RazvojDetaljiForm.cpp.
 TColor TRazvojPomoc::BojaZaOcjenu(int ocjena)
 {
 	switch (ocjena)
 	{
 		case 1:
-			return clRed;                                  // Crvena
+			return clRed;
 
 		case 2:
-			return static_cast<TColor>(RGB(255, 128, 0));   // Narančasta
+			return static_cast<TColor>(RGB(255, 128, 0));
 
 		case 3:
-			return static_cast<TColor>(RGB(255, 215, 0));   // Zlatno žuta
+			return static_cast<TColor>(RGB(255, 215, 0));
 
 		case 4:
-			return static_cast<TColor>(RGB(50, 205, 50));   // Lime zelena
+			return static_cast<TColor>(RGB(50, 205, 50));
 
 		case 5:
-			return static_cast<TColor>(RGB(0, 128, 0));     // Tamno zelena
+			return static_cast<TColor>(RGB(0, 128, 0));
 
 		default:
 			return clSilver;
 	}
 }
 //---------------------------------------------------------------------------
-// Ocjena razvoja (1-5) -> kratki tekstualni opis, npr. za izvještaj.
 String TRazvojPomoc::OpisOcjene(int ocjena)
 {
 	switch (ocjena)
@@ -44,7 +41,7 @@ String TRazvojPomoc::OpisOcjene(int ocjena)
 		case 2:
 			return L"ispod prosjeka";
 
-		case 3:
+        case 3:
 			return L"prosječno";
 
 		case 4:
@@ -58,16 +55,13 @@ String TRazvojPomoc::OpisOcjene(int ocjena)
 	}
 }
 //---------------------------------------------------------------------------
-// Dob u godinama iz datuma rođenja, uzimajući u obzir je li rođendan ove
-// godine već prošao. Ista logika je ranije bila zasebno napisana u
-// DjecaForm.cpp (OnCalcFields) i IzvjestajForm.cpp.
 int TRazvojPomoc::IzracunajDob(TDate datumRodjenja)
 {
 	unsigned short godinaRodjenja, mjesecRodjenja, danRodjenja;
 	unsigned short trenutnaGodina, trenutniMjesec, trenutniDan;
 
 	datumRodjenja.DecodeDate(&godinaRodjenja, &mjesecRodjenja, &danRodjenja);
-	Date().DecodeDate(&trenutnaGodina, &trenutniMjesec, &trenutniDan);
+    Date().DecodeDate(&trenutnaGodina, &trenutniMjesec, &trenutniDan);
 
 	int dob = trenutnaGodina - godinaRodjenja;
 

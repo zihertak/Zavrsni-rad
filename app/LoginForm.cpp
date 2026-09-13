@@ -28,7 +28,8 @@ void __fastcall Tform_Login::button_loginClick(TObject *Sender)
     ShowMessage("Unesite korisničko ime i lozinku.");
     return;
 	}
-	try{
+	try
+	{
 		data_module->connection ->Connected = true;
 		data_module->query_login->Close();
 		data_module->query_login->SQL->Text =
@@ -38,7 +39,7 @@ void __fastcall Tform_Login::button_loginClick(TObject *Sender)
 			"JOIN uloga "
 			"ON korisnik.id_uloga = uloga.id_uloga "
 			"WHERE korisnik.username = :username "
-            "AND korisnik.aktivan = 1";
+			"AND korisnik.aktivan = 1";
 		data_module->query_login
 			->ParamByName("username")
 			->AsString = edit_username->Text.Trim();
@@ -105,6 +106,10 @@ void __fastcall Tform_Login::button_loginClick(TObject *Sender)
 					registar->WriteString(
 						"ZadnjiUsername",
 						edit_username->Text.Trim());
+
+					registar->WriteString(
+						"ZadnjaPrijava",
+						DateTimeToStr(Now()));
 				}
 			}
 			__finally
@@ -115,17 +120,18 @@ void __fastcall Tform_Login::button_loginClick(TObject *Sender)
 			form_dashboard->Show();
 			this->Hide();
 		}
-		else{
+		else
+		{
 			data_module->query_login->Close();
 			ShowMessage("Neispravno korisničko ime ili lozinka.");
-            edit_password->Clear();
+			edit_password->Clear();
 			edit_password->SetFocus();
 		}
 	}
-	catch (const Exception &e){
+	catch (const Exception &e)
+	{
 		ShowMessage("Greška pri prijavi." + e.Message);
 	}
-
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_Login::FormShow(TObject *Sender)
@@ -134,10 +140,22 @@ void __fastcall Tform_Login::FormShow(TObject *Sender)
 	try
 	{
 		registar->RootKey = HKEY_CURRENT_USER;
-		if (registar->OpenKey(REGISTRY_KLJUC, true) &&
-			registar->ValueExists("ZadnjiUsername"))
+		if (registar->OpenKey(REGISTRY_KLJUC, true))
 		{
-			edit_username->Text = registar->ReadString("ZadnjiUsername");
+			if (registar->ValueExists("ZadnjiUsername"))
+			{
+				edit_username->Text = registar->ReadString("ZadnjiUsername");
+			}
+
+			if (registar->ValueExists("ZadnjaPrijava"))
+			{
+				label_zadnja_prijava->Caption =
+					L"Zadnja prijava: " + registar->ReadString("ZadnjaPrijava");
+			}
+			else
+			{
+				label_zadnja_prijava->Caption = "";
+			}
 		}
 	}
 	__finally

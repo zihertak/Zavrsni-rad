@@ -52,7 +52,6 @@ void __fastcall Tform_aktivnosti::FormShow(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_aktivnosti::FormClose(TObject *Sender, TCloseAction &Action)
-
 {
     Application->Terminate();
 }
@@ -93,6 +92,7 @@ void __fastcall Tform_aktivnosti::button_odjavaClick(TObject *Sender)
 	form_dashboard->Hide();
 	form_Login->edit_username->SetFocus();
 }
+//---------------------------------------------------------------------------
 void Tform_aktivnosti::ucitajPodrucja()
 {
 	combo_podrucje->Items->Clear();
@@ -343,10 +343,10 @@ void __fastcall Tform_aktivnosti::button_dodajClick(TObject *Sender)
 void __fastcall Tform_aktivnosti::button_urediClick(TObject *Sender)
 {
 	TKorisnickaPrava prava(data_module->currentUserUloga);
-	if (!prava.dodajAktivnost())
+	if (!prava.urediAktivnost())
 	{
 	ShowMessage(
-		L"Nemate pravo dodavanja aktivnosti."
+		L"Nemate pravo uređivanja aktivnosti."
 	);
 
 	return;
@@ -383,10 +383,10 @@ void __fastcall Tform_aktivnosti::button_urediClick(TObject *Sender)
 void __fastcall Tform_aktivnosti::button_obrisiClick(TObject *Sender)
 {
 	 TKorisnickaPrava prava(data_module->currentUserUloga);
-	if (!prava.dodajAktivnost())
+	if (!prava.obrisiAktivnost())
 	{
 	ShowMessage(
-		L"Nemate pravo dodavanja aktivnosti."
+		L"Nemate pravo brisanja aktivnosti."
 	);
 
 	return;

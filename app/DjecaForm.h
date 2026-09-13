@@ -56,6 +56,8 @@ __published:	// IDE-managed Components
 	TButton *button_dodaj;
 	TButton *button_uredi;
 	TButton *button_obrisi;
+	TButton *button_generiraj_sve;
+	TButton *button_razvoj_djeteta;
 	TDBGrid *grid_djeca;
 	TFDQuery *query_djeca;
 	TDataSource *source_djeca;
@@ -83,6 +85,8 @@ __published:	// IDE-managed Components
 	void __fastcall button_dodajClick(TObject *Sender);
 	void __fastcall button_urediClick(TObject *Sender);
 	void __fastcall button_obrisiClick(TObject *Sender);
+	void __fastcall button_generiraj_sveClick(TObject *Sender);
+	void __fastcall button_razvoj_djetetaClick(TObject *Sender);
 	void __fastcall button_odjavaClick(TObject *Sender);
 	void __fastcall query_djecaCalcFields(TDataSet *DataSet);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
@@ -98,12 +102,12 @@ private:	// User declarations
 	void ucitajSkupine();
 	void osvjeziPopisDjece();
 	void postaviIzgledGrida();
-    int originalSortLabelLeft;
+	int originalSortLabelLeft;
 	int originalSortComboLeft;
 	TRazvojPomoc razvojPomoc;
 public:		// User declarations
 	__fastcall Tform_djeca(TComponent* Owner);
-    void primijeniPrava();
+	void primijeniPrava();
 };
 //---------------------------------------------------------------------------
 extern PACKAGE Tform_djeca *form_djeca;

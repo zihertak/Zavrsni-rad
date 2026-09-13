@@ -1,4 +1,4 @@
-﻿//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 #include <vcl.h>
 #pragma hdrstop
@@ -22,47 +22,47 @@ __fastcall Tform_dijete_unos::Tform_dijete_unos(TComponent* Owner)
 void Tform_dijete_unos::primijeniPrava()
 {
 	TKorisnickaPrava prava(data_module->currentUserUloga);
-    samoZdravstveniPodaci =
+	samoZdravstveniPodaci =
 		prava.strucni() && idDijete != 0;
-    edit_ime->ReadOnly =
+	edit_ime->ReadOnly =
 		samoZdravstveniPodaci;
-    edit_prezime->ReadOnly =
+	edit_prezime->ReadOnly =
 		samoZdravstveniPodaci;
-    date_datum_rodjenja->Enabled =
+	date_datum_rodjenja->Enabled =
 		!samoZdravstveniPodaci;
-    combo_spol->Enabled =
+	combo_spol->Enabled =
 		!samoZdravstveniPodaci;
-    date_datum_upisa->Enabled =
+	date_datum_upisa->Enabled =
 		!samoZdravstveniPodaci;
-    edit_kontakt_roditelja->ReadOnly =
+	edit_kontakt_roditelja->ReadOnly =
 		samoZdravstveniPodaci;
-    if (prava.odgojitelj())
-{
-    combo_skupina->Enabled = false;
+	if (prava.odgojitelj())
+	{
+		combo_skupina->Enabled = false;
 
-    for (int i = 0; i < combo_skupina->Items->Count; i++)
-    {
-        NativeInt trenutniId =
-            reinterpret_cast<NativeInt>(
-                combo_skupina->Items->Objects[i]
-            );
+		for (int i = 0; i < combo_skupina->Items->Count; i++)
+		{
+			NativeInt trenutniId =
+				reinterpret_cast<NativeInt>(
+					combo_skupina->Items->Objects[i]
+				);
 
-        if (trenutniId ==
-            data_module->currentUserSkupinaID)
-        {
-            combo_skupina->ItemIndex = i;
-            break;
-        }
-    }
+			if (trenutniId ==
+				data_module->currentUserSkupinaID)
+			{
+				combo_skupina->ItemIndex = i;
+				break;
+			}
+		}
 	}
 	else
 	{
 		combo_skupina->Enabled =
 			!samoZdravstveniPodaci;
 	}
-		memo_alergije->ReadOnly = false;
-		memo_posebne_potrebe->ReadOnly = false;
-		memo_zdravstvene_napomene->ReadOnly = false;
+	memo_alergije->ReadOnly = false;
+	memo_posebne_potrebe->ReadOnly = false;
+	memo_zdravstvene_napomene->ReadOnly = false;
 }
 
 void Tform_dijete_unos::ucitajSkupine()
@@ -76,22 +76,22 @@ void Tform_dijete_unos::ucitajSkupine()
 			query_skupine->FieldByName("naziv")->AsString;
 		int idSkupina =
 			query_skupine->FieldByName("id_skupina")->AsInteger;
-        combo_skupina->Items->AddObject(
-            naziv,
-            reinterpret_cast<TObject*>(
+		combo_skupina->Items->AddObject(
+			naziv,
+			reinterpret_cast<TObject*>(
 				static_cast<NativeInt>(idSkupina)
 			)
 		);
 		query_skupine->Next();
 	}
-    combo_skupina->ItemIndex = -1;
+	combo_skupina->ItemIndex = -1;
 }
 void Tform_dijete_unos::pripremiZaDodavanje()
 {
 	idDijete = 0;
 	Caption ="Dodaj dijete";
-    edit_ime->Clear();
-    edit_prezime->Clear();
+	edit_ime->Clear();
+	edit_prezime->Clear();
 	edit_kontakt_roditelja->Clear();
 	memo_alergije->Clear();
 	memo_posebne_potrebe->Clear();
@@ -111,6 +111,14 @@ void Tform_dijete_unos::pripremiZaDodavanje()
 }
 void __fastcall Tform_dijete_unos::button_spremiClick(TObject *Sender)
 {
+	if (SpremiPodatke())
+	{
+		ModalResult = mrOk;
+	}
+}
+//---------------------------------------------------------------------------
+bool Tform_dijete_unos::SpremiPodatke()
+{
 	TKorisnickaPrava prava(data_module->currentUserUloga);
 	if (prava.strucni())
 	{
@@ -119,7 +127,7 @@ void __fastcall Tform_dijete_unos::button_spremiClick(TObject *Sender)
 			ShowMessage(
 				L"Nemate pravo dodavanja djece."
 			);
-			return;
+			return false;
 		}
 		try
 		{
@@ -154,7 +162,7 @@ void __fastcall Tform_dijete_unos::button_spremiClick(TObject *Sender)
 			ShowMessage(
 				L"Zdravstveni podaci uspješno su izmijenjeni."
 			);
-			ModalResult = mrOk;
+			return true;
 		}
 		catch (const Exception &e)
 		{
@@ -167,8 +175,8 @@ void __fastcall Tform_dijete_unos::button_spremiClick(TObject *Sender)
 				L"zdravstvenih podataka:\n" +
 				e.Message
 			);
+			return false;
 		}
-		return;
 	}
 
 	String ime = edit_ime->Text.Trim();
@@ -178,278 +186,277 @@ void __fastcall Tform_dijete_unos::button_spremiClick(TObject *Sender)
 	{
 		ShowMessage("Unesite ime djeteta.");
 		edit_ime->SetFocus();
-		return;
+		return false;
 	}
 	if (prezime.IsEmpty())
 	{
 		ShowMessage("Unesite prezime djeteta.");
 		edit_prezime->SetFocus();
-		return;
+		return false;
 	}
 	if (combo_spol->ItemIndex == -1)
 	{
 		ShowMessage("Odaberite spol djeteta.");
 		combo_spol->SetFocus();
-		return;
+		return false;
 	}
 	if (kontaktRoditelja.IsEmpty())
 	{
 		ShowMessage("Unesite kontakt roditelja.");
 		edit_kontakt_roditelja->SetFocus();
-		return;
+		return false;
 	}
 	if (combo_skupina->ItemIndex == -1)
 	{
 		ShowMessage("Odaberite skupinu.");
 		combo_skupina->SetFocus();
-		return;
+		return false;
 	}
 	if (date_datum_rodjenja->Date > Date())
 	{
 		ShowMessage(L"Datum rođenja ne može biti u budućnosti.");
 		date_datum_rodjenja->SetFocus();
-		return;
+		return false;
 	}
 	if (date_datum_upisa->Date <= date_datum_rodjenja->Date)
 	{
 		ShowMessage(L"Datum upisa mora biti nakon datuma rođenja.");
 		date_datum_upisa->SetFocus();
-		return;
+		return false;
 	}
 	NativeInt idSkupina = reinterpret_cast<NativeInt>(
-    combo_skupina->Items->Objects[
-        combo_skupina->ItemIndex
-	]
-);
+		combo_skupina->Items->Objects[
+			combo_skupina->ItemIndex
+		]
+	);
 	if (idDijete != 0)
-    {
-        try
-        {
-            data_module->connection->StartTransaction();
+	{
+		try
+		{
+			data_module->connection->StartTransaction();
 
-            // UPDATE TABLICE dijete
-            query_spremanje->Close();
+			query_spremanje->Close();
 			query_spremanje->SQL->Clear();
 
-            String sqlUpdateDijete =
+			String sqlUpdateDijete =
 				"UPDATE dijete SET "
-                "ime = :ime, "
-                "prezime = :prezime, "
-                "datum_rodjenja = :datum_rodjenja, "
-                "spol = :spol, "
-                "datum_upisa = :datum_upisa, "
+				"ime = :ime, "
+				"prezime = :prezime, "
+				"datum_rodjenja = :datum_rodjenja, "
+				"spol = :spol, "
+				"datum_upisa = :datum_upisa, "
 				"kontakt_roditelj = :kontakt_roditelj, "
-                "id_skupina = :id_skupina";
+				"id_skupina = :id_skupina";
 
-            if (slikaPromijenjena)
-            {
-                sqlUpdateDijete = sqlUpdateDijete + ", slika = :slika";
-            }
+			if (slikaPromijenjena)
+			{
+				sqlUpdateDijete = sqlUpdateDijete + ", slika = :slika";
+			}
 
-            sqlUpdateDijete = sqlUpdateDijete + " WHERE id_dijete = :id_dijete";
+			sqlUpdateDijete = sqlUpdateDijete + " WHERE id_dijete = :id_dijete";
 
-            query_spremanje->SQL->Add(sqlUpdateDijete);
+			query_spremanje->SQL->Add(sqlUpdateDijete);
 
-            query_spremanje->ParamByName("ime")->AsString =
-                edit_ime->Text.Trim();
+			query_spremanje->ParamByName("ime")->AsString =
+				edit_ime->Text.Trim();
 
-            query_spremanje->ParamByName("prezime")->AsString =
-                edit_prezime->Text.Trim();
+			query_spremanje->ParamByName("prezime")->AsString =
+				edit_prezime->Text.Trim();
 
-            query_spremanje->ParamByName("datum_rodjenja")->AsDateTime =
-                date_datum_rodjenja->Date;
+			query_spremanje->ParamByName("datum_rodjenja")->AsDateTime =
+				date_datum_rodjenja->Date;
 
-            query_spremanje->ParamByName("spol")->AsString =
-                combo_spol->Text;
+			query_spremanje->ParamByName("spol")->AsString =
+				combo_spol->Text;
 
-            query_spremanje->ParamByName("datum_upisa")->AsDateTime =
-                date_datum_upisa->Date;
+			query_spremanje->ParamByName("datum_upisa")->AsDateTime =
+				date_datum_upisa->Date;
 
 			query_spremanje->ParamByName("kontakt_roditelj")->AsString =
-                edit_kontakt_roditelja->Text.Trim();
+				edit_kontakt_roditelja->Text.Trim();
 
-            query_spremanje->ParamByName("id_skupina")->AsInteger =
-                static_cast<int>(idSkupina);
+			query_spremanje->ParamByName("id_skupina")->AsInteger =
+				static_cast<int>(idSkupina);
 
-            if (slikaPromijenjena)
-            {
-                if (odabranaSlikaPutanja.IsEmpty())
-                {
-                    query_spremanje->ParamByName("slika")->DataType = ftBlob;
-                    query_spremanje->ParamByName("slika")->Clear();
-                }
-                else
-                {
-                    query_spremanje
-                        ->ParamByName("slika")
-                        ->LoadFromFile(odabranaSlikaPutanja, ftBlob);
-                }
-            }
+			if (slikaPromijenjena)
+			{
+				if (odabranaSlikaPutanja.IsEmpty())
+				{
+					query_spremanje->ParamByName("slika")->DataType = ftBlob;
+					query_spremanje->ParamByName("slika")->Clear();
+				}
+				else
+				{
+					query_spremanje
+						->ParamByName("slika")
+						->LoadFromFile(odabranaSlikaPutanja, ftBlob);
+				}
+			}
 
-            query_spremanje->ParamByName("id_dijete")->AsInteger =
-                idDijete;
+			query_spremanje->ParamByName("id_dijete")->AsInteger =
+				idDijete;
 
-            query_spremanje->ExecSQL();
+			query_spremanje->ExecSQL();
 
-            // UPDATE TABLICE zdravstveni_podaci
-            query_spremanje->Close();
-            query_spremanje->SQL->Clear();
+			query_spremanje->Close();
+			query_spremanje->SQL->Clear();
 
-            query_spremanje->SQL->Add(
-                "UPDATE zdravstveni_podaci SET "
-                "alergije = :alergije, "
-                "posebne_potrebe = :posebne_potrebe, "
-                "zdravstvene_napomene = :zdravstvene_napomene "
-                "WHERE id_dijete = :id_dijete"
-            );
+			query_spremanje->SQL->Add(
+				"UPDATE zdravstveni_podaci SET "
+				"alergije = :alergije, "
+				"posebne_potrebe = :posebne_potrebe, "
+				"zdravstvene_napomene = :zdravstvene_napomene "
+				"WHERE id_dijete = :id_dijete"
+			);
 
-            query_spremanje->ParamByName("alergije")->AsString =
-                memo_alergije->Text.Trim();
+			query_spremanje->ParamByName("alergije")->AsString =
+				memo_alergije->Text.Trim();
 
-            query_spremanje->ParamByName("posebne_potrebe")->AsString =
-                memo_posebne_potrebe->Text.Trim();
+			query_spremanje->ParamByName("posebne_potrebe")->AsString =
+				memo_posebne_potrebe->Text.Trim();
 
-            query_spremanje->ParamByName("zdravstvene_napomene")->AsString =
-                memo_zdravstvene_napomene->Text.Trim();
+			query_spremanje->ParamByName("zdravstvene_napomene")->AsString =
+				memo_zdravstvene_napomene->Text.Trim();
 
-            query_spremanje->ParamByName("id_dijete")->AsInteger =
-                idDijete;
+			query_spremanje->ParamByName("id_dijete")->AsInteger =
+				idDijete;
 
-            query_spremanje->ExecSQL();
+			query_spremanje->ExecSQL();
 
-            data_module->connection->Commit();
+			data_module->connection->Commit();
 
-            ShowMessage(
-                L"Podaci o djetetu uspješno su izmijenjeni."
-            );
+			ShowMessage(
+				L"Podaci o djetetu uspješno su izmijenjeni."
+			);
 
-            ModalResult = mrOk;
-        }
-        catch (const Exception &e)
-        {
-            if (data_module->connection->InTransaction)
-            {
-                data_module->connection->Rollback();
-            }
+			return true;
+		}
+		catch (const Exception &e)
+		{
+			if (data_module->connection->InTransaction)
+			{
+				data_module->connection->Rollback();
+			}
 
-            ShowMessage(
-                L"Došlo je do pogreške pri izmjeni podataka:\n" +
-                e.Message
-            );
-        }
+			ShowMessage(
+				L"Došlo je do pogreške pri izmjeni podataka:\n" +
+				e.Message
+			);
 
-        return;
+			return false;
+		}
 	}
-try
-{
-    data_module->connection->StartTransaction();
+	try
+	{
+		data_module->connection->StartTransaction();
 
-    // 1. Spremanje osnovnih podataka
-    query_spremanje->Close();
-    query_spremanje->SQL->Clear();
+		query_spremanje->Close();
+		query_spremanje->SQL->Clear();
 
-    query_spremanje->SQL->Add(
-        "INSERT INTO dijete "
-        "(ime, prezime, datum_rodjenja, spol, "
-        "datum_upisa, kontakt_roditelj, id_skupina, slika) "
-        "VALUES "
-        "(:ime, :prezime, :datum_rodjenja, :spol, "
-        ":datum_upisa, :kontakt_roditelj, :id_skupina, :slika)"
-    );
+		query_spremanje->SQL->Add(
+			"INSERT INTO dijete "
+			"(ime, prezime, datum_rodjenja, spol, "
+			"datum_upisa, kontakt_roditelj, id_skupina, slika) "
+			"VALUES "
+			"(:ime, :prezime, :datum_rodjenja, :spol, "
+			":datum_upisa, :kontakt_roditelj, :id_skupina, :slika)"
+		);
 
-    query_spremanje->ParamByName("ime")->AsString =
-        edit_ime->Text.Trim();
+		query_spremanje->ParamByName("ime")->AsString =
+			edit_ime->Text.Trim();
 
-    query_spremanje->ParamByName("prezime")->AsString =
-        edit_prezime->Text.Trim();
+		query_spremanje->ParamByName("prezime")->AsString =
+			edit_prezime->Text.Trim();
 
-    query_spremanje->ParamByName("datum_rodjenja")->AsDateTime =
-        date_datum_rodjenja->Date;
+		query_spremanje->ParamByName("datum_rodjenja")->AsDateTime =
+			date_datum_rodjenja->Date;
 
-    query_spremanje->ParamByName("spol")->AsString =
-        combo_spol->Text;
+		query_spremanje->ParamByName("spol")->AsString =
+			combo_spol->Text;
 
-    query_spremanje->ParamByName("datum_upisa")->AsDateTime =
-        date_datum_upisa->Date;
+		query_spremanje->ParamByName("datum_upisa")->AsDateTime =
+			date_datum_upisa->Date;
 
-    query_spremanje->ParamByName("kontakt_roditelj")->AsString =
-        edit_kontakt_roditelja->Text.Trim();
+		query_spremanje->ParamByName("kontakt_roditelj")->AsString =
+			edit_kontakt_roditelja->Text.Trim();
 
-    query_spremanje->ParamByName("id_skupina")->AsInteger =
-        static_cast<int>(idSkupina);
+		query_spremanje->ParamByName("id_skupina")->AsInteger =
+			static_cast<int>(idSkupina);
 
-    if (slikaPromijenjena && !odabranaSlikaPutanja.IsEmpty())
-    {
-        query_spremanje
-            ->ParamByName("slika")
-            ->LoadFromFile(odabranaSlikaPutanja, ftBlob);
-    }
-    else
-    {
-        query_spremanje->ParamByName("slika")->DataType = ftBlob;
-        query_spremanje->ParamByName("slika")->Clear();
-    }
+		if (slikaPromijenjena && !odabranaSlikaPutanja.IsEmpty())
+		{
+			query_spremanje
+				->ParamByName("slika")
+				->LoadFromFile(odabranaSlikaPutanja, ftBlob);
+		}
+		else
+		{
+			query_spremanje->ParamByName("slika")->DataType = ftBlob;
+			query_spremanje->ParamByName("slika")->Clear();
+		}
 
-    query_spremanje->ExecSQL();
+		query_spremanje->ExecSQL();
 
-    // 2. Dohvat ID-a upravo dodanog djeteta
-    query_spremanje->Close();
-    query_spremanje->SQL->Clear();
+		query_spremanje->Close();
+		query_spremanje->SQL->Clear();
 
-    query_spremanje->SQL->Add(
-        "SELECT LAST_INSERT_ID() AS novi_id"
-    );
+		query_spremanje->SQL->Add(
+			"SELECT LAST_INSERT_ID() AS novi_id"
+		);
 
-    query_spremanje->Open();
+		query_spremanje->Open();
 
-    int noviIdDijete =
-        query_spremanje->FieldByName("novi_id")->AsInteger;
+		int noviIdDijete =
+			query_spremanje->FieldByName("novi_id")->AsInteger;
 
-    // 3. Spremanje zdravstvenih podataka
-    query_spremanje->Close();
-    query_spremanje->SQL->Clear();
+		query_spremanje->Close();
+		query_spremanje->SQL->Clear();
 
-    query_spremanje->SQL->Add(
-        "INSERT INTO zdravstveni_podaci "
-        "(alergije, posebne_potrebe, "
-        "zdravstvene_napomene, id_dijete) "
-        "VALUES "
-        "(:alergije, :posebne_potrebe, "
-        ":zdravstvene_napomene, :id_dijete)"
-    );
+		query_spremanje->SQL->Add(
+			"INSERT INTO zdravstveni_podaci "
+			"(alergije, posebne_potrebe, "
+			"zdravstvene_napomene, id_dijete) "
+			"VALUES "
+			"(:alergije, :posebne_potrebe, "
+			":zdravstvene_napomene, :id_dijete)"
+		);
 
-    query_spremanje->ParamByName("alergije")->AsString =
-        memo_alergije->Text.Trim();
+		query_spremanje->ParamByName("alergije")->AsString =
+			memo_alergije->Text.Trim();
 
-    query_spremanje->ParamByName("posebne_potrebe")->AsString =
-        memo_posebne_potrebe->Text.Trim();
+		query_spremanje->ParamByName("posebne_potrebe")->AsString =
+			memo_posebne_potrebe->Text.Trim();
 
-    query_spremanje->ParamByName("zdravstvene_napomene")->AsString =
-        memo_zdravstvene_napomene->Text.Trim();
+		query_spremanje->ParamByName("zdravstvene_napomene")->AsString =
+			memo_zdravstvene_napomene->Text.Trim();
 
-    query_spremanje->ParamByName("id_dijete")->AsInteger =
-        noviIdDijete;
+		query_spremanje->ParamByName("id_dijete")->AsInteger =
+			noviIdDijete;
 
-    query_spremanje->ExecSQL();
+		query_spremanje->ExecSQL();
 
-    data_module->connection->Commit();
+		data_module->connection->Commit();
 
-    ShowMessage(L"Dijete je uspješno spremljeno.");
+		idDijete = noviIdDijete;
 
-    ModalResult = mrOk;
-}
-catch (const Exception &e)
-{
-    if (data_module->connection->InTransaction)
-    {
-        data_module->connection->Rollback();
-    }
+		ShowMessage(L"Dijete je uspješno spremljeno.");
 
-    ShowMessage(
-        L"Došlo je do pogreške pri spremanju podataka:\n" +
-        e.Message
-    );
-}
+		return true;
+	}
+	catch (const Exception &e)
+	{
+		if (data_module->connection->InTransaction)
+		{
+			data_module->connection->Rollback();
+		}
+
+		ShowMessage(
+			L"Došlo je do pogreške pri spremanju podataka:\n" +
+			e.Message
+		);
+
+		return false;
+	}
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_dijete_unos::button_ucitajSlikuClick(TObject *Sender)
@@ -469,9 +476,6 @@ void __fastcall Tform_dijete_unos::button_ukloniSlikuClick(TObject *Sender)
 	image_slika->Picture->Assign(NULL);
 }
 //---------------------------------------------------------------------------
-// Uvozi binarnu .dat datoteku izvezenu preko Razvoj kartice (button_izvezi_profil)
-// i stvarno upisuje pregledke u bazu za ovo dijete - koristi isti obrazac SQL-a
-// kao spremanje novog pregleda u RazvojForm.cpp, samo s podacima iz datoteke.
 void __fastcall Tform_dijete_unos::button_uvezi_profilClick(TObject *Sender)
 {
 	if (idDijete == 0)
@@ -621,80 +625,79 @@ void Tform_dijete_unos::pripremiZaUredjivanje(int odabraniIdDijete)
 	);
 	query_dijete->ParamByName("id_dijete")->AsInteger =
 		idDijete;
-    query_dijete->Open();
+	query_dijete->Open();
 
-    if (query_dijete->IsEmpty())
-    {
-        ShowMessage(L"Dijete nije pronađeno.");
-        return;
+	if (query_dijete->IsEmpty())
+	{
+		ShowMessage(L"Dijete nije pronađeno.");
+		return;
 	}
 	edit_ime->Text =
 		query_dijete->FieldByName("ime")->AsString;
 	edit_prezime->Text =
 		query_dijete->FieldByName("prezime")->AsString;
-    date_datum_rodjenja->Date =
-        query_dijete->FieldByName("datum_rodjenja")->AsDateTime;
+	date_datum_rodjenja->Date =
+		query_dijete->FieldByName("datum_rodjenja")->AsDateTime;
 
-    combo_spol->ItemIndex =
-        combo_spol->Items->IndexOf(
-            query_dijete->FieldByName("spol")->AsString
-        );
+	combo_spol->ItemIndex =
+		combo_spol->Items->IndexOf(
+			query_dijete->FieldByName("spol")->AsString
+		);
 
-    date_datum_upisa->Date =
-        query_dijete->FieldByName("datum_upisa")->AsDateTime;
+	date_datum_upisa->Date =
+		query_dijete->FieldByName("datum_upisa")->AsDateTime;
 
-    edit_kontakt_roditelja->Text =
-        query_dijete->FieldByName("kontakt_roditelj")->AsString;
+	edit_kontakt_roditelja->Text =
+		query_dijete->FieldByName("kontakt_roditelj")->AsString;
 
-    int idSkupina =
-        query_dijete->FieldByName("id_skupina")->AsInteger;
+	int idSkupina =
+		query_dijete->FieldByName("id_skupina")->AsInteger;
 
-    combo_skupina->ItemIndex = -1;
+	combo_skupina->ItemIndex = -1;
 
-    for (int i = 0; i < combo_skupina->Items->Count; i++)
-    {
-        NativeInt trenutniId =
-            reinterpret_cast<NativeInt>(
-                combo_skupina->Items->Objects[i]
-            );
+	for (int i = 0; i < combo_skupina->Items->Count; i++)
+	{
+		NativeInt trenutniId =
+			reinterpret_cast<NativeInt>(
+				combo_skupina->Items->Objects[i]
+			);
 
-        if (trenutniId == idSkupina)
-        {
-            combo_skupina->ItemIndex = i;
-            break;
-        }
-    }
+		if (trenutniId == idSkupina)
+		{
+			combo_skupina->ItemIndex = i;
+			break;
+		}
+	}
 
-    if (query_dijete->FieldByName("slika")->IsNull)
-    {
-        image_slika->Picture->Assign(NULL);
-    }
-    else
-    {
-        TMemoryStream *tok = new TMemoryStream();
-        try
-        {
-            static_cast<TBlobField*>(
-                query_dijete->FieldByName("slika")
-            )->SaveToStream(tok);
-            tok->Position = 0;
-            image_slika->Picture->LoadFromStream(tok);
-        }
-        __finally
-        {
-            delete tok;
-        }
-    }
+	if (query_dijete->FieldByName("slika")->IsNull)
+	{
+		image_slika->Picture->Assign(NULL);
+	}
+	else
+	{
+		TMemoryStream *tok = new TMemoryStream();
+		try
+		{
+			static_cast<TBlobField*>(
+				query_dijete->FieldByName("slika")
+			)->SaveToStream(tok);
+			tok->Position = 0;
+			image_slika->Picture->LoadFromStream(tok);
+		}
+		__finally
+		{
+			delete tok;
+		}
+	}
 
-    memo_alergije->Text =
-        query_dijete->FieldByName("alergije")->AsString;
+	memo_alergije->Text =
+		query_dijete->FieldByName("alergije")->AsString;
 
-    memo_posebne_potrebe->Text =
-        query_dijete->FieldByName("posebne_potrebe")->AsString;
+	memo_posebne_potrebe->Text =
+		query_dijete->FieldByName("posebne_potrebe")->AsString;
 
-    memo_zdravstvene_napomene->Text =
+	memo_zdravstvene_napomene->Text =
 		query_dijete->FieldByName("zdravstvene_napomene")->AsString;
 
 	primijeniPrava();
-
 }

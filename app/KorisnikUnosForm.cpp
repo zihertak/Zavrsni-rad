@@ -1,4 +1,4 @@
-﻿//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 #include <vcl.h>
 #pragma hdrstop
@@ -66,7 +66,7 @@ void Tform_korisnik_unos::ucitajUloge()
 
     query_uloge->Close();
 }
-
+//---------------------------------------------------------------------------
 void Tform_korisnik_unos::ucitajSkupine()
 {
     combo_skupina->Items->Clear();
@@ -106,7 +106,7 @@ void Tform_korisnik_unos::ucitajSkupine()
 
     query_skupine->Close();
 }
-
+//---------------------------------------------------------------------------
 void Tform_korisnik_unos::postaviDostupnostSkupine()
 {
     bool odgojitelj = false;
@@ -128,7 +128,7 @@ void Tform_korisnik_unos::postaviDostupnostSkupine()
         combo_skupina->ItemIndex = -1;
     }
 }
-
+//---------------------------------------------------------------------------
 void Tform_korisnik_unos::pripremiZaDodavanje()
 {
     idKorisnik = 0;
@@ -152,7 +152,7 @@ void Tform_korisnik_unos::pripremiZaDodavanje()
 
     postaviDostupnostSkupine();
 }
-
+//---------------------------------------------------------------------------
 void Tform_korisnik_unos::pripremiZaUredjivanje(
     int odabraniIdKorisnik
 )
@@ -260,7 +260,7 @@ void Tform_korisnik_unos::pripremiZaUredjivanje(
 
 	postaviDostupnostSkupine();
 }
-
+//---------------------------------------------------------------------------
 int Tform_korisnik_unos::pronadiStavkuPoID(
 	TComboBox *combo,
 	int trazeniID
@@ -281,83 +281,82 @@ int Tform_korisnik_unos::pronadiStavkuPoID(
 
     return -1;
 }
+//---------------------------------------------------------------------------
 void __fastcall Tform_korisnik_unos::button_spremiClick(TObject *Sender)
 {
-    String ime = edit_ime->Text.Trim();
-    String prezime = edit_prezime->Text.Trim();
-    String username = edit_username->Text.Trim();
-    String lozinka = edit_lozinka->Text;
-    String ponovljenaLozinka = edit_ponovi_lozinku->Text;
+	String ime = edit_ime->Text.Trim();
+	String prezime = edit_prezime->Text.Trim();
+	String username = edit_username->Text.Trim();
+	String lozinka = edit_lozinka->Text;
+	String ponovljenaLozinka = edit_ponovi_lozinku->Text;
 
-    if (ime.IsEmpty())
-    {
-        ShowMessage(L"Unesite ime korisnika.");
-        edit_ime->SetFocus();
-        return;
-    }
-
-    if (prezime.IsEmpty())
-    {
-        ShowMessage(L"Unesite prezime korisnika.");
-        edit_prezime->SetFocus();
-        return;
-    }
-
-    if (username.IsEmpty())
-    {
-        ShowMessage(L"Unesite korisničko ime.");
-        edit_username->SetFocus();
-        return;
-    }
-
-    if (combo_uloga_unos->ItemIndex < 0)
-    {
-        ShowMessage(L"Odaberite ulogu korisnika.");
-        combo_uloga_unos->SetFocus();
-        return;
-    }
-
-    bool dodavanje = idKorisnik == 0;
-
-    if (dodavanje && lozinka.IsEmpty())
-    {
-        ShowMessage(L"Unesite lozinku.");
-        edit_lozinka->SetFocus();
-        return;
-    }
-
-    if (!lozinka.IsEmpty() && lozinka.Length() < 6)
-    {
-        ShowMessage(
-            L"Lozinka mora sadržavati najmanje 6 znakova."
-        );
-        edit_lozinka->SetFocus();
-        return;
-    }
-
-    if (lozinka != ponovljenaLozinka)
-    {
-        ShowMessage(L"Lozinke nisu jednake.");
-        edit_ponovi_lozinku->SetFocus();
-        return;
-    }
-
-    bool odgojitelj = SameText(
-        combo_uloga_unos->Text,
-        L"Odgojitelj"
-    );
-
-    if (
-        odgojitelj &&
-        combo_skupina->ItemIndex < 0
-    )
-    {
-        ShowMessage(
-            L"Odgojitelju morate odabrati skupinu."
-        );
-        combo_skupina->SetFocus();
-        return;
+	if (ime.IsEmpty())
+	{
+		ShowMessage(L"Unesite ime korisnika.");
+		edit_ime->SetFocus();
+		return;
 	}
+
+	if (prezime.IsEmpty())
+	{
+		ShowMessage(L"Unesite prezime korisnika.");
+		edit_prezime->SetFocus();
+		return;
+	}
+
+	if (username.IsEmpty())
+	{
+		ShowMessage(L"Unesite korisničko ime.");
+		edit_username->SetFocus();
+		return;
+	}
+
+	if (combo_uloga_unos->ItemIndex < 0)
+	{
+		ShowMessage(L"Odaberite ulogu korisnika.");
+		combo_uloga_unos->SetFocus();
+		return;
+	}
+
+	bool dodavanje = idKorisnik == 0;
+
+	if (dodavanje && lozinka.IsEmpty())
+	{
+		ShowMessage(L"Unesite lozinku.");
+		edit_lozinka->SetFocus();
+		return;
+	}
+
+	if (!lozinka.IsEmpty() && lozinka.Length() < 6)
+	{
+		ShowMessage(
+			L"Lozinka mora sadržavati najmanje 6 znakova."
+		);
+		edit_lozinka->SetFocus();
+		return;
+	}
+
+	if (lozinka != ponovljenaLozinka)
+	{
+		ShowMessage(L"Lozinke nisu jednake.");
+		edit_ponovi_lozinku->SetFocus();
+		return;
+	}
+
+	bool odgojitelj = SameText(
+		combo_uloga_unos->Text,
+		L"Odgojitelj"
+	);
+
+	if (odgojitelj && combo_skupina->ItemIndex < 0)
+	{
+		ShowMessage(
+			L"Odgojitelju morate odabrati skupinu."
+		);
+		combo_skupina->SetFocus();
+		return;
+	}
+
 	query_provjera->Close();
 	query_provjera->SQL->Clear();
 
@@ -396,19 +395,17 @@ void __fastcall Tform_korisnik_unos::button_spremiClick(TObject *Sender)
 		edit_username->SelectAll();
 		return;
 	}
-    NativeInt idUloga =
-    reinterpret_cast<NativeInt>(
-        combo_uloga_unos->Items->Objects[
-            combo_uloga_unos->ItemIndex
-        ]
-    );
+
+	NativeInt idUloga =
+		reinterpret_cast<NativeInt>(
+			combo_uloga_unos->Items->Objects[
+				combo_uloga_unos->ItemIndex
+			]
+		);
 
 	NativeInt idSkupina = 0;
 
-	if (
-		odgojitelj &&
-		combo_skupina->ItemIndex >= 0
-	)
+	if (odgojitelj && combo_skupina->ItemIndex >= 0)
 	{
 		idSkupina =
 			reinterpret_cast<NativeInt>(
@@ -417,121 +414,123 @@ void __fastcall Tform_korisnik_unos::button_spremiClick(TObject *Sender)
 				]
 			);
 	}
-    try
-{
-    query_spremanje->Close();
-    query_spremanje->SQL->Clear();
 
-    if (dodavanje)
-    {
-        query_spremanje->SQL->Add(
-            L"INSERT INTO korisnik ("
-            L"    ime, "
-            L"    prezime, "
-            L"    username, "
-            L"    lozinka, "
-            L"    id_uloga, "
-            L"    id_skupina"
-            L") VALUES ("
-            L"    :ime, "
-            L"    :prezime, "
-            L"    :username, "
-            L"    :lozinka, "
-            L"    :id_uloga, "
-            L"    :id_skupina"
-            L")"
-        );
+	try
+	{
+		query_spremanje->Close();
+		query_spremanje->SQL->Clear();
 
-        query_spremanje
-            ->ParamByName(L"lozinka")
-            ->AsWideString =
-                Hashiraj(lozinka, GenerirajSol(username));
-	}
-        else
-    {
-        if (lozinka.IsEmpty())
-        {
-            query_spremanje->SQL->Add(
-                L"UPDATE korisnik SET "
-                L"    ime = :ime, "
-                L"    prezime = :prezime, "
-                L"    username = :username, "
-                L"    id_uloga = :id_uloga, "
-                L"    id_skupina = :id_skupina "
-                L"WHERE id_korisnik = :id_korisnik"
-            );
-        }
-        else
-        {
-            query_spremanje->SQL->Add(
-                L"UPDATE korisnik SET "
-                L"    ime = :ime, "
-                L"    prezime = :prezime, "
-                L"    username = :username, "
-                L"    lozinka = :lozinka, "
-                L"    id_uloga = :id_uloga, "
-                L"    id_skupina = :id_skupina "
-                L"WHERE id_korisnik = :id_korisnik"
-            );
+		if (dodavanje)
+		{
+			query_spremanje->SQL->Add(
+				L"INSERT INTO korisnik ("
+				L"    ime, "
+				L"    prezime, "
+				L"    username, "
+				L"    lozinka, "
+				L"    id_uloga, "
+				L"    id_skupina"
+				L") VALUES ("
+				L"    :ime, "
+				L"    :prezime, "
+				L"    :username, "
+				L"    :lozinka, "
+				L"    :id_uloga, "
+				L"    :id_skupina"
+				L")"
+			);
 
-            query_spremanje
-                ->ParamByName(L"lozinka")
-                ->AsWideString =
-                    Hashiraj(lozinka, GenerirajSol(username));
-        }
+			query_spremanje
+				->ParamByName(L"lozinka")
+				->AsWideString =
+					Hashiraj(lozinka, GenerirajSol(username));
+		}
+		else
+		{
+			if (lozinka.IsEmpty())
+			{
+				query_spremanje->SQL->Add(
+					L"UPDATE korisnik SET "
+					L"    ime = :ime, "
+					L"    prezime = :prezime, "
+					L"    username = :username, "
+					L"    id_uloga = :id_uloga, "
+					L"    id_skupina = :id_skupina "
+					L"WHERE id_korisnik = :id_korisnik"
+				);
+			}
+			else
+			{
+				query_spremanje->SQL->Add(
+					L"UPDATE korisnik SET "
+					L"    ime = :ime, "
+					L"    prezime = :prezime, "
+					L"    username = :username, "
+					L"    lozinka = :lozinka, "
+					L"    id_uloga = :id_uloga, "
+					L"    id_skupina = :id_skupina "
+					L"WHERE id_korisnik = :id_korisnik"
+				);
 
-        query_spremanje
-            ->ParamByName(L"id_korisnik")
-            ->AsInteger = idKorisnik;
-	}
-	query_spremanje
-        ->ParamByName(L"ime")
-        ->AsWideString = ime;
+				query_spremanje
+					->ParamByName(L"lozinka")
+					->AsWideString =
+						Hashiraj(lozinka, GenerirajSol(username));
+			}
 
-	query_spremanje
-        ->ParamByName(L"prezime")
-        ->AsWideString = prezime;
+			query_spremanje
+				->ParamByName(L"id_korisnik")
+				->AsInteger = idKorisnik;
+		}
 
-    query_spremanje
-        ->ParamByName(L"username")
-        ->AsWideString = username;
+		query_spremanje
+			->ParamByName(L"ime")
+			->AsWideString = ime;
 
-    query_spremanje
-        ->ParamByName(L"id_uloga")
-        ->AsInteger =
-		static_cast<int>(idUloga);
+		query_spremanje
+			->ParamByName(L"prezime")
+			->AsWideString = prezime;
 
-	if (odgojitelj)
-    {
-        query_spremanje
-            ->ParamByName(L"id_skupina")
-            ->AsInteger =
-            static_cast<int>(idSkupina);
-    }
-    else
-    {
-        TFDParam *paramSkupina =
-        query_spremanje->ParamByName(L"id_skupina");
-		paramSkupina->DataType = ftInteger;
-		paramSkupina->Clear();
-	}
+		query_spremanje
+			->ParamByName(L"username")
+			->AsWideString = username;
 
-        query_spremanje->ExecSQL();
+		query_spremanje
+			->ParamByName(L"id_uloga")
+			->AsInteger =
+			static_cast<int>(idUloga);
 
-    if (dodavanje)
-    {
-        ShowMessage(
-            L"Korisnik je uspješno dodan."
-        );
-    }
-    else
-    {
-        ShowMessage(
-            L"Podaci korisnika uspješno su spremljeni."
-        );
-    }
+		if (odgojitelj)
+		{
+			query_spremanje
+				->ParamByName(L"id_skupina")
+				->AsInteger =
+				static_cast<int>(idSkupina);
+		}
+		else
+		{
+			TFDParam *paramSkupina =
+				query_spremanje->ParamByName(L"id_skupina");
+			paramSkupina->DataType = ftInteger;
+			paramSkupina->Clear();
+		}
 
-    ModalResult = mrOk;
+		query_spremanje->ExecSQL();
+
+		if (dodavanje)
+		{
+			ShowMessage(
+				L"Korisnik je uspješno dodan."
+			);
+		}
+		else
+		{
+			ShowMessage(
+				L"Podaci korisnika uspješno su spremljeni."
+			);
+		}
+
+		ModalResult = mrOk;
 	}
 	catch (const Exception &e)
 	{

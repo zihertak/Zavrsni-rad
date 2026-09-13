@@ -30,7 +30,7 @@ String Tform_razvoj_detalji::napraviZvjezdice(int ocjena)
 
     return rezultat;
 }
-
+//---------------------------------------------------------------------------
 void Tform_razvoj_detalji::ucitajPregled(int idRazvojniPregled)
 {
     query_detalji->Close();
@@ -139,17 +139,17 @@ void Tform_razvoj_detalji::ucitajPregled(int idRazvojniPregled)
 				break;
 
 			case 4:
-	postaviZvjezdice(
-		label_spoznajni_zvjezdice,
-        razina
-    );
-	break;
+				postaviZvjezdice(
+					label_spoznajni_zvjezdice,
+					razina
+				);
+				break;
         }
 
         query_detalji->Next();
     }
 }
-
+//---------------------------------------------------------------------------
 void Tform_razvoj_detalji::postaviZvjezdice(
     TLabel *labela,
     int ocjena
@@ -161,3 +161,4 @@ void Tform_razvoj_detalji::postaviZvjezdice(
     labela->Font->Color =
         razvojPomoc.BojaZaOcjenu(ocjena);
 }
+//---------------------------------------------------------------------------

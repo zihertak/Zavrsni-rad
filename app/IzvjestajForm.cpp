@@ -37,7 +37,7 @@ String Tform_izvjestaj::odgojiteljSkupine(int idSkupina)
 	query_izv_odgojitelj->ParamByName(L"id_skupina")->AsInteger = idSkupina;
 	query_izv_odgojitelj->Open();
 
-	String rezultat = L"nije dodijeljen";
+    String rezultat = L"nije dodijeljen";
 
 	if (!query_izv_odgojitelj->IsEmpty())
 	{
@@ -50,9 +50,6 @@ String Tform_izvjestaj::odgojiteljSkupine(int idSkupina)
 	return rezultat;
 }
 //---------------------------------------------------------------------------
-// Vraća true ako dijete ima barem jedan razvojni pregled. "trenutna" je
-// prosjek razina (sva 4 područja) zadnjeg pregleda, "prethodna" prosjek
-// pregleda prije njega (ako postoji) - za usporedbu napretka.
 bool Tform_izvjestaj::prosjecnaRazinaDjeteta(
 	int idDijete,
 	double &trenutna,
@@ -127,7 +124,7 @@ String Tform_izvjestaj::odrediTrendIzvjestaj(
 void Tform_izvjestaj::generirajIzvjestaj()
 {
 	memo_izvjestaj->Lines->Clear();
-	podaciGrafova.clear();
+    podaciGrafova.clear();
 
 	query_izv_skupine->Close();
 	query_izv_skupine->Open();
@@ -262,10 +259,6 @@ void Tform_izvjestaj::generirajIzvjestaj()
 	paint_razina_razvoja->Repaint();
 }
 //---------------------------------------------------------------------------
-// Ručno crtanje jednostavnog stupčastog grafa unutar zadanog pravokutnika -
-// visina svakog stupca je proporcionalna vrijednosti u odnosu na najveću u
-// nizu. Radi i na ekranu (TPaintBox->Canvas) i na printeru (Printer()->Canvas)
-// jer prima gotov Canvas i područje, ne konkretnu komponentu.
 void Tform_izvjestaj::crtajStupcastiGraf(TCanvas *canvas, TRect podrucje, bool crtajBrojDjece)
 {
 	int sirina = podrucje.Right - podrucje.Left;
@@ -304,7 +297,7 @@ void Tform_izvjestaj::crtajStupcastiGraf(TCanvas *canvas, TRect podrucje, bool c
 	int sirinaStupca = (sirina - 20) / (brojStupaca * 2);
 
 	canvas->Font->Size = 8;
-	canvas->Brush->Style = bsClear;
+    canvas->Brush->Style = bsClear;
 
 	for (int i = 0; i < brojStupaca; i++)
 	{
@@ -357,9 +350,6 @@ void __fastcall Tform_izvjestaj::paint_razina_razvojaPaint(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall Tform_izvjestaj::button_pdfClick(TObject *Sender)
 {
-	// Umjesto da pitamo korisnika koji printer želi (TPrintDialog), sami
-	// pronađemo Windowsov ugrađeni "Microsoft Print to PDF" i postavimo ga
-	// kao aktivni - on sam otvori standardni "Spremi kao" dijalog.
 	int indeksPdfPrintera = Printer()->Printers->IndexOf(L"Microsoft Print to PDF");
 
 	if (indeksPdfPrintera < 0)
@@ -372,11 +362,7 @@ void __fastcall Tform_izvjestaj::button_pdfClick(TObject *Sender)
 
 	Printer()->PrinterIndex = indeksPdfPrintera;
 
-	// Margina i visine se računaju proporcionalno prema stvarnoj veličini
-	// stranice na printeru (a ne fiksnim pikselima) - "Microsoft Print to
-	// PDF" zna raditi u puno većoj rezoluciji (DPI) nego ekran, pa fiksni
-	// broj piksela zna ispasti prevelik ili premalen.
-	int margin = Printer()->PageWidth / 20;
+    int margin = Printer()->PageWidth / 20;
 
 	Printer()->BeginDoc();
 

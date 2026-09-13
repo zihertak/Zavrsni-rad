@@ -23,6 +23,7 @@ USEFORM("KorisniciForm.cpp", form_korisnici);
 USEFORM("DijeteUnosForm.cpp", form_dijete_unos);
 USEFORM("DjecaForm.cpp", form_djeca);
 USEFORM("IzvjestajForm.cpp", form_izvjestaj);
+USEFORM("PreporukeGrupnoForm.cpp", form_preporuke_grupno);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
@@ -49,6 +50,7 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 		Application->CreateForm(__classid(Tform_najava_unos), &form_najava_unos);
 		Application->CreateForm(__classid(Tform_bolest_unos), &form_bolest_unos);
 		Application->CreateForm(__classid(Tform_izvjestaj), &form_izvjestaj);
+		Application->CreateForm(__classid(Tform_preporuke_grupno), &form_preporuke_grupno);
 		Application->Run();
 	}
 	catch (Exception &exception)

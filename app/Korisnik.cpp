@@ -4,6 +4,7 @@
 
 #include "Korisnik.h"
 #include <vcl.h>
+#pragma package(smart_init)
 
 TKorisnik::TKorisnik()
 {
@@ -40,4 +41,3 @@ String TKorisnik::PunoIme() const
 	return ime + L" " + prezime;
 }
 //---------------------------------------------------------------------------
-#pragma package(smart_init)

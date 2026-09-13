@@ -44,7 +44,7 @@ void Tform_bolest_unos::pripremiZaDodavanje()
 {
 	Caption = L"Dodaj zapis o bolesti";
 	ucitajDjecu();
-	combo_dijete->ItemIndex = -1;
+    combo_dijete->ItemIndex = -1;
 	date_od->Date = Date();
 	date_do->Date = Date();
 	combo_razlog->ItemIndex = -1;
@@ -85,7 +85,7 @@ void __fastcall Tform_bolest_unos::button_spremiClick(TObject *Sender)
 {
 	if (combo_dijete->ItemIndex < 0)
 	{
-		ShowMessage(L"Odaberite dijete.");
+	    ShowMessage(L"Odaberite dijete.");
 		return;
 	}
 

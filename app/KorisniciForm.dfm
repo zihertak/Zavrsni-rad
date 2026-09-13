@@ -36,7 +36,7 @@ object form_korisnici: Tform_korisnici
       Top = 20
       Width = 220
       Height = 38
-      Caption = 'Naslov aplikacije'
+      Caption = 'Svijet malih ljudi'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -28
@@ -366,26 +366,9 @@ object form_korisnici: Tform_korisnici
       TabOrder = 5
       TabStop = False
     end
-    object button_upute: TButton
-      Left = 0
-      Top = 270
-      Width = 220
-      Height = 45
-      Align = alTop
-      Caption = 'Upute'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -18
-      Font.Name = 'Segoe UI'
-      Font.Style = [fsBold]
-      ParentFont = False
-      TabOrder = 6
-      TabStop = False
-      OnClick = button_uputeClick
-    end
     object button_zdravlje: TButton
       Left = 0
-      Top = 315
+      Top = 270
       Width = 220
       Height = 45
       Align = alTop
@@ -396,13 +379,13 @@ object form_korisnici: Tform_korisnici
       Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 7
+      TabOrder = 6
       TabStop = False
       OnClick = button_zdravljeClick
     end
     object button_najave: TButton
       Left = 0
-      Top = 360
+      Top = 315
       Width = 220
       Height = 45
       Align = alTop
@@ -413,9 +396,26 @@ object form_korisnici: Tform_korisnici
       Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 8
+      TabOrder = 7
       TabStop = False
       OnClick = button_najaveClick
+    end
+    object button_upute: TButton
+      Left = 0
+      Top = 360
+      Width = 220
+      Height = 45
+      Align = alTop
+      Caption = 'Upute'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -18
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 8
+      TabStop = False
+      OnClick = button_uputeClick
     end
     object button_odjava: TButton
       Left = 0
@@ -474,7 +474,7 @@ object form_korisnici: Tform_korisnici
         Top = 52
         Width = 391
         Height = 28
-        Caption = 'Pregled i upravljanje korisnisni'#269'kim ra'#269'unima'
+        Caption = 'Pregled i upravljanje korisni'#269'kim ra'#269'unima'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clGray
         Font.Height = -20

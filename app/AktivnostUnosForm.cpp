@@ -144,16 +144,16 @@ void Tform_aktivnost_unos::pripremiZaUredjivanje(
 	query_aktivnost->Open();
     if (query_aktivnost->IsEmpty())
 	{
-	ShowMessage(
-		L"Aktivnost nije pronađena."
-	);
+		ShowMessage(
+			L"Aktivnost nije pronađena."
+		);
 
-	return;
+		return;
 	}
     edit_naziv->Text =
-	query_aktivnost
-		->FieldByName("naziv")
-		->AsString;
+		query_aktivnost
+			->FieldByName("naziv")
+			->AsString;
 
 	memo_opis->Text =
 		query_aktivnost
@@ -200,7 +200,7 @@ void Tform_aktivnost_unos::pripremiZaUredjivanje(
 
     for (int i = 0; i < check_podrucja->Items->Count; i++)
 	{
-	check_podrucja->Checked[i] = false;
+		check_podrucja->Checked[i] = false;
 	}
     query_podrucja->Close();
 	query_podrucja->SQL->Clear();
@@ -220,26 +220,26 @@ void Tform_aktivnost_unos::pripremiZaUredjivanje(
 
     while (!query_podrucja->Eof)
 	{
-	int idPodrucje =
-		query_podrucja
-			->FieldByName("id_podrucje_razvoja")
-			->AsInteger;
+		int idPodrucje =
+			query_podrucja
+				->FieldByName("id_podrucje_razvoja")
+				->AsInteger;
 
-	for (int i = 0; i < check_podrucja->Items->Count; i++)
-	{
-		NativeInt trenutniId =
-			reinterpret_cast<NativeInt>(
-				check_podrucja->Items->Objects[i]
-			);
-
-		if (trenutniId == idPodrucje)
+		for (int i = 0; i < check_podrucja->Items->Count; i++)
 		{
-			check_podrucja->Checked[i] = true;
-			break;
-		}
-	}
+			NativeInt trenutniId =
+				reinterpret_cast<NativeInt>(
+					check_podrucja->Items->Objects[i]
+				);
 
-	query_podrucja->Next();
+			if (trenutniId == idPodrucje)
+			{
+				check_podrucja->Checked[i] = true;
+				break;
+			}
+		}
+
+		query_podrucja->Next();
 	}
 }
 void __fastcall Tform_aktivnost_unos::button_odustaniClick(TObject *Sender)
@@ -409,8 +409,6 @@ void __fastcall Tform_aktivnost_unos::button_spremiClick(
 
 		if (idAktivnost == 0)
 		{
-			// DODAVANJE NOVE AKTIVNOSTI
-
 			query_spremanje->Close();
 			query_spremanje->SQL->Clear();
 
@@ -572,8 +570,6 @@ void __fastcall Tform_aktivnost_unos::button_spremiClick(
 		}
 		else
 		{
-			// UREĐIVANJE POSTOJEĆE AKTIVNOSTI
-
 			query_spremanje->Close();
 			query_spremanje->SQL->Clear();
 
@@ -647,8 +643,6 @@ void __fastcall Tform_aktivnost_unos::button_spremiClick(
 
 			query_spremanje->ExecSQL();
 
-			// Brišemo stare veze s područjima razvoja
-
 			query_spremanje->Close();
 			query_spremanje->SQL->Clear();
 
@@ -663,8 +657,6 @@ void __fastcall Tform_aktivnost_unos::button_spremiClick(
 				idAktivnost;
 
 			query_spremanje->ExecSQL();
-
-			// Spremamo trenutno označena područja razvoja
 
 			for (int i = 0;
 				 i < check_podrucja->Items->Count;
@@ -763,7 +755,6 @@ void Tform_aktivnost_unos::ucitajRazineTezine()
 void Tform_aktivnost_unos::pripremiZaPregled(
     int odabraniIdAktivnost)
 {
-    // Koristimo postojeće učitavanje svih podataka aktivnosti.
     pripremiZaUredjivanje(odabraniIdAktivnost);
 
     Caption = L"Detalji aktivnosti";

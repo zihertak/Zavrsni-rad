@@ -49,7 +49,7 @@ object form_Login: Tform_Login
         Align = alClient
         Alignment = taCenter
         AutoSize = False
-        Caption = 'Naslov aplikacije'
+        Caption = 'Svijet malih ljudi'
         Color = 14339973
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -65,7 +65,7 @@ object form_Login: Tform_Login
     end
     object panel_login: TPanel
       Left = 232
-      Top = 185
+      Top = 186
       Width = 400
       Height = 260
       Anchors = []
@@ -73,7 +73,7 @@ object form_Login: Tform_Login
       ParentBackground = False
       TabOrder = 1
       ExplicitLeft = 229
-      ExplicitTop = 175
+      ExplicitTop = 176
       object label_username: TLabel
         Left = 40
         Top = 45
@@ -112,6 +112,20 @@ object form_Login: Tform_Login
         Default = True
         TabOrder = 2
         OnClick = button_loginClick
+      end
+      object label_zadnja_prijava: TLabel
+        Left = 40
+        Top = 238
+        Width = 320
+        Height = 15
+        Alignment = taCenter
+        Caption = ' '
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clGray
+        Font.Height = -11
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
       end
     end
   end

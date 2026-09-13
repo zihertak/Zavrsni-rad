@@ -72,6 +72,7 @@ private:	// User declarations
 	bool slikaPromijenjena;
 	void ucitajSkupine();
     void primijeniPrava();
+	bool SpremiPodatke();
 public:		// User declarations
 	__fastcall Tform_dijete_unos(TComponent* Owner);
 	void pripremiZaDodavanje();

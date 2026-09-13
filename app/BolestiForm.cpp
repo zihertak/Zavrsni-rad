@@ -243,8 +243,6 @@ bool Tform_bolesti::preklapanjeDatuma(int idDijete, String od, String doDatuma, 
 		TDate postojeciOd = ParsirajDatum(zapis->GetValue("od")->Value());
 		TDate postojeciDo = ParsirajDatum(zapis->GetValue("do")->Value());
 
-		// Dva razdoblja se preklapaju ako početak jednog nije poslije
-		// kraja drugog, u oba smjera.
 		if (noviOd <= postojeciDo && postojeciOd <= noviDo)
 		{
 			return true;
@@ -373,9 +371,6 @@ void Tform_bolesti::izracunajUpozorenja()
 		delete obradjeneSkupine;
 	}
 
-	// Memo ostane skrolan na staru poziciju od prije osvježavanja
-	// (npr. na zadnji red), pa ga ručno vratimo na vrh da se odmah
-	// vide sva upozorenja, a ne samo zadnje dodano.
 	memo_upozorenja->SelStart = 0;
 	memo_upozorenja->SelLength = 0;
 	SendMessage(memo_upozorenja->Handle, EM_SCROLLCARET, 0, 0);

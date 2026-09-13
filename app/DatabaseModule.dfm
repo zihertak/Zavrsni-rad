@@ -26,18 +26,14 @@ object data_module: Tdata_module
       '    uloga.naziv AS naziv_uloge'
       'FROM korisnik'
       'JOIN uloga'
-      '    ON korisnik.id_uloga = uloga.id_uloge'
+      '    ON korisnik.id_uloga = uloga.id_uloga'
       'WHERE korisnik.username = :username'
-      'AND korisnik.lozinka = :lozinka')
+      'AND korisnik.aktivan = 1')
     Left = 600
     Top = 144
     ParamData = <
       item
         Name = 'USERNAME'
-        ParamType = ptInput
-      end
-      item
-        Name = 'LOZINKA'
         ParamType = ptInput
       end>
   end

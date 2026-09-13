@@ -73,6 +73,15 @@ object form_dijete_unos: Tform_dijete_unos
       Height = 15
       Caption = 'Skupina'
     end
+    object image_slika: TImage
+      Left = 424
+      Top = 30
+      Width = 100
+      Height = 100
+      Center = True
+      Proportional = True
+      Stretch = True
+    end
     object edit_ime: TEdit
       Left = 136
       Top = 35
@@ -131,15 +140,6 @@ object form_dijete_unos: Tform_dijete_unos
       Style = csDropDownList
       TabOrder = 6
     end
-    object image_slika: TImage
-      Left = 424
-      Top = 30
-      Width = 100
-      Height = 100
-      Center = True
-      Proportional = True
-      Stretch = True
-    end
     object button_ucitajSliku: TButton
       Left = 424
       Top = 140
@@ -161,8 +161,8 @@ object form_dijete_unos: Tform_dijete_unos
     object button_uvezi_profil: TButton
       Left = 424
       Top = 220
-      Width = 140
-      Height = 30
+      Width = 108
+      Height = 60
       Caption = 'Uvezi razvojni profil'
       TabOrder = 9
       OnClick = button_uvezi_profilClick
@@ -204,8 +204,6 @@ object form_dijete_unos: Tform_dijete_unos
       Top = 35
       Width = 297
       Height = 45
-      Lines.Strings = (
-        'memo_alergije')
       ScrollBars = ssVertical
       TabOrder = 0
     end
@@ -214,8 +212,6 @@ object form_dijete_unos: Tform_dijete_unos
       Top = 90
       Width = 297
       Height = 45
-      Lines.Strings = (
-        'memo_posebne_potrebe')
       ScrollBars = ssVertical
       TabOrder = 1
     end
@@ -224,8 +220,6 @@ object form_dijete_unos: Tform_dijete_unos
       Top = 145
       Width = 297
       Height = 45
-      Lines.Strings = (
-        'memo_zdravstvene_napomene')
       ScrollBars = ssVertical
       TabOrder = 2
     end

@@ -59,8 +59,6 @@ void __fastcall Tform_najava_unos::button_spremiClick(TObject *Sender)
 
 	String vrsta = combo_vrsta->Text;
 
-	// "Zatvaranje vrtića" tip najave baš i jest namijenjen vikendu/prazniku,
-	// za ostale vrste vrijedi upozoriti korisnika da provjeri datum.
 	if (kalendarPomoc.JeVikend(DayOfWeek(date_datum->Date)) && vrsta != L"Zatvaranje vrtića")
 	{
 		int odgovor = MessageDlg(

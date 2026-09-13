@@ -274,6 +274,12 @@
             <DependentOn>NajaveForm.h</DependentOn>
             <BuildOrder>20</BuildOrder>
         </CppCompile>
+        <CppCompile Include="PreporukeGrupnoForm.cpp">
+            <Form>form_preporuke_grupno</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>PreporukeGrupnoForm.h</DependentOn>
+            <BuildOrder>27</BuildOrder>
+        </CppCompile>
         <CppCompile Include="RazvojDetaljiForm.cpp">
             <Form>form_razvoj_detalji</Form>
             <FormType>dfm</FormType>
@@ -323,21 +329,22 @@
             <BuildOrder>25</BuildOrder>
             <IgnorePath>true</IgnorePath>
         </LibFiles>
-        <FormResources Include="NajaveForm.dfm"/>
         <FormResources Include="RazvojDetaljiForm.dfm"/>
         <FormResources Include="RazvojForm.dfm"/>
-        <FormResources Include="KorisnikUnosForm.dfm"/>
+        <FormResources Include="PreporukeGrupnoForm.dfm"/>
         <FormResources Include="LoginForm.dfm"/>
         <FormResources Include="NajavaUnosForm.dfm"/>
+        <FormResources Include="NajaveForm.dfm"/>
         <FormResources Include="SkupinaUnosForm.dfm"/>
         <FormResources Include="SkupineForm.dfm"/>
         <FormResources Include="UputeForm.dfm"/>
-        <FormResources Include="BolestUnosForm.dfm"/>
         <FormResources Include="DashboardForm.dfm"/>
         <FormResources Include="DatabaseModule.dfm"/>
+        <FormResources Include="BolestUnosForm.dfm"/>
         <FormResources Include="AktivnostiForm.dfm"/>
         <FormResources Include="AktivnostUnosForm.dfm"/>
         <FormResources Include="BolestiForm.dfm"/>
+        <FormResources Include="KorisnikUnosForm.dfm"/>
         <FormResources Include="KorisniciForm.dfm"/>
         <FormResources Include="DijeteUnosForm.dfm"/>
         <FormResources Include="DjecaForm.dfm"/>

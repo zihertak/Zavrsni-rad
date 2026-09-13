@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.004,C:\Users\Luka\Documents\Embarcadero\Studio\Projects\VrticPomocnaLib.cbproj=C:\Users\Luka\Documents\Embarcadero\Studio\Projects\Project1.cbproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.445,C:\Users\Luka\Documents\Embarcadero\Studio\Projects\VrticPomocnaLib.cbproj=C:\Users\Luka\Desktop\NTP\app\VrticPomocnaLib.cbproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.004,C:\Users\Luka\Documents\Embarcadero\Studio\Projects\Project1.cbproj=C:\Users\Luka\Documents\Embarcadero\Studio\Projects\VrticPomocnaLib.cbproj</Transaction>
     <Transaction>1899.12.30 00:00:00.000.223,C:\Users\Luka\Desktop\NTP\app\VrticPomocnaLib.cbproj=C:\Users\Luka\Desktop\NTP\app\VrticPomocnaLib.cbproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.445,C:\Users\Luka\Desktop\NTP\app\VrticPomocnaLib.cbproj=C:\Users\Luka\Documents\Embarcadero\Studio\Projects\VrticPomocnaLib.cbproj</Transaction>
   </Transactions>
 </BorlandProject>

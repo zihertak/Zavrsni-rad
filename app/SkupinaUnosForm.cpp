@@ -25,6 +25,7 @@ void Tform_skupina_unos::pripremiZaDodavanje()
 	spin_dob_od->Value = 2;
 	spin_dob_do->Value = 2;
 }
+//---------------------------------------------------------------------------
 void __fastcall Tform_skupina_unos::button_spremiClick(
 	TObject *Sender)
 {
@@ -94,43 +95,43 @@ void __fastcall Tform_skupina_unos::button_spremiClick(
 
 			ModalResult = mrOk;
 		}
-        else
+		else
 		{
-		query_spremanje->Close();
-		query_spremanje->SQL->Clear();
+			query_spremanje->Close();
+			query_spremanje->SQL->Clear();
 
-		query_spremanje->SQL->Add(
-			"UPDATE skupina SET "
-			"naziv = :naziv, "
-			"pedagoska_godina = :pedagoska_godina, "
-			"dob_od = :dob_od, "
-			"dob_do = :dob_do "
-			"WHERE id_skupina = :id"
-		);
+			query_spremanje->SQL->Add(
+				"UPDATE skupina SET "
+				"naziv = :naziv, "
+				"pedagoska_godina = :pedagoska_godina, "
+				"dob_od = :dob_od, "
+				"dob_do = :dob_do "
+				"WHERE id_skupina = :id"
+			);
 
-		query_spremanje
-			->ParamByName("naziv")
-			->AsString = naziv;
+			query_spremanje
+				->ParamByName("naziv")
+				->AsString = naziv;
 
-		query_spremanje
-			->ParamByName("pedagoska_godina")
-			->AsString = pedagoskaGodina;
+			query_spremanje
+				->ParamByName("pedagoska_godina")
+				->AsString = pedagoskaGodina;
 
-		query_spremanje
-			->ParamByName("dob_od")
-			->AsInteger = dobOd;
+			query_spremanje
+				->ParamByName("dob_od")
+				->AsInteger = dobOd;
 
-		query_spremanje
-			->ParamByName("dob_do")
-			->AsInteger = dobDo;
+			query_spremanje
+				->ParamByName("dob_do")
+				->AsInteger = dobDo;
 
-		query_spremanje
-			->ParamByName("id")
-			->AsInteger = idSkupine;
+			query_spremanje
+				->ParamByName("id")
+				->AsInteger = idSkupine;
 
-		query_spremanje->ExecSQL();
+			query_spremanje->ExecSQL();
 
-		ModalResult = mrOk;
+			ModalResult = mrOk;
 		}
 	}
 	catch (Exception &e)

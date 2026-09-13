@@ -28,7 +28,6 @@ __fastcall Tform_dashboard::Tform_dashboard(TComponent* Owner)
 }
 //---------------------------------------------------------------------------
 void __fastcall Tform_dashboard::FormClose(TObject *Sender, TCloseAction &Action)
-
 {
     Application->Terminate();
 }
@@ -44,9 +43,6 @@ void __fastcall Tform_dashboard::FormShow(TObject *Sender)
 	dohvatiVrijeme();
 }
 //---------------------------------------------------------------------------
-// Dohvaća trenutno vrijeme za Zagreb preko Open-Meteo REST servisa (besplatan,
-// ne treba API ključ - drugačiji servis od onog s predavanja) i procjenjuje je
-// li dan prikladan za aktivnosti vani.
 void Tform_dashboard::dohvatiVrijeme()
 {
 	label_vrijeme->Caption = L"Dohvaćam vrijeme...";
@@ -119,8 +115,6 @@ void Tform_dashboard::dohvatiVrijeme()
 	}
 }
 //---------------------------------------------------------------------------
-// Pojednostavljeni prikaz WMO vremenskog koda (Open-Meteo standard) - samo
-// najčešće skupine kodova, ne cijela službena tablica.
 String Tform_dashboard::opisVremena(int weathercode)
 {
 	if (weathercode == 0)
@@ -161,8 +155,6 @@ String Tform_dashboard::opisVremena(int weathercode)
 	return L"nepoznato";
 }
 //---------------------------------------------------------------------------
-// Pravilo: hladno (ispod 5°C) ili kišno/olujno vrijeme -> nije prikladno za
-// aktivnosti vani.
 bool Tform_dashboard::prikladnoZaVani(double temperatura, int weathercode)
 {
 	if (temperatura < 5)
@@ -190,8 +182,6 @@ void __fastcall Tform_dashboard::button_odjavaClick(TObject *Sender)
 	form_Login->edit_username->SetFocus();
 	this->Hide();
 }
-//---------------------------------------------------------------------------
-
 //---------------------------------------------------------------------------
 void __fastcall Tform_dashboard::button_djecaClick(TObject *Sender)
 {
